@@ -139,9 +139,6 @@ button,input,select,textarea{font:inherit;color:inherit}
 .check input{width:20px;height:20px;margin-top:2px;accent-color:var(--primary);flex:none}
 .consent-doc{background:var(--surface-2);border-radius:12px;padding:16px 18px;max-height:none;display:grid;gap:10px;font-size:.95rem}
 .consent-doc h3{font-size:.98rem}
-.sig-wrap{border:1.5px dashed var(--line);border-radius:12px;background:var(--surface);position:relative;touch-action:none}
-.sig-wrap canvas{width:100%;height:150px;display:block;border-radius:12px}
-.sig-wrap .hint{position:absolute;left:12px;bottom:8px;font-size:.8rem;color:var(--muted);pointer-events:none}
 
 /* ---------- presentación ---------- */
 .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:center}
@@ -672,7 +669,7 @@ const STEPS = [
 const DRAFT_KEY = "tme_borrador_v1";
 function blank() {
   return { step: 0, maxStep: 0, meta: { codigo: "", estrato: "", establecimiento: "", fecha: new Date().toISOString().slice(0, 10) },
-    cons: { leido: false, acepta: null, foto: null, nombre: "", dni: "", condicion: "", firma: null },
+    cons: { leido: false, acepta: null, foto: null },
     ficha: {}, nasa: {}, suseso: {}, warr: {}, nordic: {}, reba: { tarea: "", lado: "", obs: [{}, {}, {}], fotos: [] }, active: 0 };
 }
 let S = store.get(DRAFT_KEY) || blank();
@@ -820,48 +817,21 @@ function stepCons(host) {
   <div class="q" id="q-acepta" style="margin-top:10px"><span class="q-label">¿Acepta participar de manera voluntaria en este estudio?</span>${pills("acepta", ["Sí, acepto", "No acepto"], c.acepta)}</div>
   <div id="cons-yes" ${c.acepta === "Sí, acepto" ? "" : "hidden"}>
     <div class="q" id="q-foto" style="margin-top:10px"><span class="q-label">Autorizo la toma de fotografías durante la observación (sin captar el rostro del paciente)</span>${pills("foto", ["Sí", "No"], c.foto)}</div>
-    <div class="grid3" style="margin-top:12px">
-      <div class="field"><label for="c-nombre">Nombres y apellidos</label><input class="input" id="c-nombre" value="${esc(c.nombre)}" autocomplete="off"></div>
-      <div class="field"><label for="c-dni">DNI</label><input class="input mono" id="c-dni" value="${esc(c.dni)}" inputmode="numeric" maxlength="8"></div>
-      <div class="field"><label>En calidad de</label><div class="pills" id="q-cond">${["Interno", "Egresado"].map(o => `<label class="pill"><input type="radio" name="cond" value="${o}" ${c.condicion === o ? "checked" : ""}><span>${o}</span></label>`).join("")}</div></div>
-    </div>
-    <div class="field" style="margin-top:12px"><label>Firma del participante</label><div class="sig-wrap" id="sig-wrap"><canvas id="sig"></canvas><span class="hint">Firme con el dedo o el mouse</span></div><div><button class="btn btn-ghost" id="sig-clear" style="min-height:36px;padding:6px 12px;font-size:.85rem;margin-top:6px">Borrar firma</button></div></div>
-    <p class="muted" style="font-size:.85rem;margin-top:8px">Se entregará una copia impresa de este documento al participante.</p>
+    <p class="muted" style="font-size:.85rem;margin-top:10px">El consentimiento se registra de forma anónima: no se guardan nombres, DNI ni firma. El participante se identifica solo con su código.</p>
   </div>`;
   $("#c-leido", host).onchange = e => { c.leido = e.target.checked; persist(); };
   bindPills(host, "acepta", v => { c.acepta = v; $("#cons-yes", host).hidden = v !== "Sí, acepto"; persist(); });
   bindPills(host, "foto", v => { c.foto = v; persist(); });
-  $$('input[name="cond"]', host).forEach(r => r.onchange = () => { c.condicion = r.value; persist(); });
-  $("#c-nombre", host).oninput = e => { c.nombre = e.target.value; persist(); };
-  $("#c-dni", host).oninput = e => { e.target.value = e.target.value.replace(/\D/g, ""); c.dni = e.target.value; persist(); };
-  setupSignature($("#sig", host), c);
-  $("#sig-clear", host).onclick = () => { c.firma = null; persist(); setupSignature($("#sig", host), c); };
   nav(host, { onNext: () => {
     $$(".invalid", host).forEach(x => x.classList.remove("invalid"));
     if (!c.leido) { $("#q-leido", host).classList.add("invalid"); return "Confirme que leyó la información."; }
     if (!c.acepta) { $("#q-acepta", host).classList.add("invalid"); return "Indique si acepta participar."; }
     if (c.acepta === "No acepto") { finishRefusal("rechazó"); return "__stop"; }
     if (!c.foto) { $("#q-foto", host).classList.add("invalid"); return "Indique si autoriza las fotografías."; }
-    if (!c.nombre.trim()) { $("#c-nombre", host).classList.add("invalid"); return "Escriba nombres y apellidos."; }
-    if (!/^\d{8}$/.test(c.dni)) { $("#c-dni", host).classList.add("invalid"); return "El DNI debe tener 8 dígitos."; }
-    if (!c.condicion) { $("#q-cond", host).classList.add("invalid"); return "Indique su condición."; }
-    if (c.condicion !== S.meta.estrato) { $("#q-cond", host).classList.add("invalid"); return "La condición no coincide con el estrato registrado en la presentación."; }
-    if (!c.firma) { $("#sig-wrap", host).classList.add("invalid"); return "Falta la firma del participante."; }
-    if (!S.ficha.condicion) S.ficha.condicion = c.condicion;
+    if (!S.ficha.condicion) S.ficha.condicion = S.meta.estrato;
     return null; } });
   const nb = $("#next", host), orig = nb.onclick;
   nb.onclick = () => { if (c.acepta === "No acepto" && c.leido) { finishRefusal("rechazó"); return; } orig(); };
-}
-function setupSignature(cv, c) {
-  const ctx = cv.getContext("2d"); const dpr = window.devicePixelRatio || 1;
-  const fit = () => { const r = cv.getBoundingClientRect(); cv.width = Math.max(1, r.width * dpr); cv.height = 150 * dpr; ctx.scale(dpr, dpr); ctx.lineWidth = 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = cssVar("--ink");
-    if (c.firma) { const im = new Image(); im.onload = () => ctx.drawImage(im, 0, 0, r.width, 150); im.src = c.firma; } };
-  fit();
-  let draw = false, last = null;
-  const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-  cv.onpointerdown = e => { draw = true; last = pos(e); cv.setPointerCapture(e.pointerId); };
-  cv.onpointermove = e => { if (!draw) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(...last); ctx.lineTo(...p); ctx.stroke(); last = p; };
-  cv.onpointerup = cv.onpointercancel = () => { if (!draw) return; draw = false; c.firma = cv.toDataURL("image/png"); persist(); $("#sig-wrap")?.classList.remove("invalid"); };
 }
 function pills(name, opts, val) { return `<div class="pills" role="radiogroup">${opts.map(o => `<label class="pill"><input type="radio" name="${name}" value="${esc(o)}" ${val === o ? "checked" : ""}><span>${esc(o)}</span></label>`).join("")}</div>`; }
 function bindPills(host, name, fn) { $$(`input[name="${name}"]`, host).forEach(r => r.onchange = () => { r.closest(".q")?.classList.remove("invalid"); fn(r.value); }); }
@@ -1119,7 +1089,7 @@ function stepSend(host) {
   <div id="send-zone"></div>`;
   const missing = STEPS.slice(1, 8).filter((st, i) => i + 1 >= S.maxStep).map(x => x.t);
   const problems = [];
-  if (!S.cons.firma) problems.push("Consentimiento sin firma");
+  if (S.cons.acepta !== "Sí, acepto") problems.push("Consentimiento no aceptado");
   if (!s.nasa) problems.push("NASA-TLX incompleto"); if (!s.sus) problems.push("SUSESO/ISTAS21 incompleto"); if (!s.warr) problems.push("Satisfacción laboral incompleta");
   if (REGIONS.some(r => !S.nordic[r.id]?.m12)) problems.push("Cuestionario Nórdico incompleto"); if (!s.rebaFinal || s.reba.some(x => !x)) problems.push("Observaciones REBA incompletas");
   $("#checks", host).innerHTML = problems.length ? `<div class="banner bad"><div><b>Antes de enviar:</b> ${problems.map(esc).join("; ")}.</div></div>` : `<div class="banner good"><div><b>Todo completo.</b> ${S.reba.fotos.length} foto(s) adjunta(s).</div></div>`;
@@ -1146,7 +1116,7 @@ async function submit(host, estado = "completa") {
     const rec = {
       id, estado, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, establecimiento: S.meta.establecimiento,
       encuestador: P.uid, enviado: new Date().toISOString(),
-      consentimiento: { acepta: S.cons.acepta, foto: S.cons.foto, nombre: S.cons.nombre, dni: S.cons.dni, condicion: S.cons.condicion, firma: S.cons.firma },
+      consentimiento: { acepta: S.cons.acepta, foto: S.cons.foto },
       ficha: S.ficha, nasa: S.nasa, suseso: S.suseso, warr: S.warr, nordico: S.nordic,
       reba: { tarea: S.reba.tarea, lado: S.reba.lado, obs: S.reba.obs },
       puntajes: { nasa: s.nasa, suseso: s.sus, warr: s.warr, regiones12m: s.regs, sintomas12m: s.sintomas12, reba: s.reba.map(r => r ? r.total : null), rebaFinal: s.rebaFinal, rebaNivel: s.rebaLevel ? s.rebaLevel.t : null, imc: s.imc },
@@ -1297,7 +1267,7 @@ const Admin = {
       <h3 style="margin-top:14px">Ficha</h3><div class="kv" style="margin-top:6px">${Object.entries(r.ficha || {}).map(([k, v]) => `<span>${esc((FICHA.find(q => q.id === k) || {}).t || k)}</span><span>${esc(v)}</span>`).join("")}</div>
       <h3 style="margin-top:14px">Observación REBA</h3><p>${esc(r.reba?.tarea || "")} · lado ${esc(r.reba?.lado || "")}</p>
       <h3 style="margin-top:14px">Fotografías</h3><div class="gallery" id="d-gal"><p class="muted">Cargando…</p></div>
-      <h3 style="margin-top:14px">Consentimiento</h3><p class="muted" style="font-size:.88rem">${esc(r.consentimiento?.nombre || "")} · DNI ${esc(r.consentimiento?.dni || "")} · Fotos: ${esc(r.consentimiento?.foto || "")}</p>${r.consentimiento?.firma ? `<img src="${r.consentimiento.firma}" alt="Firma del participante" style="max-width:260px;background:#fff;border-radius:8px;border:1px solid var(--line);margin-top:6px">` : ""}`}`;
+      <h3 style="margin-top:14px">Consentimiento</h3><p class="muted" style="font-size:.88rem">${esc(r.consentimiento?.acepta || "")} · Fotos: ${esc(r.consentimiento?.foto || "")} · registro anónimo</p>`}`;
     bg.classList.add("open"); d.classList.add("open");
     const close = () => { bg.classList.remove("open"); d.classList.remove("open"); };
     $("#close-d").onclick = close; bg.onclick = close;
@@ -1308,7 +1278,7 @@ const Admin = {
     if (!rows.length) { toast("Aún no hay registros para exportar"); return; }
     if (!P.downloads) { toast("La descarga no está disponible en esta vista"); return; }
     let data, filename;
-    if (kind === "json") { data = JSON.stringify(rows.map(r => { const c = JSON.parse(JSON.stringify(r)); if (c.consentimiento) delete c.consentimiento.firma; return c; }), null, 2); filename = "estudio_tme_registros.json"; }
+    if (kind === "json") { data = JSON.stringify(rows.map(r => { const c = JSON.parse(JSON.stringify(r)); return c; }), null, 2); filename = "estudio_tme_registros.json"; }
     else {
       const cols = ["codigo", "estrato", "estado", "fecha", "establecimiento", ...FICHA.filter(q => q.id).map(q => "ficha_" + q.id), "imc", ...NASA.map(x => "nasa_" + x.id), "nasa_raw", ...Array.from({ length: 20 }, (_, i) => "suseso_" + (i + 1)), ...SUSESO.map(s => "suseso_" + s.key), ...WARR.map((_, i) => "warr_" + (i + 1)), "warr_total", ...REGIONS.flatMap(r => ["nord_" + r.id + "_12m", "nord_" + r.id + "_7d", "nord_" + r.id + "_imp"]), "sintomas_12m", "reba_tarea", "reba_lado", "reba_obs1", "reba_obs2", "reba_obs3", "reba_final", "reba_nivel", "n_fotos"];
       const line = r => { const p = r.puntajes || {}; const o = { codigo: r.codigo, estrato: r.estrato, estado: r.estado, fecha: r.fecha, establecimiento: r.establecimiento, imc: p.imc, nasa_raw: p.nasa, warr_total: p.warr, sintomas_12m: p.sintomas12m == null ? "" : p.sintomas12m ? 1 : 0, reba_tarea: r.reba?.tarea, reba_lado: r.reba?.lado, reba_final: p.rebaFinal, reba_nivel: p.rebaNivel, n_fotos: (r.fotos || []).length };
@@ -1349,7 +1319,7 @@ function renderHome() {
       <a class="card choice enc" href="#encuesta">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3M9 10h6M9 14h6M9 18h3"/></svg></span>
         <div><p class="eyebrow">Encuestadores</p><h2>Aplicar encuesta</h2></div>
-        <ul><li>Presentación y consentimiento con firma</li><li>Ficha, NASA-TLX, SUSESO/ISTAS21, satisfacción laboral y Nórdico</li><li>Observación REBA con diagramas y fotos opcionales</li></ul>
+        <ul><li>Presentación y consentimiento informado</li><li>Ficha, NASA-TLX, SUSESO/ISTAS21, satisfacción laboral y Nórdico</li><li>Observación REBA con diagramas y fotos opcionales</li></ul>
         <span class="go">${pending ? "Continuar o iniciar" : "Iniciar encuesta"} ${ICONS.next}</span>
       </a>
       <a class="card choice adm" href="#admin">

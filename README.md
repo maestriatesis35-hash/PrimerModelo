@@ -7,7 +7,7 @@ Aplicación de campo del anteproyecto **«Factores ocupacionales asociados a sí
 `index.html` es una página única con:
 
 - **Inicio**: elección entre aplicar la encuesta o entrar al panel.
-- **Encuesta paso a paso**: presentación, consentimiento informado con firma, ficha sociodemográfica y ocupacional, NASA-TLX (versión Raw), SUSESO/ISTAS21 (versión breve), Escala General de Satisfacción Laboral de Warr, Cook y Wall, Cuestionario Nórdico con mapa corporal y observación REBA con diagramas de postura y cálculo automático (tablas A, B y C).
+- **Encuesta paso a paso**: presentación, consentimiento informado anónimo (sin nombre, DNI ni firma), ficha sociodemográfica y ocupacional, NASA-TLX (versión Raw), SUSESO/ISTAS21 (versión breve), Escala General de Satisfacción Laboral de Warr, Cook y Wall, Cuestionario Nórdico con mapa corporal y observación REBA con diagramas de postura y cálculo automático (tablas A, B y C).
 - **Panel de administración** protegido con contraseña: avance por estrato (meta 121: 68 egresados y 53 internos), prevalencia de síntomas por región, niveles REBA, fotografías y exportación CSV/JSON.
 
 ## Modo de funcionamiento
