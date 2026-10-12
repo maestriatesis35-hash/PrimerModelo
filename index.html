@@ -1,0 +1,1452 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Estudio TME Fisioterapia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: cuaderno de campo clínico — barra superior con dos vistas; encuesta en pasos con riel de progreso; panel en rejilla de tarjetas */
+:root{
+  --bg:#F2F6F6; --surface:#FFFFFF; --surface-2:#E8EFF0; --ink:#12262E; --ink-2:#3E555D; --muted:#64787F;
+  --line:#D4E0E2; --primary:#0B5E70; --primary-ink:#FFFFFF; --primary-soft:#DCEEF1;
+  --accent:#C2741A; --accent-soft:#F7E7D2;
+  --good:#2C7A4B; --good-soft:#DCEFE3; --warn:#9A6A10; --warn-soft:#F6EBCF; --bad:#B23A2E; --bad-soft:#F6DEDA;
+  --s1:#0080A0; --s2:#C2741A;
+  --seq1:#D5ECF1; --seq2:#9CD0DC; --seq3:#4FA7BC; --seq4:#0B7C95; --seq5:#0A4F60;
+  --shadow:0 1px 2px rgba(18,38,46,.06),0 8px 24px rgba(18,38,46,.06);
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:14px; --r-sm:9px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C181D; --surface:#12232A; --surface-2:#183039; --ink:#E4EEF0; --ink-2:#B8CBD0; --muted:#8FA6AD;
+  --line:#25424B; --primary:#4FB6CA; --primary-ink:#06232B; --primary-soft:#163C46;
+  --accent:#E09A45; --accent-soft:#3A2A16;
+  --good:#5CC48A; --good-soft:#163A27; --warn:#E2B45A; --warn-soft:#3A2F14; --bad:#F08A7E; --bad-soft:#40201C;
+  --s1:#1CA3BC; --s2:#C47A14;
+  --seq1:#173A43; --seq2:#1F5A67; --seq3:#2C8297; --seq4:#4FB0C5; --seq5:#9ADAE6;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C181D; --surface:#12232A; --surface-2:#183039; --ink:#E4EEF0; --ink-2:#B8CBD0; --muted:#8FA6AD;
+  --line:#25424B; --primary:#4FB6CA; --primary-ink:#06232B; --primary-soft:#163C46;
+  --accent:#E09A45; --accent-soft:#3A2A16;
+  --good:#5CC48A; --good-soft:#163A27; --warn:#E2B45A; --warn-soft:#3A2F14; --bad:#F08A7E; --bad-soft:#40201C;
+  --s1:#1CA3BC; --s2:#C47A14;
+  --seq1:#173A43; --seq2:#1F5A67; --seq3:#2C8297; --seq4:#4FB0C5; --seq5:#9ADAE6;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.7rem,4.5vw,2.6rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.3rem,3vw,1.7rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.muted{color:var(--muted)}
+a{color:var(--primary)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* ---------- barra superior ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--primary);display:grid;place-items:center;flex:none}
+.brand-mark svg{width:22px;height:22px}
+.brand b{font-family:var(--f-display);font-size:1.02rem;display:block;line-height:1.1}
+.brand small{color:var(--muted);font-size:.78rem}
+.tabs{margin-left:auto;display:flex;background:var(--surface-2);border-radius:999px;padding:4px;gap:2px}
+.tabs a{text-decoration:none;color:var(--ink-2);padding:7px 14px;border-radius:999px;font-weight:700;font-size:.9rem;transition:background .2s,color .2s}
+.tabs a[aria-current="page"]{background:var(--surface);color:var(--primary);box-shadow:var(--shadow)}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:22px 80px}
+.banner{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:var(--r-sm);font-size:.9rem;margin-bottom:14px;border:1px solid var(--line);background:var(--surface)}
+.banner.warn{background:var(--warn-soft);border-color:transparent;color:var(--ink)}
+.banner.bad{background:var(--bad-soft);border-color:transparent}
+.banner.good{background:var(--good-soft);border-color:transparent}
+
+/* ---------- botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 20px;font-weight:700;cursor:pointer;transition:transform .15s ease,box-shadow .2s,background .2s;min-height:44px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:var(--primary-ink);box-shadow:0 6px 16px color-mix(in srgb,var(--primary) 35%,transparent)}
+.btn-primary:hover{box-shadow:0 8px 22px color-mix(in srgb,var(--primary) 45%,transparent)}
+.btn-ghost{background:transparent;color:var(--ink-2);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn svg{width:18px;height:18px}
+
+/* ---------- encuesta: layout ---------- */
+.survey{display:grid;grid-template-columns:260px minmax(0,1fr);gap:22px;align-items:start}
+.rail{position:sticky;top:84px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rail li button{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:10px;padding:8px 8px;border-radius:10px;cursor:pointer;font-size:.92rem;color:var(--ink-2)}
+.rail li button:hover{background:var(--surface-2)}
+.rail li button[aria-current="step"]{background:var(--primary-soft);color:var(--ink);font-weight:700}
+.rail .dot{width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--f-mono);font-size:.75rem;border:1.5px solid var(--line);background:var(--surface);transition:all .25s}
+.rail li.done .dot{background:var(--good);border-color:var(--good);color:#fff}
+.rail li button[aria-current="step"] .dot{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.rail .who{font-size:.72rem;color:var(--muted);display:block;line-height:1.2}
+.rail-foot{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:.82rem;color:var(--muted)}
+.mobile-progress{display:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.step{padding:clamp(18px,3vw,30px);animation:stepIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes stepIn{from{opacity:.001;transform:translateY(14px)}to{opacity:1;transform:none}}
+.step-head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+.step-head .meta{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.chip.p{background:var(--primary-soft);color:var(--primary)}
+.chip.a{background:var(--accent-soft);color:var(--accent)}
+.chip.g{background:var(--good-soft);color:var(--good)}
+.chip.w{background:var(--warn-soft);color:var(--warn)}
+.chip.b{background:var(--bad-soft);color:var(--bad)}
+.lead{color:var(--ink-2);max-width:68ch}
+.navbar{display:flex;justify-content:space-between;gap:10px;margin-top:24px;padding-top:18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.err{color:var(--bad);font-size:.85rem;font-weight:700;min-height:1.2em}
+
+/* ---------- formularios ---------- */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.field{display:grid;gap:6px;min-width:0}
+.field>label,.q-label{font-weight:700;font-size:.93rem}
+.field small{color:var(--muted);font-size:.8rem}
+.input,select.input,textarea.input{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);min-height:44px;transition:border-color .2s,box-shadow .2s}
+.input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
+.input.invalid,.q.invalid{border-color:var(--bad)!important;box-shadow:0 0 0 3px var(--bad-soft)}
+.section-title{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+.section-title .tag{font-family:var(--f-mono);font-size:.78rem;background:var(--ink);color:var(--surface);padding:2px 8px;border-radius:6px}
+.q{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:10px;background:var(--surface);transition:border-color .2s}
+.q + .q{margin-top:10px}
+.q-head{display:flex;gap:10px;align-items:baseline}
+.q-num{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);min-width:2.2em}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{position:relative}
+.pill input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.pill span{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:6px 13px;border-radius:999px;border:1.5px solid var(--line);font-size:.88rem;cursor:pointer;transition:all .18s;user-select:none;background:var(--surface)}
+.pill input:checked + span{background:var(--primary);border-color:var(--primary);color:var(--primary-ink);font-weight:700;transform:translateY(-1px)}
+.pill input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+.likert7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.likert7 .pill span{width:100%;padding:6px 2px;flex-direction:column;font-size:.72rem;line-height:1.15;text-align:center;border-radius:10px;min-height:52px}
+.likert7 .pill b{font-family:var(--f-mono);font-size:.95rem}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--primary);flex:none}
+.consent-doc{background:var(--surface-2);border-radius:12px;padding:16px 18px;max-height:none;display:grid;gap:10px;font-size:.95rem}
+.consent-doc h3{font-size:.98rem}
+.sig-wrap{border:1.5px dashed var(--line);border-radius:12px;background:var(--surface);position:relative;touch-action:none}
+.sig-wrap canvas{width:100%;height:150px;display:block;border-radius:12px}
+.sig-wrap .hint{position:absolute;left:12px;bottom:8px;font-size:.8rem;color:var(--muted);pointer-events:none}
+
+/* ---------- presentación ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:center}
+.hero-anim{aspect-ratio:1/1;max-width:340px;width:100%;justify-self:center;position:relative}
+.hero-anim .lottie{position:absolute;inset:0}
+.hero-anim .center-ico{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+.fact{background:var(--surface-2);border-radius:12px;padding:12px}
+.fact b{display:block;font-family:var(--f-display);font-size:1.35rem}
+.fact span{font-size:.8rem;color:var(--muted)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:18px;padding:0;list-style:none;counter-reset:f}
+.flow li{counter-increment:f;padding:10px 12px;border-radius:10px;border:1px solid var(--line);font-size:.86rem;display:flex;gap:8px;align-items:flex-start}
+.flow li::before{content:counter(f);font-family:var(--f-mono);font-size:.75rem;background:var(--primary-soft);color:var(--primary);border-radius:6px;padding:1px 6px;flex:none}
+.flow li.enc{background:var(--accent-soft);border-color:transparent}
+
+/* ---------- NASA ---------- */
+.nasa{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:22px;align-items:start}
+.nasa-item{padding:14px;border:1.5px solid var(--line);border-radius:12px}
+.nasa-item + .nasa-item{margin-top:10px}
+.nasa-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.nasa-val{font-family:var(--f-mono);font-size:1.25rem;font-weight:600;color:var(--primary);min-width:3ch;text-align:right}
+.nasa-val.unset{color:var(--muted)}
+.range{width:100%;margin-top:8px;accent-color:var(--primary);height:28px}
+.ticks{display:flex;justify-content:space-between;margin-top:-4px;padding:0 7px}
+.ticks i{width:1px;height:6px;background:var(--line)}
+.ticks i:nth-child(5n+1){height:10px;background:var(--muted)}
+.ends{display:flex;justify-content:space-between;font-size:.76rem;color:var(--muted)}
+.radar-card{position:sticky;top:90px;padding:16px;text-align:center}
+.radar-card svg{width:100%;max-width:300px;height:auto}
+.big{font-family:var(--f-display);font-size:2.4rem;font-weight:800;line-height:1}
+
+/* ---------- Nórdico ---------- */
+.nordic{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;align-items:start}
+.body-map{position:sticky;top:90px;padding:12px;text-align:center}
+.body-map svg{width:100%;max-width:300px;height:auto}
+.reg{cursor:pointer;transition:fill .25s,stroke .25s;fill:var(--surface-2);stroke:var(--muted);stroke-width:1.2}
+.reg:hover{fill:var(--primary-soft)}
+.reg.yes{fill:var(--accent);stroke:var(--accent)}
+.reg.sel{stroke:var(--primary);stroke-width:3}
+.silhouette{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.legend-row{display:flex;gap:14px;justify-content:center;font-size:.8rem;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.legend-row i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.region{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;transition:border-color .2s,box-shadow .2s;scroll-margin-top:90px}
+.region + .region{margin-top:10px}
+.region.sel{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
+.region-head{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.region-body{display:grid;gap:10px;margin-top:10px}
+.subq{display:grid;gap:6px}
+.subq .q-label{font-weight:400;font-size:.88rem;color:var(--ink-2)}
+
+/* ---------- REBA ---------- */
+.obs-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.obs-tabs button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer;min-height:40px}
+.obs-tabs button[aria-selected="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.reba{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px;align-items:start}
+.group{border:1.5px solid var(--line);border-radius:14px;padding:14px}
+.group + .group{margin-top:12px}
+.group h3{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;cursor:pointer;z-index:2}
+.opt .box{border:1.5px solid var(--line);border-radius:12px;padding:8px 8px 6px;display:grid;gap:4px;text-align:center;transition:all .18s;background:var(--surface);height:100%}
+.opt svg{width:100%;height:74px}
+.opt .lbl{font-size:.76rem;line-height:1.2;color:var(--ink-2)}
+.opt .pts{font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.opt input:checked + .box{border-color:var(--primary);background:var(--primary-soft);box-shadow:0 0 0 3px var(--primary-soft)}
+.opt input:checked + .box .pts{color:var(--primary);font-weight:600}
+.opt input:focus-visible + .box{outline:3px solid var(--accent);outline-offset:2px}
+.adj{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.adj label{display:inline-flex;gap:6px;align-items:center;font-size:.82rem;border:1px dashed var(--line);border-radius:999px;padding:6px 10px;cursor:pointer}
+.adj input{accent-color:var(--primary)}
+.score-card{position:sticky;top:90px;padding:16px;display:grid;gap:12px}
+.score-num{font-family:var(--f-display);font-size:3.4rem;font-weight:800;line-height:1;transition:color .3s}
+.lvl{padding:6px 12px;border-radius:999px;font-weight:700;display:inline-block;font-size:.88rem}
+.lvl-1{background:var(--good-soft);color:var(--good)}
+.lvl-2{background:var(--seq1);color:var(--ink)}
+.lvl-3{background:var(--warn-soft);color:var(--warn)}
+.lvl-4{background:var(--bad-soft);color:var(--bad)}
+.lvl-5{background:var(--bad);color:#fff}
+.calc{font-family:var(--f-mono);font-size:.8rem;display:grid;gap:3px;color:var(--ink-2)}
+.calc div{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding-bottom:2px}
+.photo-zone{border:1.5px dashed var(--line);border-radius:12px;padding:12px;display:grid;gap:10px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.thumbs figure{margin:0;position:relative;border-radius:10px;overflow:hidden;aspect-ratio:1;background:var(--surface-2)}
+.thumbs img{width:100%;height:100%;object-fit:cover}
+.thumbs button{position:absolute;top:4px;right:4px;border:0;border-radius:999px;width:26px;height:26px;background:rgba(0,0,0,.6);color:#fff;cursor:pointer}
+
+/* ---------- resumen ---------- */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.sum{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px}
+.sum b{font-family:var(--f-display);font-size:1.5rem}
+.done-screen{text-align:center;display:grid;justify-items:center;gap:12px;padding:20px 0}
+.done-screen .lottie{width:180px;height:180px}
+.saving{display:flex;align-items:center;gap:10px;justify-content:center}
+.spin{width:22px;height:22px;border-radius:50%;border:3px solid var(--primary-soft);border-top-color:var(--primary);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- admin ---------- */
+.admin-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{padding:16px;display:grid;gap:4px}
+.kpi b{font-family:var(--f-display);font-size:2rem;line-height:1}
+.kpi .bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:6px}
+.kpi .bar i{display:block;height:100%;border-radius:99px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.panel{padding:16px;min-width:0}
+.panel h3{margin-bottom:4px}
+.hbars{display:grid;gap:7px;margin-top:12px}
+.hbar{display:grid;grid-template-columns:120px minmax(0,1fr) 54px;gap:8px;align-items:center;font-size:.84rem}
+.hbar .track{height:16px;background:var(--surface-2);border-radius:0 4px 4px 0;position:relative}
+.hbar .fill{height:100%;border-radius:0 4px 4px 0;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.hbar .v{font-family:var(--f-mono);text-align:right;color:var(--ink-2)}
+.hbar:hover .fill{filter:brightness(1.1)}
+.vbars{display:flex;gap:10px;align-items:flex-end;height:150px;margin-top:14px;border-bottom:1px solid var(--line);padding:0 6px}
+.vbar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%}
+.vbar .col{width:100%;max-width:46px;border-radius:4px 4px 0 0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.vbar .n{font-family:var(--f-mono);font-size:.8rem}
+.vlabels{display:flex;gap:10px;padding:6px 6px 0}
+.vlabels span{flex:1;text-align:center;font-size:.72rem;color:var(--muted)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--ink-2);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.table-wrap{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:760px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+tbody tr{cursor:pointer;transition:background .15s}
+tbody tr:hover{background:var(--surface-2)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}
+.gallery figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in}
+.gallery figcaption{font-size:.76rem;padding:6px 8px;color:var(--ink-2)}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);display:grid;gap:8px;justify-items:center}
+.empty svg{width:64px;height:64px;opacity:.7}
+.drawer-bg{position:fixed;inset:0;background:rgba(6,20,26,.45);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-bg.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,100%);background:var(--surface);z-index:51;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);overflow-y:auto;padding:18px;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));border-left:1px solid var(--line)}
+.drawer.open{transform:none}
+.kv{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;font-size:.88rem}
+.kv span:nth-child(odd){color:var(--muted)}
+.kv span:nth-child(even){font-family:var(--f-mono);text-align:right}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:60;display:grid;place-items:center;padding:16px}
+.lightbox img{max-height:88vh;border-radius:10px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(120%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;z-index:70;transition:transform .3s;max-width:calc(100% - 32px)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ---------- inicio ---------- */
+.home{display:grid;gap:22px}
+.home-hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;align-items:center}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.choice{display:grid;gap:12px;padding:22px;text-decoration:none;color:var(--ink);position:relative;overflow:hidden;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+.choice:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:0 14px 34px color-mix(in srgb,var(--primary) 18%,transparent)}
+.choice .ico{width:54px;height:54px;border-radius:16px;display:grid;place-items:center}
+.choice .ico svg{width:30px;height:30px}
+.choice.enc .ico{background:var(--primary-soft);color:var(--primary)}
+.choice.adm .ico{background:var(--accent-soft);color:var(--accent)}
+.choice h2{font-size:1.4rem}
+.choice ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:.92rem;display:grid;gap:3px}
+.choice .go{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--primary)}
+.choice.adm .go{color:var(--accent)}
+.choice .go svg{width:18px;height:18px;transition:transform .2s}
+.choice:hover .go svg{transform:translateX(4px)}
+.lock-badge{position:absolute;top:16px;right:16px}
+.resume{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 16px}
+.login{max-width:440px;margin:30px auto;padding:26px;display:grid;gap:14px;text-align:left}
+.login .ico{width:60px;height:60px;border-radius:18px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;justify-self:center}
+.login .ico svg{width:32px;height:32px}
+.login h2{text-align:center}
+.pw{position:relative}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--muted);cursor:pointer;padding:6px 8px;font-size:.82rem;font-weight:700}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+/* ---------- responsive ---------- */
+@media (max-width: 920px){
+  .survey{grid-template-columns:minmax(0,1fr)}
+  .rail{display:none}
+  .mobile-progress{display:block;position:sticky;top:60px;z-index:20;background:var(--bg);padding:8px 0 10px}
+  .mp-row{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px;gap:8px}
+  .mp-bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+  .mp-bar i{display:block;height:100%;background:var(--primary);transition:width .4s}
+  .nasa,.nordic,.reba,.hero{grid-template-columns:minmax(0,1fr)}
+  .radar-card,.body-map,.score-card{position:static}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-grid{grid-template-columns:minmax(0,1fr)}
+  .home-hero,.choices{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width: 560px){
+  .grid2,.grid3,.facts{grid-template-columns:minmax(0,1fr)}
+  .likert7{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .likert7 .pill span{font-size:0;min-height:44px}
+  .likert7 .pill b{font-size:.95rem}
+  .hbar{grid-template-columns:92px minmax(0,1fr) 46px}
+  .navbar .btn{flex:1}
+  .tabs{margin-left:0;width:100%}
+  .tabs a{flex:1;text-align:center}
+  .brand small{display:none}
+  .score-card{position:sticky;bottom:0;top:auto;z-index:10;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px}
+  .score-card .calc,.score-card .hide-sm{display:none}
+  .score-num{font-size:2.2rem}
+}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div class="topbar"><div class="topbar-in">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary-ink)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v7M12 9l-4 3M12 9l4 3M12 14l-3 6M12 14l3 6"/></svg></div>
+    <div><b>Estudio TME · Fisioterapia</b><small>UCSS 2026 · Escuela de Posgrado UNP</small></div>
+  </div>
+  <nav class="tabs" aria-label="Vistas">
+    <a href="#inicio" id="tab-home">Inicio</a>
+    <a href="#encuesta" id="tab-enc">Encuesta</a>
+    <a href="#admin" id="tab-adm">Admin <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="vertical-align:-1px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></a>
+  </nav>
+</div></div>
+
+<main class="wrap">
+  <div id="conn-banner"></div>
+  <section id="view-home"></section>
+  <section id="view-enc" hidden></section>
+  <section id="view-adm" hidden></section>
+</main>
+<div class="drawer-bg" id="drawer-bg"></div>
+<aside class="drawer" id="drawer" aria-label="Detalle de encuesta"></aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<script>
+"use strict";
+/* =====================================================================
+   CONFIGURACIÓN DEL ESTUDIO
+   ===================================================================== */
+const CFG = {
+  titulo: "Factores ocupacionales asociados a síntomas musculoesqueléticos en fisioterapeutas egresados e internos en actividad asistencial de la Universidad Católica Sedes Sapientiae, 2026",
+  investigador: "Lic. TM. Marlon Stevinson Rosas Chero",
+  asesora: "Dra. Rosario Nelly Elera Ojeda",
+  institucion: "Escuela de Posgrado – Unidad de Posgrado de la Facultad de Ciencias de la Salud, Universidad Nacional de Piura",
+  contactoInv: "[Por completar: teléfono y correo del investigador]",
+  contactoComite: "Comité de Ética de la Investigación de la Facultad de Ciencias de la Salud, Universidad Nacional de Piura. [Por completar: teléfono o correo]",
+  meta: { total: 121, egresado: 68, interno: 53 }
+};
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2800); }
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} }
+};
+
+/* =====================================================================
+   INSTRUMENTOS
+   ===================================================================== */
+const FICHA = [
+  { sec: "A. Datos sociodemográficos" },
+  { id: "edad", t: "Edad", type: "number", unit: "años", min: 18, max: 80 },
+  { id: "sexo", t: "Sexo", type: "pills", opts: ["Masculino", "Femenino"] },
+  { id: "peso", t: "Peso", type: "number", unit: "kg", min: 30, max: 200, step: "0.1" },
+  { id: "talla", t: "Talla", type: "number", unit: "cm", min: 120, max: 220 },
+  { id: "mano", t: "Mano dominante", type: "pills", opts: ["Diestro(a)", "Zurdo(a)", "Ambidiestro(a)"] },
+  { sec: "B. Condición laboral o formativa" },
+  { id: "condicion", t: "Condición", type: "pills", opts: ["Interno", "Egresado"] },
+  { id: "meses", t: "Tiempo en actividad asistencial", type: "number", unit: "meses", min: 0, max: 600 },
+  { id: "pacientes", t: "Número promedio de pacientes atendidos por día", type: "number", unit: "pacientes", min: 0, max: 100 },
+  { id: "moviliza", t: "¿Realiza movilización o transferencia de pacientes en su actividad habitual?", type: "pills", opts: ["Sí", "No"] },
+  { id: "otroEmpleo", t: "¿Tiene otro empleo o actividad laboral adicional?", type: "pills", opts: ["Sí", "No"] },
+  { id: "anosEgreso", t: "Años desde el egreso", type: "number", unit: "años", min: 0, max: 40, only: "Egresado" },
+  { id: "vinculo", t: "Tipo de vínculo laboral", type: "pills", opts: ["Nombrado", "Contratado", "Locador de servicios", "Independiente"], only: "Egresado" },
+  { id: "centros", t: "Número de centros donde trabaja", type: "number", unit: "centros", min: 1, max: 10, only: "Egresado" },
+  { id: "sede", t: "Sede de internado", type: "text", only: "Interno" },
+  { id: "mesInternado", t: "Mes de internado en curso", type: "number", unit: "mes", min: 1, max: 12, only: "Interno" },
+  { sec: "C. Jornada laboral y pausas activas" },
+  { id: "horas", t: "¿Cuántas horas trabaja durante el día?", type: "number", unit: "horas", min: 1, max: 24, step: "0.5" },
+  { id: "pausas", t: "¿Cuántas pausas activas realiza durante su turno de trabajo?", type: "number", unit: "pausas", min: 0, max: 20 },
+  { id: "minPausa", t: "¿Cuántos minutos en promedio dura su pausa activa?", type: "number", unit: "min", min: 0, max: 120 },
+  { sec: "D. Antecedentes" },
+  { id: "deporte", t: "¿Realiza actividad física o deporte de forma regular?", type: "pills", opts: ["Sí", "No"], follow: { id: "deporteCual", t: "¿Cuál?" } },
+  { id: "lesionPrevia", t: "¿Ha tenido alguna lesión musculoesquelética previa (traumatismo, lesión deportiva, fractura) o cirugía musculoesquelética?", type: "pills", opts: ["Sí", "No"], follow: { id: "lesionCual", t: "Especifique" } },
+  { id: "reuma", t: "¿Tiene diagnóstico de alguna enfermedad reumatológica sistémica (artritis reumatoide, lupus u otra)?", type: "pills", opts: ["Sí", "No"] },
+  { id: "embarazo", t: "¿Está embarazada actualmente?", type: "pills", opts: ["Sí", "No", "No aplica"] },
+  { id: "licencia", t: "¿Se encuentra actualmente con descanso médico o licencia?", type: "pills", opts: ["Sí", "No"] }
+];
+const NASA = [
+  { id: "mental", t: "Exigencia mental", d: "¿Cuánta actividad mental y perceptiva fue necesaria (pensar, decidir, calcular, recordar, observar, buscar)? ¿La tarea fue fácil o difícil, simple o compleja?", lo: "Muy baja", hi: "Muy alta" },
+  { id: "fisica", t: "Exigencia física", d: "¿Cuánta actividad física fue necesaria (empujar, tirar, girar, levantar, movilizar)? ¿La tarea fue ligera o pesada, descansada o agotadora?", lo: "Muy baja", hi: "Muy alta" },
+  { id: "temporal", t: "Exigencia temporal", d: "¿Cuánta presión de tiempo sintió por el ritmo al que se sucedían las tareas? ¿Fue lento y pausado o rápido y frenético?", lo: "Muy baja", hi: "Muy alta" },
+  { id: "rendimiento", t: "Rendimiento", d: "¿Hasta qué punto cree que tuvo éxito en alcanzar los objetivos de su trabajo? ¿Cuán satisfecho está con su rendimiento?", lo: "Muy bueno", hi: "Muy malo" },
+  { id: "esfuerzo", t: "Esfuerzo", d: "¿En qué medida tuvo que trabajar (física y mentalmente) para alcanzar su nivel de resultados?", lo: "Muy bajo", hi: "Muy alto" },
+  { id: "frustracion", t: "Frustración", d: "Durante la tarea, ¿en qué medida se sintió inseguro, desalentado, irritado, tenso o preocupado, frente a seguro, satisfecho, relajado y contento?", lo: "Muy baja", hi: "Muy alta" }
+];
+const SUS_OPTS = ["Siempre", "La mayoría de las veces", "Algunas veces", "Sólo unas pocas veces", "Nunca"];
+const SUSESO = [
+  { dim: "Exigencias psicológicas", key: "ex", items: [
+    [1, "¿Puede hacer su trabajo con tranquilidad y tenerlo al día?", 0],
+    [2, "En su trabajo, ¿tiene usted que tomar decisiones difíciles?", 1],
+    [3, "En general, ¿considera usted que su trabajo le provoca desgaste emocional?", 1],
+    [4, "En su trabajo, ¿tiene usted que guardar sus emociones y no expresarlas?", 1],
+    [5, "¿Su trabajo requiere atención constante?", 1]] },
+  { dim: "Trabajo activo y desarrollo de habilidades", key: "ta", items: [
+    [6, "¿Tiene influencia sobre la cantidad de trabajo que se le asigna?", 0],
+    [7, "¿Puede dejar su trabajo un momento para conversar con un compañero o compañera?", 0],
+    [8, "Su trabajo, ¿permite que aprenda cosas nuevas?", 0],
+    [9, "Las tareas que hace, ¿le parecen importantes?", 0],
+    [10, "¿Siente que su empresa o institución tiene gran importancia para usted?", 0]] },
+  { dim: "Apoyo social en la empresa y calidad de liderazgo", key: "as", items: [
+    [11, "¿Sabe exactamente qué tareas son de su responsabilidad?", 0],
+    [12, "¿Tiene que hacer tareas que usted cree que deberían hacerse de otra manera?", 1],
+    [13, "¿Recibe ayuda y apoyo de su jefe(a) o superior(a) inmediato(a)?", 0],
+    [14, "Entre compañeros y compañeras, ¿se ayudan en el trabajo?", 0],
+    [15, "Sus jefes inmediatos, ¿resuelven bien los conflictos?", 0]] },
+  { dim: "Compensaciones", key: "co", items: [
+    [16, "¿Está preocupado(a) por si lo(la) despiden o no le renuevan el contrato?", 1],
+    [17, "¿Está preocupado(a) por si le cambian las tareas contra su voluntad?", 1],
+    [18, "Mis superiores me dan el reconocimiento que merezco.", 0]] },
+  { dim: "Doble presencia", key: "dp", items: [
+    [19, "Si está ausente un día de casa, las tareas domésticas que realiza, ¿se quedan sin hacer?", 1],
+    [20, "Cuando está en el trabajo, ¿piensa en las exigencias domésticas y familiares?", 1]] }
+];
+const WARR_OPTS = ["Muy insatisfecho", "Insatisfecho", "Moderadamente insatisfecho", "Ni satisfecho ni insatisfecho", "Moderadamente satisfecho", "Satisfecho", "Muy satisfecho"];
+const WARR = ["Condiciones físicas del trabajo", "Libertad para elegir tu propio método de trabajo", "Tus compañeros de trabajo", "Reconocimiento que obtienes por el trabajo bien hecho", "Tu superior inmediato", "Responsabilidad que se te ha asignado", "Tu salario", "La posibilidad de utilizar tus capacidades", "Relaciones entre dirección y trabajadores en tu institución", "Tus posibilidades de promocionar", "El modo en que tu institución está gestionada", "La atención que se presta a las sugerencias que haces", "Tu horario de trabajo", "La variedad de tareas que realizas en tu trabajo", "Tu estabilidad en el empleo"];
+const REGIONS = [
+  { id: "cuello", t: "Cuello" },
+  { id: "hombros", t: "Hombros", side: true },
+  { id: "codos", t: "Codos", side: true },
+  { id: "munecas", t: "Muñecas / manos", side: true },
+  { id: "dorsal", t: "Columna dorsal" },
+  { id: "lumbar", t: "Columna lumbar" },
+  { id: "caderas", t: "Caderas / muslos", both: true },
+  { id: "rodillas", t: "Rodillas", both: true },
+  { id: "tobillos", t: "Tobillos / pies", both: true }
+];
+const SIDE_OPTS = ["Derecho", "Izquierdo", "Ambos"];
+
+/* =====================================================================
+   REBA — tablas oficiales (Hignett y McAtamney, 2000)
+   ===================================================================== */
+const TABLE_A = { // [cuello][tronco] -> piernas 1..4
+  1: [[1, 2, 3, 4], [2, 3, 4, 5], [2, 4, 5, 6], [3, 5, 6, 7], [4, 6, 7, 8]],
+  2: [[1, 2, 3, 4], [3, 4, 5, 6], [4, 5, 6, 7], [5, 6, 7, 8], [6, 7, 8, 9]],
+  3: [[3, 3, 5, 6], [4, 5, 6, 7], [5, 6, 7, 8], [6, 7, 8, 9], [7, 8, 9, 9]]
+};
+const TABLE_B = { // [antebrazo][brazo] -> muñeca 1..3
+  1: [[1, 2, 2], [1, 2, 3], [3, 4, 5], [4, 5, 5], [6, 7, 8], [7, 8, 8]],
+  2: [[1, 2, 3], [2, 3, 4], [4, 5, 5], [5, 6, 7], [7, 8, 8], [8, 9, 9]]
+};
+const TABLE_C = [
+  [1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7], [1, 2, 2, 3, 4, 4, 5, 6, 6, 7, 7, 8], [2, 3, 3, 3, 4, 5, 6, 7, 7, 8, 8, 8],
+  [3, 4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9], [4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9, 9], [6, 6, 6, 7, 8, 8, 9, 9, 10, 10, 10, 10],
+  [7, 7, 7, 8, 9, 9, 9, 10, 10, 11, 11, 11], [8, 8, 8, 9, 10, 10, 10, 10, 10, 11, 11, 11], [9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12],
+  [10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12, 12], [11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12], [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function rebaLevel(s) {
+  if (!s) return null;
+  if (s === 1) return { n: 1, t: "Inapreciable", a: "No es necesaria actuación" };
+  if (s <= 3) return { n: 2, t: "Bajo", a: "Puede ser necesaria la actuación" };
+  if (s <= 7) return { n: 3, t: "Medio", a: "Es necesaria la actuación" };
+  if (s <= 10) return { n: 4, t: "Alto", a: "Es necesaria la actuación cuanto antes" };
+  return { n: 5, t: "Muy alto", a: "Es necesaria la actuación de inmediato" };
+}
+function rebaCalc(o) {
+  if (!o) return null;
+  const need = ["neck", "trunk", "legs", "load", "upper", "lower", "wrist", "coupling"];
+  if (need.some(k => o[k] == null)) return null;
+  const neck = clamp(o.neck + (o.neckAdj ? 1 : 0), 1, 3);
+  const trunk = clamp(o.trunk + (o.trunkAdj ? 1 : 0), 1, 5);
+  const legs = clamp(o.legs + (o.knee || 0), 1, 4);
+  const a = TABLE_A[neck][trunk - 1][legs - 1];
+  const load = o.load + (o.shock ? 1 : 0);
+  const scoreA = a + load;
+  const upper = clamp(o.upper + (o.abd ? 1 : 0) + (o.raised ? 1 : 0) - (o.supported ? 1 : 0), 1, 6);
+  const lower = o.lower;
+  const wrist = clamp(o.wrist + (o.wristAdj ? 1 : 0), 1, 3);
+  const b = TABLE_B[lower][upper - 1][wrist - 1];
+  const scoreB = b + o.coupling;
+  const c = TABLE_C[clamp(scoreA, 1, 12) - 1][clamp(scoreB, 1, 12) - 1];
+  const act = (o.act1 ? 1 : 0) + (o.act2 ? 1 : 0) + (o.act3 ? 1 : 0);
+  const total = c + act;
+  return { neck, trunk, legs, a, load, scoreA, upper, lower, wrist, b, coupling: o.coupling, scoreB, c, act, total, level: rebaLevel(total) };
+}
+
+/* ---------- esquemas de postura (SVG generados) ---------- */
+function polar(cx, cy, r, deg) { const a = (deg - 90) * Math.PI / 180; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; }
+function wedge(cx, cy, r, d0, d1) {
+  const [x0, y0] = polar(cx, cy, r, d0), [x1, y1] = polar(cx, cy, r, d1);
+  const large = Math.abs(d1 - d0) > 180 ? 1 : 0, sweep = d1 > d0 ? 1 : 0;
+  return `<path d="M${cx},${cy} L${x0.toFixed(1)},${y0.toFixed(1)} A${r},${r} 0 ${large} ${sweep} ${x1.toFixed(1)},${y1.toFixed(1)} Z" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="1"/>`;
+}
+function seg(x1, y1, x2, y2, w = 5, col = "var(--ink)") { return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`; }
+function svgWrap(inner) { return `<svg viewBox="0 0 120 80" aria-hidden="true">${inner}</svg>`; }
+// ángulos: 0 = vertical hacia arriba; positivos = flexión (hacia adelante, derecha del dibujo)
+function figNeck(r0, r1) {
+  const hx = 50, hy = 44; const mid = (r0 + r1) / 2; const [ex, ey] = polar(hx, hy, 22, mid);
+  return svgWrap(`${seg(hx, hy, hx, 78, 7, "var(--muted)")}${wedge(hx, hy, 24, r0, r1)}${seg(hx, hy, ex, ey, 5)}<circle cx="${(ex + (ex - hx) * .25).toFixed(1)}" cy="${(ey + (ey - hy) * .25).toFixed(1)}" r="7" fill="var(--ink)"/>`);
+}
+function figTrunk(r0, r1) {
+  const px = 50, py = 66; const mid = (r0 + r1) / 2; const [sx, sy] = polar(px, py, 40, mid);
+  const [hx, hy] = polar(px, py, 52, mid);
+  return svgWrap(`${seg(px, py, px - 8, 78, 5, "var(--muted)")}${seg(px, py, px + 8, 78, 5, "var(--muted)")}${wedge(px, py, 40, r0, r1)}${seg(px, py, sx, sy, 6)}<circle cx="${hx.toFixed(1)}" cy="${hy.toFixed(1)}" r="7" fill="var(--ink)"/>`);
+}
+function figUpper(r0, r1) { // brazo: 180 = colgando; flexión hacia adelante reduce
+  const sx = 46, sy = 18; const mid = (r0 + r1) / 2;
+  const map = d => 180 - d; const [ex, ey] = polar(sx, sy, 34, map(mid));
+  return svgWrap(`${seg(sx, sy - 6, sx, 70, 9, "var(--muted)")}<circle cx="${sx}" cy="${sy - 14}" r="7" fill="var(--muted)"/>${wedge(sx, sy, 34, map(r1), map(r0))}${seg(sx, sy, ex, ey, 5)}`);
+}
+function figLower(kind) {
+  const ex = 40, ey = 30;
+  const w = kind === 1 ? wedge(ex, ey, 34, 80, 120) : wedge(ex, ey, 34, 120, 175) + wedge(ex, ey, 34, 30, 80);
+  const [hx, hy] = polar(ex, ey, 32, kind === 1 ? 100 : 145);
+  return svgWrap(`${seg(ex, ey, ex - 4, 2, 6, "var(--muted)")}${w}${seg(ex, ey, hx, hy, 5)}<circle cx="${ex}" cy="${ey}" r="3.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>`);
+}
+function figWrist(kind) {
+  const wx = 52, wy = 40;
+  const w = kind === 1 ? wedge(wx, wy, 30, 75, 105) : wedge(wx, wy, 30, 105, 140) + wedge(wx, wy, 30, 40, 75);
+  const [hx, hy] = polar(wx, wy, 26, kind === 1 ? 90 : 125);
+  return svgWrap(`${seg(10, wy, wx, wy, 7, "var(--muted)")}${w}${seg(wx, wy, hx, hy, 5)}`);
+}
+function figLegs(kind) {
+  if (kind === 1) return svgWrap(`<circle cx="60" cy="10" r="6" fill="var(--muted)"/>${seg(60, 16, 60, 42, 6, "var(--muted)")}${seg(60, 42, 52, 74, 5)}${seg(60, 42, 68, 74, 5)}${seg(40, 76, 80, 76, 2, "var(--accent)")}`);
+  return svgWrap(`<circle cx="60" cy="10" r="6" fill="var(--muted)"/>${seg(60, 16, 60, 42, 6, "var(--muted)")}${seg(60, 42, 56, 76, 5)}${seg(60, 42, 74, 58, 5)}${seg(74, 58, 82, 64, 5)}${seg(44, 78, 68, 78, 2, "var(--accent)")}`);
+}
+function figKnee(deg) {
+  const hx = 50, hy = 18, [kx, ky] = [50, 46]; const [fx, fy] = polar(kx, ky, 28, 180 - deg);
+  return svgWrap(`${seg(hx, hy - 12, hx, hy, 6, "var(--muted)")}${seg(hx, hy, kx, ky, 5)}${deg ? wedge(kx, ky, 26, 180 - deg - 15, 180 - deg + 15) : ""}${seg(kx, ky, fx, fy, 5)}`);
+}
+function figLoad(k) {
+  const boxes = ["", `<rect x="72" y="44" width="16" height="14" rx="2" fill="var(--accent)"/>`, `<rect x="68" y="40" width="26" height="20" rx="3" fill="var(--accent)"/>`][k];
+  return svgWrap(`<circle cx="46" cy="12" r="6" fill="var(--muted)"/>${seg(46, 18, 46, 48, 6, "var(--muted)")}${seg(46, 48, 40, 76, 5, "var(--muted)")}${seg(46, 48, 52, 76, 5, "var(--muted)")}${seg(46, 26, 70, 50, 5)}${boxes}<text x="60" y="76" font-size="10" fill="var(--muted)" font-family="monospace">${["<5 kg", "5–10 kg", ">10 kg"][k]}</text>`);
+}
+function figGrip(k) {
+  const col = ["var(--good)", "var(--warn)", "var(--bad)", "var(--bad)"][k];
+  const handle = k === 0 ? `<rect x="40" y="30" width="40" height="8" rx="4" fill="${col}"/>` : k === 1 ? `<rect x="40" y="32" width="40" height="5" rx="2" fill="${col}"/>` : k === 2 ? `<path d="M40 36 h40" stroke="${col}" stroke-width="3" stroke-dasharray="4 4"/>` : `<path d="M44 26 l32 22 M76 26 l-32 22" stroke="${col}" stroke-width="4" stroke-linecap="round"/>`;
+  return svgWrap(`<rect x="30" y="38" width="60" height="30" rx="4" fill="none" stroke="var(--muted)" stroke-width="2"/>${handle}`);
+}
+const REBA_OPTS = {
+  neck: [[1, "0°–20° de flexión", figNeck(0, 20)], [2, ">20° de flexión o en extensión", figNeck(20, 60) ]],
+  trunk: [[1, "Erguido", figTrunk(-3, 3)], [2, "0°–20° flexión o extensión", figTrunk(-20, 20)], [3, "20°–60° flexión o >20° extensión", figTrunk(20, 60)], [4, ">60° de flexión", figTrunk(60, 100)]],
+  legs: [[1, "Apoyo bilateral, andando o sentado", figLegs(1)], [2, "Apoyo unilateral, ligero o inestable", figLegs(2)]],
+  knee: [[0, "Rodillas sin flexión relevante", figKnee(0)], [1, "Flexión de rodillas 30°–60° (+1)", figKnee(45)], [2, "Flexión de rodillas >60° (+2, no sentado)", figKnee(80)]],
+  load: [[0, "Menos de 5 kg", figLoad(0)], [1, "5 a 10 kg", figLoad(1)], [2, "Más de 10 kg", figLoad(2)]],
+  upper: [[1, "20° extensión a 20° flexión", figUpper(-20, 20)], [2, ">20° extensión o 20°–45° flexión", figUpper(20, 45)], [3, "45°–90° de flexión", figUpper(45, 90)], [4, ">90° de flexión", figUpper(90, 150)]],
+  lower: [[1, "60°–100° de flexión", figLower(1)], [2, "<60° o >100° de flexión", figLower(2)]],
+  wrist: [[1, "0°–15° flexión/extensión", figWrist(1)], [2, ">15° flexión/extensión", figWrist(2)]],
+  coupling: [[0, "Bueno: agarre firme", figGrip(0)], [1, "Regular: aceptable no ideal", figGrip(1)], [2, "Malo: posible no aceptable", figGrip(2)], [3, "Inaceptable: inseguro", figGrip(3)]]
+};
+const REBA_ADJ = {
+  neck: [["neckAdj", "Torsión o inclinación lateral (+1)"]],
+  trunk: [["trunkAdj", "Torsión o inclinación lateral (+1)"]],
+  load: [["shock", "Fuerza aplicada bruscamente (+1)"]],
+  upper: [["abd", "Brazo abducido o rotado (+1)"], ["raised", "Hombro elevado (+1)"], ["supported", "Brazo apoyado o a favor de la gravedad (−1)"]],
+  wrist: [["wristAdj", "Desviación o torsión (+1)"]],
+  act: [["act1", "Una o más partes del cuerpo estáticas >1 min (+1)"], ["act2", "Movimientos repetitivos >4 veces/min (+1)"], ["act3", "Cambios posturales importantes o base inestable (+1)"]]
+};
+
+/* =====================================================================
+   LOTTIE (animaciones construidas en código)
+   ===================================================================== */
+const hexToRgb = h => { const n = parseInt(h.replace("#", ""), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255, 1]; };
+const kf = (t, s, ease = true) => ease ? { t, s, o: { x: [0.33], y: [0] }, i: { x: [0.2], y: [1] } } : { t, s };
+function trShape() { return { ty: "tr", p: { a: 0, k: [0, 0] }, a: { a: 0, k: [0, 0] }, s: { a: 0, k: [100, 100] }, r: { a: 0, k: 0 }, o: { a: 0, k: 100 } }; }
+function layer(ind, shapes, ks, ip, op, st = 0) {
+  return { ddd: 0, ind, ty: 4, nm: "l" + ind, sr: 1, ks: Object.assign({ o: { a: 0, k: 100 }, r: { a: 0, k: 0 }, p: { a: 0, k: [100, 100, 0] }, a: { a: 0, k: [0, 0, 0] }, s: { a: 0, k: [100, 100, 100] } }, ks), ao: 0, shapes, ip, op, st, bm: 0 };
+}
+function lottieSuccess(color) {
+  const c = hexToRgb(color);
+  const circle = { ty: "gr", it: [{ ty: "el", p: { a: 0, k: [0, 0] }, s: { a: 0, k: [150, 150] }, d: 1 }, { ty: "st", c: { a: 0, k: c }, o: { a: 0, k: 100 }, w: { a: 0, k: 9 }, lc: 2, lj: 2 }, { ty: "tm", s: { a: 0, k: 0 }, e: { a: 1, k: [kf(0, [0]), kf(26, [100], false)] }, o: { a: 0, k: -90 }, m: 1 }, trShape()] };
+  const check = { ty: "gr", it: [{ ty: "sh", ks: { a: 0, k: { i: [[0, 0], [0, 0], [0, 0]], o: [[0, 0], [0, 0], [0, 0]], v: [[-34, 2], [-10, 26], [38, -24]], c: false } } }, { ty: "st", c: { a: 0, k: c }, o: { a: 0, k: 100 }, w: { a: 0, k: 11 }, lc: 2, lj: 2 }, { ty: "tm", s: { a: 0, k: 0 }, e: { a: 1, k: [kf(22, [0]), kf(44, [100], false)] }, o: { a: 0, k: 0 }, m: 1 }, trShape()] };
+  const pop = { s: { a: 1, k: [kf(0, [80, 80, 100]), kf(30, [106, 106, 100]), kf(44, [100, 100, 100], false)] } };
+  return { v: "5.7.4", fr: 30, ip: 0, op: 60, w: 200, h: 200, nm: "ok", ddd: 0, assets: [], layers: [layer(1, [check], {}, 0, 60), layer(2, [circle], pop, 0, 60)] };
+}
+function lottieRings(color) {
+  const c = hexToRgb(color); const layers = [];
+  for (let i = 0; i < 3; i++) {
+    const ring = { ty: "gr", it: [{ ty: "el", p: { a: 0, k: [0, 0] }, s: { a: 0, k: [120, 120] }, d: 1 }, { ty: "st", c: { a: 0, k: c }, o: { a: 0, k: 100 }, w: { a: 0, k: 3 }, lc: 2, lj: 2 }, trShape()] };
+    const off = i * 30;
+    layers.push(layer(i + 1, [ring], { s: { a: 1, k: [kf(off, [40, 40, 100]), kf(off + 90, [160, 160, 100], false)] }, o: { a: 1, k: [kf(off, [90]), kf(off + 90, [0], false)] } }, 0, 180));
+  }
+  const dot = { ty: "gr", it: [{ ty: "el", p: { a: 0, k: [0, 0] }, s: { a: 0, k: [92, 92] }, d: 1 }, { ty: "fl", c: { a: 0, k: c }, o: { a: 0, k: 14 } }, trShape()] };
+  layers.push(layer(9, [dot], { s: { a: 1, k: [kf(0, [96, 96, 100]), kf(45, [104, 104, 100]), kf(90, [96, 96, 100]), kf(135, [104, 104, 100]), kf(180, [96, 96, 100], false)] } }, 0, 180));
+  return { v: "5.7.4", fr: 30, ip: 0, op: 180, w: 200, h: 200, nm: "rings", ddd: 0, assets: [], layers };
+}
+function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#0B5E70"; }
+function playLottie(el, data, loop) {
+  if (!window.lottie || !el) return null;
+  try {
+    const a = lottie.loadAnimation({ container: el, renderer: "svg", loop: !!loop && !reduceMotion, autoplay: !reduceMotion, animationData: data });
+    if (reduceMotion) a.addEventListener("DOMLoaded", () => a.goToAndStop(a.totalFrames - 1, true));
+    return a;
+  } catch (e) { return null; }
+}
+
+/* =====================================================================
+   PLATAFORMA (db, assets, user, downloads)
+   ===================================================================== */
+const P = { db: null, assets: null, user: null, downloads: null, uid: null, ready: false, canAdmin: false };
+async function initPlatform() {
+  if (!window.claude || !window.claude.use) { P.ready = true; renderConn(); if (route() === "admin") Admin.start(); return; }
+  const [db, user, assets, downloads] = await Promise.all(["db", "user", "assets", "downloads"].map(n => window.claude.use(n).catch(() => null)));
+  Object.assign(P, { db, user, assets, downloads, ready: true });
+  if (user) { try { P.uid = await user.id(); } catch {} try { P.canAdmin = !!(user.canEdit && await user.canEdit()) || !!(user.isOwner && await user.isOwner()); } catch {} }
+  renderConn();
+  if (route() === "admin") Admin.start();
+}
+function renderConn() {
+  const b = $("#conn-banner");
+  if (!P.db) b.innerHTML = `<div class="banner warn"><b>Modo de práctica.</b>&nbsp;Esta vista no está conectada al almacenamiento del estudio: puede recorrer los instrumentos, pero las respuestas no se enviarán. Abra la página publicada con su cuenta para registrar encuestas.</div>`;
+  else if (!P.uid) b.innerHTML = `<div class="banner warn">Inicie sesión con la cuenta del equipo de investigación para enviar encuestas.</div>`;
+  else b.innerHTML = "";
+}
+
+/* =====================================================================
+   ESTADO DE LA ENCUESTA
+   ===================================================================== */
+const STEPS = [
+  { id: "pres", t: "Presentación", who: "Encuestador" },
+  { id: "cons", t: "Consentimiento informado", who: "Participante" },
+  { id: "ficha", t: "Ficha sociodemográfica", who: "Participante" },
+  { id: "nasa", t: "NASA-TLX", who: "Participante" },
+  { id: "suseso", t: "SUSESO/ISTAS21", who: "Participante" },
+  { id: "warr", t: "Satisfacción laboral", who: "Participante" },
+  { id: "nordic", t: "Cuestionario Nórdico", who: "Participante" },
+  { id: "reba", t: "Observación REBA", who: "Encuestador" },
+  { id: "send", t: "Revisión y envío", who: "Encuestador" }
+];
+const DRAFT_KEY = "tme_borrador_v1";
+function blank() {
+  return { step: 0, maxStep: 0, meta: { codigo: "", estrato: "", establecimiento: "", fecha: new Date().toISOString().slice(0, 10) },
+    cons: { leido: false, acepta: null, foto: null, nombre: "", dni: "", condicion: "", firma: null },
+    ficha: {}, nasa: {}, suseso: {}, warr: {}, nordic: {}, reba: { tarea: "", lado: "", obs: [{}, {}, {}], fotos: [] }, active: 0 };
+}
+let S = store.get(DRAFT_KEY) || blank();
+let saveTimer = null;
+function persist() { clearTimeout(saveTimer); saveTimer = setTimeout(() => store.set(DRAFT_KEY, S), 350); }
+
+/* ---------- puntajes ---------- */
+function scores(st = S) {
+  const n = NASA.map(x => st.nasa[x.id]).filter(v => v != null);
+  const nasa = n.length === 6 ? Math.round(n.reduce((a, b) => a + b, 0) / 6 * 10) / 10 : null;
+  const sus = {}; let susOk = true;
+  SUSESO.forEach(d => { let s = 0; d.items.forEach(([n, , inv]) => { const v = st.suseso["s" + n]; if (v == null) susOk = false; else s += inv ? 4 - v : v; }); sus[d.key] = s; });
+  const w = WARR.map((_, i) => st.warr["w" + (i + 1)]).filter(v => v != null);
+  const warr = w.length === 15 ? w.reduce((a, b) => a + b, 0) : null;
+  const regs = REGIONS.filter(r => st.nordic[r.id]?.m12 === "Sí").map(r => r.id);
+  const reba = st.reba.obs.map(rebaCalc);
+  const valid = reba.filter(Boolean).map(r => r.total);
+  const rebaFinal = valid.length ? Math.max(...valid) : null;
+  const imc = st.ficha.peso && st.ficha.talla ? Math.round(st.ficha.peso / ((st.ficha.talla / 100) ** 2) * 10) / 10 : null;
+  return { nasa, sus: susOk ? sus : null, warr, regs, sintomas12: regs.length > 0, reba, rebaFinal, rebaLevel: rebaLevel(rebaFinal), imc };
+}
+function eligibility(st = S) {
+  const f = st.ficha, out = [];
+  if (f.reuma === "Sí") out.push("Diagnóstico de enfermedad reumatológica sistémica");
+  if (f.embarazo === "Sí") out.push("Embarazo en curso");
+  if (f.licencia === "Sí") out.push("Descanso médico o licencia");
+  if (f.moviliza === "No") out.push("No realiza movilización o transferencia de pacientes");
+  if (f.meses != null && f.meses !== "" && +f.meses < 3) out.push("Menos de 3 meses de actividad asistencial");
+  if (f.condicion === "Egresado" && f.anosEgreso != null && f.anosEgreso !== "" && +f.anosEgreso > 6) out.push("Más de 6 años de egreso");
+  return out;
+}
+
+/* =====================================================================
+   RENDER — ENCUESTA
+   ===================================================================== */
+const ICONS = {
+  next: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
+  prev: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>`,
+  cam: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>`,
+  send: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 12l16-8-6 16-2-6z"/></svg>`
+};
+function renderSurvey() {
+  const v = $("#view-enc");
+  const pct = Math.round(S.step / (STEPS.length - 1) * 100);
+  v.innerHTML = `
+  <div class="survey">
+    <aside class="rail card" aria-label="Pasos">
+      <p class="eyebrow" style="margin:2px 6px 10px">Recorrido de la encuesta</p>
+      <ol>${STEPS.map((s, i) => `<li class="${i < S.maxStep || (i < S.step) ? "done" : ""}"><button data-go="${i}" ${i > S.maxStep ? "disabled" : ""} ${i === S.step ? 'aria-current="step"' : ""}><span class="dot">${i < S.maxStep && i !== S.step ? "✓" : i + 1}</span><span>${s.t}<span class="who">${s.who}</span></span></button></li>`).join("")}</ol>
+      <div class="rail-foot">Código: <b class="mono">${esc(S.meta.codigo || "—")}</b><br>Estrato: <b>${esc(S.meta.estrato || "—")}</b><br><button class="btn btn-ghost" style="margin-top:10px;min-height:36px;padding:6px 12px;font-size:.82rem" id="reset">Descartar y empezar de nuevo</button></div>
+    </aside>
+    <div style="min-width:0">
+      <div class="mobile-progress"><div class="mp-row"><b>${S.step + 1}/${STEPS.length} · ${STEPS[S.step].t}</b><span class="muted">${STEPS[S.step].who}</span></div><div class="mp-bar"><i style="width:${Math.max(pct, 4)}%"></i></div></div>
+      <article class="card step" id="step"></article>
+    </div>
+  </div>`;
+  $$("[data-go]", v).forEach(b => b.onclick = () => go(+b.dataset.go));
+  $("#reset", v).onclick = () => confirmReset();
+  const host = $("#step", v);
+  ({ pres: stepPres, cons: stepCons, ficha: stepFicha, nasa: stepNasa, suseso: stepSuseso, warr: stepWarr, nordic: stepNordic, reba: stepReba, send: stepSend })[STEPS[S.step].id](host);
+}
+function confirmReset() {
+  const host = $("#step");
+  host.innerHTML = `<div class="banner bad"><div><b>¿Descartar esta encuesta?</b><br>Se borrarán las respuestas no enviadas de este dispositivo.</div></div><div class="navbar"><button class="btn btn-ghost" id="no">Volver</button><button class="btn btn-accent" id="yes">Sí, descartar</button></div>`;
+  $("#no").onclick = renderSurvey; $("#yes").onclick = () => { S = blank(); store.del(DRAFT_KEY); renderSurvey(); window.scrollTo({ top: 0 }); };
+}
+function head(i, sub, chips = "") {
+  const s = STEPS[i];
+  return `<div class="step-head"><div><p class="eyebrow">Paso ${i + 1} de ${STEPS.length} · ${s.who}</p><h2>${s.t}</h2>${sub ? `<p class="lead" style="margin-top:6px">${sub}</p>` : ""}</div><div class="meta">${chips}</div></div>`;
+}
+function nav(host, { back = true, nextLabel = "Siguiente", onNext }) {
+  const d = document.createElement("div");
+  d.innerHTML = `<p class="err" id="err" role="alert"></p><div class="navbar">${back ? `<button class="btn btn-ghost" id="prev">${ICONS.prev} Anterior</button>` : "<span></span>"}<button class="btn btn-primary" id="next">${nextLabel} ${ICONS.next}</button></div>`;
+  host.appendChild(d);
+  if (back) $("#prev", host).onclick = () => go(S.step - 1);
+  $("#next", host).onclick = () => { const err = onNext ? onNext() : null; if (err) { $("#err", host).textContent = err; const inv = $(".invalid", host); if (inv) inv.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); return; } go(S.step + 1); };
+}
+function go(i) {
+  if (i < 0 || i >= STEPS.length) return;
+  S.step = i; S.maxStep = Math.max(S.maxStep, i); persist(); renderSurvey();
+  window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+}
+
+/* ---------- 1. Presentación ---------- */
+function stepPres(host) {
+  host.innerHTML = `
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Investigación de maestría · Salud Pública</p>
+      <h1 style="margin-top:6px">Su trabajo cuida a otros. Este estudio cuida su espalda, cuello y manos.</h1>
+      <p class="lead" style="margin-top:12px">Buscamos conocer qué condiciones del trabajo asistencial —organizacionales, ergonómicas y psicosociales— se asocian con dolor o molestias musculoesqueléticas en fisioterapeutas egresados e internos de la UCSS.</p>
+      <div class="facts">
+        <div class="fact"><b class="mono">20–25</b><span>minutos de cuestionarios</span></div>
+        <div class="fact"><b class="mono">3</b><span>movilizaciones observadas (REBA)</span></div>
+        <div class="fact"><b class="mono">0</b><span>videos: solo observación directa</span></div>
+      </div>
+    </div>
+    <div class="hero-anim" aria-hidden="true"><div class="lottie" id="lot-rings"></div><div class="center-ico"><svg width="92" height="92" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="4" r="2"/><path d="M12 6.5v7.5M12 8.5l-4.5 3M12 8.5l4.5 3M12 14l-3.2 6.5M12 14l3.2 6.5"/><path d="M9 10.2c1.8 1.1 4.2 1.1 6 0" stroke="var(--accent)"/></svg></div></div>
+  </div>
+  <h3 style="margin-top:22px">Recorrido</h3>
+  <ol class="flow">
+    <li>Consentimiento informado</li><li>Ficha sociodemográfica y ocupacional</li><li>NASA-TLX: carga de trabajo percibida</li><li>SUSESO/ISTAS21: factores psicosociales</li><li>Escala de satisfacción laboral</li><li>Cuestionario Nórdico de síntomas</li><li class="enc">Observación REBA (encuestador)</li><li class="enc">Revisión y envío</li>
+  </ol>
+  <div class="section-title"><span class="tag">ENC</span><h3>Datos de registro (encuestador)</h3></div>
+  <div class="grid3">
+    <div class="field"><label for="m-estrato">Estrato</label><select class="input" id="m-estrato"><option value="">Seleccione…</option><option ${S.meta.estrato === "Egresado" ? "selected" : ""}>Egresado</option><option ${S.meta.estrato === "Interno" ? "selected" : ""}>Interno</option></select><small>Meta: 68 egresados · 53 internos</small></div>
+    <div class="field"><label for="m-codigo">Código del participante</label><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="E-001 o I-001" autocomplete="off"><small>Según la lista aleatoria del estrato</small></div>
+    <div class="field"><label for="m-fecha">Fecha</label><input class="input" type="date" id="m-fecha" value="${esc(S.meta.fecha)}"></div>
+  </div>
+  <div class="field" style="margin-top:14px"><label for="m-est">Establecimiento o sede</label><input class="input" id="m-est" value="${esc(S.meta.establecimiento)}" placeholder="Nombre del establecimiento donde se realiza la observación"></div>
+  <p class="muted" style="margin-top:14px;font-size:.88rem">${esc(CFG.institucion)} · Investigador: ${esc(CFG.investigador)} · Asesora: ${esc(CFG.asesora)}</p>`;
+  playLottie($("#lot-rings", host), lottieRings(cssVar("--primary")), true);
+  const est = $("#m-estrato", host), cod = $("#m-codigo", host);
+  est.onchange = () => { S.meta.estrato = est.value; if (!S.meta.codigo || /^[EI]-$/.test(S.meta.codigo)) { cod.value = est.value ? (est.value[0] + "-") : ""; S.meta.codigo = cod.value; } persist(); };
+  cod.oninput = () => { S.meta.codigo = cod.value.trim().toUpperCase(); persist(); };
+  $("#m-fecha", host).onchange = e => { S.meta.fecha = e.target.value; persist(); };
+  $("#m-est", host).oninput = e => { S.meta.establecimiento = e.target.value; persist(); };
+  nav(host, { back: false, nextLabel: "Comenzar", onNext: () => {
+    $$(".invalid", host).forEach(x => x.classList.remove("invalid"));
+    if (!S.meta.estrato) { est.classList.add("invalid"); return "Seleccione el estrato del participante."; }
+    if (!/^[EI]-\d{1,4}$/.test(S.meta.codigo)) { cod.classList.add("invalid"); return "Escriba un código con el formato E-001 o I-001."; }
+    if (S.meta.codigo[0] !== S.meta.estrato[0]) { cod.classList.add("invalid"); return "El código no coincide con el estrato (E = egresado, I = interno)."; }
+    return null; } });
+}
+
+/* ---------- 2. Consentimiento ---------- */
+function stepCons(host) {
+  const c = S.cons;
+  host.innerHTML = head(1, "Lea con calma. Puede hacer preguntas al encuestador antes de decidir.", `<span class="chip p">Anexo 2</span>`) + `
+  <div class="consent-doc">
+    <p class="mono" style="font-size:.8rem">${esc(CFG.titulo)}</p>
+    <p><b>Institución:</b> ${esc(CFG.institucion)}. <b>Investigador:</b> ${esc(CFG.investigador)}. <b>Asesora:</b> ${esc(CFG.asesora)}.</p>
+    <div><h3>1. Propósito del estudio</h3><p>Conocer qué condiciones del trabajo asistencial (organizacionales, ergonómicas y psicosociales) se asocian con la presencia de dolor o molestias musculoesqueléticas en fisioterapeutas egresados e internos.</p></div>
+    <div><h3>2. Procedimientos</h3><p>a) Completará una ficha sociodemográfica y ocupacional y cuatro cuestionarios (NASA-TLX, SUSESO/ISTAS21, Escala de Satisfacción Laboral de Warr, Cook y Wall y Cuestionario Nórdico). b) El investigador lo observará directamente durante tres movilizaciones o transferencias de pacientes de su jornada habitual para evaluar su postura con el método REBA. No se grabarán videos. Solo si usted lo autoriza, se podrán tomar fotografías enfocadas en usted, sin captar el rostro del paciente y con la autorización del establecimiento y el consentimiento verbal del paciente.</p></div>
+    <div><h3>3. Duración</h3><p>Aproximadamente 20 a 25 minutos para los cuestionarios y 15 a 20 minutos para la observación.</p></div>
+    <div><h3>4. Riesgos o molestias</h3><p>Riesgo mínimo. Las posibles molestias son el tiempo destinado a responder y la incomodidad de ser observado o de responder preguntas personales. No existe riesgo físico adicional.</p></div>
+    <div><h3>5. Beneficios</h3><p>No recibirá pago. Los resultados aportarán evidencia para prevenir los síntomas musculoesqueléticos en fisioterapeutas. Si lo solicita, se le entregará su resultado individual de REBA con recomendaciones posturales.</p></div>
+    <div><h3>6. Participación voluntaria y derecho a retirarse</h3><p>Su participación es voluntaria. Puede negarse o retirarse en cualquier momento, sin dar explicaciones.</p></div>
+    <div><h3>7. Ausencia de consecuencias</h3><p>No participar o retirarse no tendrá ninguna consecuencia. Para los internos, no afectará la evaluación de su internado; para los egresados, no afectará su situación laboral.</p></div>
+    <div><h3>8. Confidencialidad</h3><p>Sus datos se identificarán con un código, se almacenarán con acceso restringido y se usarán solo con fines académicos. Las fotografías se eliminarán al terminar la puntuación REBA. Los resultados se publicarán de forma agrupada (Ley N.° 29733).</p></div>
+    <div><h3>9 y 10. Contactos</h3><p>Investigador: ${esc(CFG.contactoInv)}<br>${esc(CFG.contactoComite)}</p></div>
+  </div>
+  <div class="section-title"><span class="tag">DEC</span><h3>Declaración de consentimiento</h3></div>
+  <label class="check" id="q-leido"><input type="checkbox" id="c-leido" ${c.leido ? "checked" : ""}><span>Declaro que he leído (o se me ha leído) la información anterior, que he podido hacer preguntas y que estas han sido respondidas.</span></label>
+  <div class="q" id="q-acepta" style="margin-top:10px"><span class="q-label">¿Acepta participar de manera voluntaria en este estudio?</span>${pills("acepta", ["Sí, acepto", "No acepto"], c.acepta)}</div>
+  <div id="cons-yes" ${c.acepta === "Sí, acepto" ? "" : "hidden"}>
+    <div class="q" id="q-foto" style="margin-top:10px"><span class="q-label">Autorizo la toma de fotografías durante la observación (sin captar el rostro del paciente)</span>${pills("foto", ["Sí", "No"], c.foto)}</div>
+    <div class="grid3" style="margin-top:12px">
+      <div class="field"><label for="c-nombre">Nombres y apellidos</label><input class="input" id="c-nombre" value="${esc(c.nombre)}" autocomplete="off"></div>
+      <div class="field"><label for="c-dni">DNI</label><input class="input mono" id="c-dni" value="${esc(c.dni)}" inputmode="numeric" maxlength="8"></div>
+      <div class="field"><label>En calidad de</label><div class="pills" id="q-cond">${["Interno", "Egresado"].map(o => `<label class="pill"><input type="radio" name="cond" value="${o}" ${c.condicion === o ? "checked" : ""}><span>${o}</span></label>`).join("")}</div></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label>Firma del participante</label><div class="sig-wrap" id="sig-wrap"><canvas id="sig"></canvas><span class="hint">Firme con el dedo o el mouse</span></div><div><button class="btn btn-ghost" id="sig-clear" style="min-height:36px;padding:6px 12px;font-size:.85rem;margin-top:6px">Borrar firma</button></div></div>
+    <p class="muted" style="font-size:.85rem;margin-top:8px">Se entregará una copia impresa de este documento al participante.</p>
+  </div>`;
+  $("#c-leido", host).onchange = e => { c.leido = e.target.checked; persist(); };
+  bindPills(host, "acepta", v => { c.acepta = v; $("#cons-yes", host).hidden = v !== "Sí, acepto"; persist(); });
+  bindPills(host, "foto", v => { c.foto = v; persist(); });
+  $$('input[name="cond"]', host).forEach(r => r.onchange = () => { c.condicion = r.value; persist(); });
+  $("#c-nombre", host).oninput = e => { c.nombre = e.target.value; persist(); };
+  $("#c-dni", host).oninput = e => { e.target.value = e.target.value.replace(/\D/g, ""); c.dni = e.target.value; persist(); };
+  setupSignature($("#sig", host), c);
+  $("#sig-clear", host).onclick = () => { c.firma = null; persist(); setupSignature($("#sig", host), c); };
+  nav(host, { onNext: () => {
+    $$(".invalid", host).forEach(x => x.classList.remove("invalid"));
+    if (!c.leido) { $("#q-leido", host).classList.add("invalid"); return "Confirme que leyó la información."; }
+    if (!c.acepta) { $("#q-acepta", host).classList.add("invalid"); return "Indique si acepta participar."; }
+    if (c.acepta === "No acepto") { finishRefusal("rechazó"); return "__stop"; }
+    if (!c.foto) { $("#q-foto", host).classList.add("invalid"); return "Indique si autoriza las fotografías."; }
+    if (!c.nombre.trim()) { $("#c-nombre", host).classList.add("invalid"); return "Escriba nombres y apellidos."; }
+    if (!/^\d{8}$/.test(c.dni)) { $("#c-dni", host).classList.add("invalid"); return "El DNI debe tener 8 dígitos."; }
+    if (!c.condicion) { $("#q-cond", host).classList.add("invalid"); return "Indique su condición."; }
+    if (c.condicion !== S.meta.estrato) { $("#q-cond", host).classList.add("invalid"); return "La condición no coincide con el estrato registrado en la presentación."; }
+    if (!c.firma) { $("#sig-wrap", host).classList.add("invalid"); return "Falta la firma del participante."; }
+    if (!S.ficha.condicion) S.ficha.condicion = c.condicion;
+    return null; } });
+  const nb = $("#next", host), orig = nb.onclick;
+  nb.onclick = () => { if (c.acepta === "No acepto" && c.leido) { finishRefusal("rechazó"); return; } orig(); };
+}
+function setupSignature(cv, c) {
+  const ctx = cv.getContext("2d"); const dpr = window.devicePixelRatio || 1;
+  const fit = () => { const r = cv.getBoundingClientRect(); cv.width = Math.max(1, r.width * dpr); cv.height = 150 * dpr; ctx.scale(dpr, dpr); ctx.lineWidth = 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = cssVar("--ink");
+    if (c.firma) { const im = new Image(); im.onload = () => ctx.drawImage(im, 0, 0, r.width, 150); im.src = c.firma; } };
+  fit();
+  let draw = false, last = null;
+  const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  cv.onpointerdown = e => { draw = true; last = pos(e); cv.setPointerCapture(e.pointerId); };
+  cv.onpointermove = e => { if (!draw) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(...last); ctx.lineTo(...p); ctx.stroke(); last = p; };
+  cv.onpointerup = cv.onpointercancel = () => { if (!draw) return; draw = false; c.firma = cv.toDataURL("image/png"); persist(); $("#sig-wrap")?.classList.remove("invalid"); };
+}
+function pills(name, opts, val) { return `<div class="pills" role="radiogroup">${opts.map(o => `<label class="pill"><input type="radio" name="${name}" value="${esc(o)}" ${val === o ? "checked" : ""}><span>${esc(o)}</span></label>`).join("")}</div>`; }
+function bindPills(host, name, fn) { $$(`input[name="${name}"]`, host).forEach(r => r.onchange = () => { r.closest(".q")?.classList.remove("invalid"); fn(r.value); }); }
+
+/* ---------- 3. Ficha ---------- */
+function stepFicha(host) {
+  const f = S.ficha;
+  let html = head(2, "Datos generales, condición laboral, jornada, pausas activas y antecedentes. Son confidenciales.", `<span class="chip p">Anexo 3</span><span class="chip a">23 ítems</span>`);
+  let n = 0;
+  FICHA.forEach(q => {
+    if (q.sec) { html += `<div class="section-title"><span class="tag">${q.sec[0]}</span><h3>${esc(q.sec.slice(3))}</h3></div>`; return; }
+    n++;
+    const hid = q.only && f.condicion !== q.only ? "hidden" : "";
+    let ctrl = "";
+    if (q.type === "number") ctrl = `<div style="display:flex;gap:8px;align-items:center;max-width:260px"><input class="input mono" type="number" inputmode="decimal" id="f-${q.id}" min="${q.min}" max="${q.max}" step="${q.step || 1}" value="${esc(f[q.id] ?? "")}"><span class="muted">${q.unit}</span></div>`;
+    else if (q.type === "text") ctrl = `<input class="input" id="f-${q.id}" value="${esc(f[q.id] ?? "")}">`;
+    else ctrl = pills("f-" + q.id, q.opts, f[q.id]);
+    if (q.follow) ctrl += `<div id="fw-${q.id}" ${f[q.id] === "Sí" ? "" : "hidden"}><input class="input" id="f-${q.follow.id}" placeholder="${q.follow.t}" value="${esc(f[q.follow.id] ?? "")}"></div>`;
+    html += `<div class="q" id="q-${q.id}" data-only="${q.only || ""}" ${hid}><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(q.t)}</span></div>${ctrl}</div>`;
+  });
+  html += `<div id="elig" style="margin-top:14px"></div>`;
+  host.innerHTML = html;
+  const updElig = () => { const e = eligibility(); $("#elig", host).innerHTML = e.length ? `<div class="banner bad"><div><b>Posible criterio de exclusión.</b> ${e.map(esc).join("; ")}. Si se confirma, registre al participante como no elegible para reemplazarlo dentro del mismo estrato.<div style="margin-top:8px"><button class="btn btn-accent" id="noelig" style="min-height:38px;padding:6px 14px">Registrar como no elegible</button></div></div></div>` : ""; const b = $("#noelig", host); if (b) b.onclick = () => finishRefusal("no elegible"); };
+  const bmi = () => {};
+  FICHA.filter(q => q.id).forEach(q => {
+    if (q.type === "pills") bindPills(host, "f-" + q.id, v => {
+      f[q.id] = v;
+      if (q.id === "condicion") $$("[data-only]", host).forEach(el => { if (el.dataset.only) el.hidden = el.dataset.only !== v; });
+      if (q.follow) $(`#fw-${q.id}`, host).hidden = v !== "Sí";
+      persist(); updElig();
+    });
+    else { const el = $(`#f-${q.id}`, host); el.oninput = () => { el.closest(".q").classList.remove("invalid"); f[q.id] = q.type === "number" ? (el.value === "" ? "" : +el.value) : el.value; persist(); updElig(); }; }
+    if (q.follow) { const el = $(`#f-${q.follow.id}`, host); el.oninput = () => { f[q.follow.id] = el.value; persist(); }; }
+  });
+  updElig();
+  nav(host, { onNext: () => {
+    $$(".invalid", host).forEach(x => x.classList.remove("invalid"));
+    for (const q of FICHA) {
+      if (!q.id) continue; if (q.only && f.condicion !== q.only) continue;
+      const v = f[q.id];
+      if (v == null || v === "") { $(`#q-${q.id}`, host).classList.add("invalid"); return `Falta responder: «${q.t}».`; }
+      if (q.type === "number" && (v < q.min || v > q.max)) { $(`#q-${q.id}`, host).classList.add("invalid"); return `Revise el valor de «${q.t}» (entre ${q.min} y ${q.max}).`; }
+    }
+    if (f.condicion !== S.meta.estrato) { $("#q-condicion", host).classList.add("invalid"); return "La condición no coincide con el estrato registrado."; }
+    if (eligibility().length) return "El participante cumple un criterio de exclusión. Regístrelo como no elegible o corrija la respuesta.";
+    return null; } });
+}
+
+/* ---------- 4. NASA-TLX ---------- */
+function radarSVG(vals) {
+  const cx = 150, cy = 150, R = 105, n = 6;
+  const pt = (i, r) => polar(cx, cy, r, i * 360 / n);
+  let g = "";
+  [25, 50, 75, 100].forEach(l => { g += `<polygon points="${[...Array(n)].map((_, i) => pt(i, R * l / 100).map(v => v.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="var(--line)" stroke-width="1"/>`; });
+  NASA.forEach((x, i) => { const [ax, ay] = pt(i, R); g += `<line x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}" stroke="var(--line)"/>`; const [lx, ly] = pt(i, R + 22); g += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="var(--ink-2)" font-family="Atkinson Hyperlegible, sans-serif">${x.t.replace("Exigencia ", "Exig. ")}</text>`; });
+  const pts = NASA.map((x, i) => pt(i, R * (vals[x.id] ?? 0) / 100));
+  g += `<polygon points="${pts.map(p => p.map(v => v.toFixed(1)).join(",")).join(" ")}" fill="var(--primary)" fill-opacity=".22" stroke="var(--primary)" stroke-width="2" stroke-linejoin="round"/>`;
+  pts.forEach(([x, y], i) => { if (vals[NASA[i].id] != null) g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="var(--primary)" stroke="var(--surface)" stroke-width="2"/>`; });
+  return `<svg viewBox="0 0 300 300" role="img" aria-label="Perfil de carga de trabajo">${g}</svg>`;
+}
+function stepNasa(host) {
+  const v = S.nasa;
+  host.innerHTML = head(3, "Piense en su actividad asistencial habitual. Deslice cada escala de 0 a 100 (cada marca equivale a 5 puntos).", `<span class="chip p">Anexo 4</span><span class="chip a">Versión Raw</span>`) + `
+  <div class="nasa"><div>${NASA.map(x => `
+    <div class="nasa-item q" id="q-${x.id}">
+      <div class="nasa-top"><h3>${x.t}</h3><span class="nasa-val mono ${v[x.id] == null ? "unset" : ""}" id="v-${x.id}">${v[x.id] ?? "—"}</span></div>
+      <p class="muted" style="font-size:.88rem">${x.d}</p>
+      <input class="range" type="range" min="0" max="100" step="5" id="r-${x.id}" value="${v[x.id] ?? 50}" aria-label="${x.t}">
+      <div class="ticks" aria-hidden="true">${"<i></i>".repeat(21)}</div>
+      <div class="ends"><span>${x.lo}</span><span>${x.hi}</span></div>
+    </div>`).join("")}</div>
+    <div class="card radar-card"><p class="eyebrow">Perfil de carga percibida</p><div id="radar">${radarSVG(v)}</div><p class="muted" style="font-size:.85rem">Puntaje global (promedio)</p><p class="big mono" id="nasa-total">${scores().nasa ?? "—"}</p></div>
+  </div>`;
+  NASA.forEach(x => { const r = $(`#r-${x.id}`, host); const set = () => { v[x.id] = +r.value; $(`#v-${x.id}`, host).textContent = r.value; $(`#v-${x.id}`, host).classList.remove("unset"); r.closest(".q").classList.remove("invalid"); $("#radar", host).innerHTML = radarSVG(v); $("#nasa-total", host).textContent = scores().nasa ?? "—"; persist(); }; r.oninput = set; r.onchange = set; });
+  nav(host, { onNext: () => { const miss = NASA.find(x => v[x.id] == null); if (miss) { $(`#q-${miss.id}`, host).classList.add("invalid"); return `Mueva la escala de «${miss.t}» (aunque su respuesta sea 50).`; } return null; } });
+}
+
+/* ---------- 5. SUSESO ---------- */
+function stepSuseso(host) {
+  const v = S.suseso;
+  const answered = () => Object.keys(v).length;
+  host.innerHTML = head(4, "Marque la alternativa que mejor describa su situación en su actividad asistencial. No hay respuestas buenas ni malas.", `<span class="chip p">Anexo 6</span><span class="chip a" id="sus-count">${answered()}/20</span>`) +
+    SUSESO.map((d, di) => `<div class="section-title"><span class="tag">D${di + 1}</span><h3>${d.dim}</h3></div>` + d.items.map(([n, t]) => `
+      <div class="q" id="q-s${n}"><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(t)}</span></div>
+      <div class="pills" role="radiogroup">${SUS_OPTS.map((o, oi) => `<label class="pill"><input type="radio" name="s${n}" value="${oi}" ${v["s" + n] === oi ? "checked" : ""}><span>${o}</span></label>`).join("")}</div></div>`).join("")).join("");
+  for (let n = 1; n <= 20; n++) bindPills(host, "s" + n, val => { v["s" + n] = +val; $("#sus-count", host).textContent = answered() + "/20"; persist(); });
+  nav(host, { onNext: () => { for (let n = 1; n <= 20; n++) if (v["s" + n] == null) { $(`#q-s${n}`, host).classList.add("invalid"); return `Falta responder la pregunta ${n}.`; } return null; } });
+}
+
+/* ---------- 6. Warr-Cook-Wall ---------- */
+function stepWarr(host) {
+  const v = S.warr;
+  host.innerHTML = head(5, "Indique su grado de satisfacción con cada aspecto de su trabajo, de 1 (muy insatisfecho) a 7 (muy satisfecho).", `<span class="chip p">Anexo 7</span><span class="chip a" id="w-count">${Object.keys(v).length}/15</span>`) +
+    `<div class="legend" style="margin-bottom:10px">${WARR_OPTS.map((o, i) => `<span><b class="mono">${i + 1}</b> ${o}</span>`).join("")}</div>` +
+    WARR.map((t, i) => `<div class="q" id="q-w${i + 1}"><div class="q-head"><span class="q-num">${String(i + 1).padStart(2, "0")}</span><span class="q-label">${esc(t)}</span></div>
+      <div class="likert7" role="radiogroup" aria-label="${esc(t)}">${WARR_OPTS.map((o, oi) => `<label class="pill"><input type="radio" name="w${i + 1}" value="${oi + 1}" ${v["w" + (i + 1)] === oi + 1 ? "checked" : ""} aria-label="${oi + 1} ${o}"><span><b>${oi + 1}</b>${o}</span></label>`).join("")}</div></div>`).join("");
+  for (let i = 1; i <= 15; i++) bindPills(host, "w" + i, val => { v["w" + i] = +val; $("#w-count", host).textContent = Object.keys(v).length + "/15"; persist(); });
+  nav(host, { onNext: () => { for (let i = 1; i <= 15; i++) if (v["w" + i] == null) { $(`#q-w${i}`, host).classList.add("invalid"); return `Falta responder el ítem ${i}.`; } return null; } });
+}
+
+/* ---------- 7. Nórdico ---------- */
+function bodySVG() {
+  // vista posterior esquemática; regiones clicables
+  const R = (id, d) => `<path class="reg" data-reg="${id}" d="${d}" tabindex="0" role="button" aria-label="${REGIONS.find(r => r.id === id).t}"/>`;
+  return `<svg viewBox="0 0 220 440" role="group" aria-label="Mapa corporal, vista posterior">
+    <path class="silhouette" d="M110 14c15 0 25 11 25 26s-10 27-25 27-25-12-25-27 10-26 25-26zM96 68h28l4 14 34 8c12 3 18 12 19 24l6 70c1 9-3 14-9 15l-4 60c0 6-4 10-9 10l-6-2 1-62-3-58-8 2 4 60-6 64 6 92-2 50h-24l-6-52-4-80h-6l-4 80-6 52H76l-2-50 6-92-6-64 4-60-8-2-3 58 1 62-6 2c-5 0-9-4-9-10l-4-60c-6-1-10-6-9-15l6-70c1-12 7-21 19-24l34-8z"/>
+    ${R("cuello", "M98 66h24l3 18H95z")}
+    ${R("hombros", "M60 92c8-6 22-9 34-10l2 22-30 4c-5 1-9-2-10-6zM160 92c-8-6-22-9-34-10l-2 22 30 4c5 1 9-2 10-6z")}
+    ${R("dorsal", "M90 104h40l2 64H88z")}
+    ${R("codos", "M46 168h20l-1 22H44zM154 168h20l2 22h-21z")}
+    ${R("lumbar", "M88 170h44l2 40H86z")}
+    ${R("munecas", "M38 236h22l-1 30c0 6-4 10-10 10s-11-4-11-10zM160 236h22v30c0 6-5 10-11 10s-10-4-10-10z")}
+    ${R("caderas", "M84 212h52l4 56h-60z")}
+    ${R("rodillas", "M80 300h24l-2 30H80zM116 300h24v30h-22z")}
+    ${R("tobillos", "M78 392h22l2 28H74zM120 392h22l4 28h-28z")}
+    <text x="110" y="436" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="Atkinson Hyperlegible, sans-serif">Vista posterior</text>
+  </svg>`;
+}
+function stepNordic(host) {
+  const v = S.nordic; let sel = null;
+  host.innerHTML = head(6, "Toque una zona del cuerpo o use la lista. Para cada región responda las tres preguntas. Problemas = dolor, molestia, incomodidad, adormecimiento u hormigueo.", `<span class="chip p">Anexo 8</span><span class="chip a" id="n-count"></span>`) + `
+  <div class="nordic">
+    <div class="card body-map">${bodySVG()}<div class="legend-row"><span><i style="background:var(--accent)"></i>Con síntomas (12 meses)</span><span><i style="background:var(--surface-2);border:1px solid var(--muted)"></i>Sin registrar / no</span></div></div>
+    <div id="regions">${REGIONS.map(r => regionHTML(r)).join("")}</div>
+  </div>`;
+  function regionHTML(r) {
+    const d = v[r.id] || {};
+    const sideQ = (k) => r.side && d[k] === "Sí" ? `<div class="pills" style="margin-top:4px">${SIDE_OPTS.map(o => `<label class="pill"><input type="radio" name="${r.id}-${k}-lado" value="${o}" ${d[k + "Lado"] === o ? "checked" : ""}><span>${o === "Ambos" ? (r.id === "hombros" ? "Ambos hombros" : r.id === "codos" ? "Ambos codos" : "Ambas") : o}</span></label>`).join("")}</div>` : "";
+    const label = r.both ? "uno o ambos(as) " : "";
+    return `<div class="region q" id="q-${r.id}" data-r="${r.id}">
+      <div class="region-head" data-toggle="${r.id}"><h3>${r.t}</h3><span class="chip ${d.m12 === "Sí" ? "a" : d.m12 === "No" ? "g" : ""}">${d.m12 === "Sí" ? "Con síntomas" : d.m12 === "No" ? "Sin síntomas" : "Pendiente"}</span></div>
+      <div class="region-body">
+        <div class="subq"><span class="q-label">A. En los últimos 12 meses, ¿ha tenido problemas en ${label}${r.t.toLowerCase()}?</span>${pills(r.id + "-m12", ["No", "Sí"], d.m12)}${sideQ("m12")}</div>
+        ${d.m12 === "Sí" ? `<div class="subq"><span class="q-label">B. ¿Ha tenido problemas en los últimos 7 días?</span>${pills(r.id + "-d7", ["No", "Sí"], d.d7)}${sideQ("d7")}</div>
+        <div class="subq"><span class="q-label">C. En los últimos 12 meses, ¿estos problemas le han impedido realizar sus actividades normales (trabajo, hogar o aficiones)?</span>${pills(r.id + "-imp", ["No", "Sí"], d.imp)}</div>` : ""}
+      </div></div>`;
+  }
+  const paint = () => {
+    $$(".reg", host).forEach(p => { p.classList.toggle("yes", v[p.dataset.reg]?.m12 === "Sí"); p.classList.toggle("sel", p.dataset.reg === sel); });
+    const done = REGIONS.filter(r => v[r.id]?.m12).length; $("#n-count", host).textContent = done + "/9 regiones";
+  };
+  const bindRegion = (r) => {
+    const box = $(`#q-${r.id}`, host);
+    const reb = () => { box.outerHTML = regionHTML(r); bindRegion(r); paint(); };
+    bindPills(box, r.id + "-m12", val => { v[r.id] = Object.assign(v[r.id] || {}, { m12: val }); if (val === "No") v[r.id] = { m12: "No" }; persist(); reb(); });
+    bindPills(box, r.id + "-d7", val => { v[r.id].d7 = val; persist(); reb(); });
+    bindPills(box, r.id + "-imp", val => { v[r.id].imp = val; persist(); });
+    ["m12", "d7"].forEach(k => bindPills(box, `${r.id}-${k}-lado`, val => { v[r.id][k + "Lado"] = val; persist(); }));
+    box.addEventListener("click", () => { sel = r.id; paint(); $$(".region", host).forEach(x => x.classList.toggle("sel", x.dataset.r === sel)); });
+  };
+  REGIONS.forEach(bindRegion);
+  $$(".reg", host).forEach(p => { const act = () => { sel = p.dataset.reg; paint(); const box = $(`#q-${sel}`, host); $$(".region", host).forEach(x => x.classList.toggle("sel", x === box)); box.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); }; p.onclick = act; p.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } }; });
+  paint();
+  nav(host, { onNext: () => {
+    for (const r of REGIONS) { const d = v[r.id] || {};
+      if (!d.m12) { $(`#q-${r.id}`, host).classList.add("invalid"); return `Responda la pregunta A para «${r.t}».`; }
+      if (r.side && d.m12 === "Sí" && !d.m12Lado) { $(`#q-${r.id}`, host).classList.add("invalid"); return `Indique el lado afectado en «${r.t}».`; }
+      if (d.m12 === "Sí" && (!d.d7 || !d.imp)) { $(`#q-${r.id}`, host).classList.add("invalid"); return `Complete las preguntas B y C de «${r.t}».`; }
+      if (r.side && d.d7 === "Sí" && !d.d7Lado) { $(`#q-${r.id}`, host).classList.add("invalid"); return `Indique el lado (7 días) en «${r.t}».`; }
+    } return null; } });
+}
+
+/* ---------- 8. REBA ---------- */
+function stepReba(host) {
+  const R = S.reba; const fotosOK = S.cons.foto === "Sí";
+  const optGroup = (key, title, i) => {
+    const o = R.obs[i];
+    return `<div class="field"><span class="q-label">${title}</span><div class="opts">${REBA_OPTS[key].map(([val, lbl, svg]) => `<label class="opt"><input type="radio" name="${key}-${i}" value="${val}" ${o[key] === val ? "checked" : ""}><div class="box">${svg}<span class="lbl">${lbl}</span><span class="pts">${key === "knee" ? "+" + val : key === "load" || key === "coupling" ? "+" + val : val + " pt"}</span></div></label>`).join("")}</div>
+      ${REBA_ADJ[key] ? `<div class="adj">${REBA_ADJ[key].map(([k, l]) => `<label><input type="checkbox" data-adj="${k}" ${o[k] ? "checked" : ""}>${l}</label>`).join("")}</div>` : ""}</div>`;
+  };
+  const obsHTML = i => `
+    <div class="reba">
+      <div>
+        <div class="group"><h3><span class="chip p">Grupo A</span> Cuello, tronco y piernas</h3>
+          ${optGroup("neck", "Cuello", i)}<div style="height:12px"></div>${optGroup("trunk", "Tronco", i)}<div style="height:12px"></div>${optGroup("legs", "Piernas", i)}<div style="height:8px"></div>${optGroup("knee", "Flexión de rodillas", i)}<div style="height:12px"></div>${optGroup("load", "Carga o fuerza", i)}
+        </div>
+        <div class="group"><h3><span class="chip a">Grupo B</span> Brazo, antebrazo y muñeca <span class="muted" style="font-weight:400;font-size:.85rem">(lado evaluado)</span></h3>
+          ${optGroup("upper", "Brazo", i)}<div style="height:12px"></div>${optGroup("lower", "Antebrazo", i)}<div style="height:12px"></div>${optGroup("wrist", "Muñeca", i)}<div style="height:12px"></div>${optGroup("coupling", "Agarre", i)}
+        </div>
+        <div class="group"><h3><span class="chip">Actividad</span></h3><div class="adj">${REBA_ADJ.act.map(([k, l]) => `<label><input type="checkbox" data-adj="${k}" ${R.obs[i][k] ? "checked" : ""}>${l}</label>`).join("")}</div></div>
+        <div class="group"><h3>${ICONS.cam.replace("<svg", '<svg width="20" height="20"')} Fotografía de la observación ${i + 1}</h3>
+          ${fotosOK ? `<div class="photo-zone"><p class="muted" style="font-size:.86rem">Opcional. Encuadre al fisioterapeuta; no capte el rostro del paciente. Requiere autorización del establecimiento y consentimiento verbal del paciente.</p><label class="btn btn-ghost" style="width:max-content">${ICONS.cam} Tomar o subir foto<input type="file" accept="image/*" capture="environment" id="foto-in" hidden></label><div class="thumbs" id="thumbs"></div></div>` : `<p class="muted" style="font-size:.88rem">El participante no autorizó fotografías. La puntuación se registra solo por observación directa.</p>`}
+        </div>
+      </div>
+      <aside class="card score-card" aria-live="polite" id="score-card"></aside>
+    </div>`;
+  host.innerHTML = head(7, "Observe tres ejecuciones de la misma movilización. Se registra el puntaje más alto como criterio conservador. No se graban videos.", `<span class="chip p">Anexo 5</span><span class="chip a">Hoja de campo</span>`) + `
+    <div class="grid2">
+      <div class="field"><label for="r-tarea">Tarea observada</label><select class="input" id="r-tarea"><option value="">Seleccione…</option>${["Transferencia cama a silla", "Transferencia silla a cama", "Cambio de posición en cama", "Asistencia a la marcha", "Sedestación / bipedestación asistida", "Otra movilización"].map(t => `<option ${R.tarea === t ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+      <div class="field"><label>Lado corporal evaluado (mayor carga)</label>${pills("r-lado", ["Derecho", "Izquierdo"], R.lado)}</div>
+    </div>
+    <div class="obs-tabs" role="tablist" style="margin-top:16px">${[0, 1, 2].map(i => { const c = rebaCalc(R.obs[i]); return `<button role="tab" aria-selected="${S.active === i}" data-obs="${i}">Observación ${i + 1}${c ? ` · <span class="mono">${c.total}</span>` : ""}</button>`; }).join("")}<span class="chip g" id="final-chip"></span></div>
+    <div id="obs-host"></div>`;
+  const fin = () => { const s = scores(); $("#final-chip", host).textContent = s.rebaFinal ? `Puntaje final: ${s.rebaFinal} · ${s.rebaLevel.t}` : "Puntaje final: —"; };
+  const renderObs = () => {
+    const i = S.active; $("#obs-host", host).innerHTML = obsHTML(i);
+    const o = R.obs[i];
+    Object.keys(REBA_OPTS).forEach(key => $$(`input[name="${key}-${i}"]`, host).forEach(inp => inp.onchange = () => { o[key] = +inp.value; persist(); upd(); }));
+    $$("[data-adj]", host).forEach(cb => cb.onchange = () => { o[cb.dataset.adj] = cb.checked; persist(); upd(); });
+    if (fotosOK) { $("#foto-in", host).onchange = e => addPhoto(e.target.files[0], i); drawThumbs(); }
+    upd();
+  };
+  const drawThumbs = () => { const t = $("#thumbs", host); if (!t) return; const list = R.fotos.filter(f => f.obs === S.active); t.innerHTML = list.map(f => `<figure><img src="${f.data}" alt="Foto observación ${f.obs + 1}"><button aria-label="Eliminar foto" data-del="${f.k}">×</button></figure>`).join(""); $$("[data-del]", t).forEach(b => b.onclick = () => { R.fotos = R.fotos.filter(f => f.k !== b.dataset.del); persist(); drawThumbs(); }); };
+  const addPhoto = async (file, i) => { if (!file) return; try { const data = await compressImage(file); R.fotos.push({ k: "f" + Date.now(), obs: i, data, ts: new Date().toISOString() }); persist(); drawThumbs(); toast("Foto agregada"); } catch { toast("No se pudo procesar la imagen. Intente con otra foto."); } };
+  const upd = () => {
+    const c = rebaCalc(R.obs[S.active]);
+    const sc = $("#score-card", host);
+    sc.innerHTML = c ? `<p class="eyebrow">Observación ${S.active + 1}</p><div><span class="score-num mono" style="color:var(--${["", "good", "primary", "warn", "bad", "bad"][c.level.n]})">${c.total}</span></div><span class="lvl lvl-${c.level.n}">${c.level.t}</span><p class="muted hide-sm" style="font-size:.84rem">${c.level.a}</p>
+      <div class="calc"><div><span>Tabla A (${c.neck}·${c.trunk}·${c.legs})</span><b>${c.a}</b></div><div><span>+ Carga/fuerza</span><b>${c.load}</b></div><div><span>Puntuación A</span><b>${c.scoreA}</b></div><div><span>Tabla B (${c.upper}·${c.lower}·${c.wrist})</span><b>${c.b}</b></div><div><span>+ Agarre</span><b>${c.coupling}</b></div><div><span>Puntuación B</span><b>${c.scoreB}</b></div><div><span>Tabla C</span><b>${c.c}</b></div><div><span>+ Actividad</span><b>${c.act}</b></div></div>`
+      : `<p class="eyebrow">Observación ${S.active + 1}</p><p class="score-num mono muted">—</p><p class="muted" style="font-size:.86rem">Seleccione una opción en cada segmento para calcular el puntaje REBA.</p>`;
+    $$("[data-obs]", host).forEach(b => { const cc = rebaCalc(R.obs[+b.dataset.obs]); b.innerHTML = `Observación ${+b.dataset.obs + 1}${cc ? ` · <span class="mono">${cc.total}</span>` : ""}`; });
+    fin();
+  };
+  $$("[data-obs]", host).forEach(b => b.onclick = () => { S.active = +b.dataset.obs; $$("[data-obs]", host).forEach(x => x.setAttribute("aria-selected", x === b)); persist(); renderObs(); });
+  $("#r-tarea", host).onchange = e => { R.tarea = e.target.value; persist(); };
+  bindPills(host, "r-lado", v => { R.lado = v; persist(); });
+  renderObs();
+  nav(host, { onNext: () => {
+    if (!R.tarea) { $("#r-tarea", host).classList.add("invalid"); return "Seleccione la tarea observada."; }
+    if (!R.lado) return "Indique el lado corporal evaluado.";
+    const miss = [0, 1, 2].find(i => !rebaCalc(R.obs[i]));
+    if (miss != null) { S.active = miss; renderObs(); $$("[data-obs]", host).forEach(x => x.setAttribute("aria-selected", +x.dataset.obs === miss)); return `Complete la observación ${miss + 1}.`; }
+    return null; } });
+}
+function dataUrlToBlob(u) { const [h, b] = u.split(","); const bin = atob(b); const arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i); return new Blob([arr], { type: (h.match(/data:([^;]+)/) || [])[1] || "image/jpeg" }); }
+function compressImage(file, maxSide = 960, maxChars = 230000) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onerror = rej;
+    fr.onload = () => { const im = new Image(); im.onerror = rej; im.onload = () => {
+      let w = im.width, h = im.height; const k = Math.min(1, maxSide / Math.max(w, h)); w = Math.round(w * k); h = Math.round(h * k);
+      const cv = document.createElement("canvas"); cv.width = w; cv.height = h; cv.getContext("2d").drawImage(im, 0, 0, w, h);
+      let q = .72, out = cv.toDataURL("image/jpeg", q);
+      while (out.length > maxChars && q > .3) { q -= .08; out = cv.toDataURL("image/jpeg", q); }
+      if (out.length > maxChars) { const c2 = document.createElement("canvas"); c2.width = Math.round(w * .7); c2.height = Math.round(h * .7); c2.getContext("2d").drawImage(cv, 0, 0, c2.width, c2.height); out = c2.toDataURL("image/jpeg", .6); }
+      res(out); }; im.src = fr.result; };
+    fr.readAsDataURL(file);
+  });
+}
+
+/* ---------- 9. Revisión y envío ---------- */
+function stepSend(host) {
+  const s = scores();
+  const susTxt = s.sus ? SUSESO.map(d => `${d.dim.split(" ")[0]} ${s.sus[d.key]}`).join(" · ") : "Incompleto";
+  host.innerHTML = head(8, "Revise el resumen. Al enviar, la encuesta se guarda en el registro del estudio y se borra de este dispositivo.", `<span class="chip p mono">${esc(S.meta.codigo)}</span><span class="chip a">${esc(S.meta.estrato)}</span>`) + `
+  <div class="summary">
+    <div class="sum"><span class="eyebrow">NASA-TLX (Raw)</span><b class="mono">${s.nasa ?? "—"}</b><span class="muted">Promedio de 6 dimensiones (0–100)</span></div>
+    <div class="sum"><span class="eyebrow">REBA final</span><b class="mono">${s.rebaFinal ?? "—"}</b>${s.rebaLevel ? `<span class="lvl lvl-${s.rebaLevel.n}" style="justify-self:start">${s.rebaLevel.t}</span>` : ""}</div>
+    <div class="sum"><span class="eyebrow">Satisfacción laboral</span><b class="mono">${s.warr ?? "—"}</b><span class="muted">Puntaje total (15–105)</span></div>
+    <div class="sum"><span class="eyebrow">Síntomas 12 meses</span><b>${s.regs.length ? s.regs.length + " región(es)" : "Ninguna"}</b><span class="muted">${s.regs.map(r => REGIONS.find(x => x.id === r).t).join(", ") || "Sin síntomas reportados"}</span></div>
+    <div class="sum"><span class="eyebrow">SUSESO/ISTAS21 (puntaje bruto)</span><span style="font-size:.86rem">${esc(susTxt)}</span></div>
+    <div class="sum"><span class="eyebrow">Ficha</span><span style="font-size:.86rem">${esc(S.ficha.edad ?? "—")} años · ${esc(S.ficha.sexo ?? "—")} · IMC ${s.imc ?? "—"} · ${esc(S.ficha.horas ?? "—")} h/día · ${esc(S.ficha.pausas ?? "—")} pausas</span></div>
+  </div>
+  <div id="checks" style="margin-top:14px"></div>
+  <div id="send-zone"></div>`;
+  const missing = STEPS.slice(1, 8).filter((st, i) => i + 1 >= S.maxStep).map(x => x.t);
+  const problems = [];
+  if (!S.cons.firma) problems.push("Consentimiento sin firma");
+  if (!s.nasa) problems.push("NASA-TLX incompleto"); if (!s.sus) problems.push("SUSESO/ISTAS21 incompleto"); if (!s.warr) problems.push("Satisfacción laboral incompleta");
+  if (REGIONS.some(r => !S.nordic[r.id]?.m12)) problems.push("Cuestionario Nórdico incompleto"); if (!s.rebaFinal || s.reba.some(x => !x)) problems.push("Observaciones REBA incompletas");
+  $("#checks", host).innerHTML = problems.length ? `<div class="banner bad"><div><b>Antes de enviar:</b> ${problems.map(esc).join("; ")}.</div></div>` : `<div class="banner good"><div><b>Todo completo.</b> ${S.reba.fotos.length} foto(s) adjunta(s).</div></div>`;
+  const zone = $("#send-zone", host);
+  zone.innerHTML = `<div class="navbar"><button class="btn btn-ghost" id="prev">${ICONS.prev} Anterior</button><button class="btn btn-primary" id="send" ${problems.length ? "disabled" : ""}>${ICONS.send} Enviar encuesta</button></div>`;
+  $("#prev", zone).onclick = () => go(S.step - 1);
+  $("#send", zone).onclick = () => submit(host);
+}
+async function submit(host, estado = "completa") {
+  const zone = $("#send-zone", host) || host;
+  if (!P.db || !P.uid) { zone.innerHTML = `<div class="banner warn"><div><b>No se envió.</b> Esta vista no está conectada al registro del estudio (modo de práctica). Las respuestas siguen guardadas en este dispositivo.</div></div>`; return; }
+  zone.innerHTML = `<div class="saving" style="padding:20px"><span class="spin"></span><b>Guardando en el registro del estudio…</b></div>`;
+  try {
+    const s = scores();
+    const id = `${S.meta.codigo}_${Date.now()}`;
+    const base = P.db.doc(`respuestas/${P.uid}`);
+    const fotosRefs = [];
+    for (const f of S.reba.fotos) {
+      let ref = null;
+      if (P.assets) { try { const blob = dataUrlToBlob(f.data); const up = await P.assets.upload(blob, { type: "image/jpeg" }); ref = { asset: up.id }; } catch { ref = null; } }
+      if (!ref) { const fd = base.collection("fotos").doc(); await fd.set({ encuesta: id, codigo: S.meta.codigo, obs: f.obs + 1, data: f.data, ts: f.ts }); ref = { doc: fd.id }; }
+      fotosRefs.push(Object.assign({ obs: f.obs + 1, ts: f.ts }, ref));
+    }
+    const rec = {
+      id, estado, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, establecimiento: S.meta.establecimiento,
+      encuestador: P.uid, enviado: new Date().toISOString(),
+      consentimiento: { acepta: S.cons.acepta, foto: S.cons.foto, nombre: S.cons.nombre, dni: S.cons.dni, condicion: S.cons.condicion, firma: S.cons.firma },
+      ficha: S.ficha, nasa: S.nasa, suseso: S.suseso, warr: S.warr, nordico: S.nordic,
+      reba: { tarea: S.reba.tarea, lado: S.reba.lado, obs: S.reba.obs },
+      puntajes: { nasa: s.nasa, suseso: s.sus, warr: s.warr, regiones12m: s.regs, sintomas12m: s.sintomas12, reba: s.reba.map(r => r ? r.total : null), rebaFinal: s.rebaFinal, rebaNivel: s.rebaLevel ? s.rebaLevel.t : null, imc: s.imc },
+      fotos: fotosRefs
+    };
+    await base.set({ encuestador: P.uid, actualizado: rec.enviado });
+    await base.collection("encuestas").doc(id).set(rec);
+    store.del(DRAFT_KEY);
+    showDone(host, rec);
+  } catch (e) {
+    const msg = e && e.code === "quota_exceeded" ? "El almacenamiento del estudio está lleno. Avise al administrador." : "No se pudo guardar. Revise la conexión e intente de nuevo; las respuestas siguen en este dispositivo.";
+    zone.innerHTML = `<div class="banner bad"><div><b>Error al enviar.</b> ${msg}</div></div><div class="navbar"><span></span><button class="btn btn-primary" id="retry">${ICONS.send} Reintentar</button></div>`;
+    $("#retry", zone).onclick = () => submit(host, estado);
+  }
+}
+async function finishRefusal(estado) {
+  const host = $("#step");
+  if (!P.db || !P.uid) { host.innerHTML = `<div class="done-screen"><h2>Registro de práctica</h2><p class="lead">El participante quedó como «${estado}». En modo de práctica no se guarda.</p><button class="btn btn-primary" id="again">Nueva encuesta</button></div>`; $("#again").onclick = () => { S = blank(); store.del(DRAFT_KEY); renderSurvey(); }; return; }
+  host.innerHTML = `<div class="saving" style="padding:30px"><span class="spin"></span><b>Registrando…</b></div>`;
+  try {
+    const id = `${S.meta.codigo}_${Date.now()}`; const base = P.db.doc(`respuestas/${P.uid}`);
+    const rec = { id, estado, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, establecimiento: S.meta.establecimiento, encuestador: P.uid, enviado: new Date().toISOString(), motivos: estado === "no elegible" ? eligibility() : [], puntajes: {}, fotos: [] };
+    await base.set({ encuestador: P.uid, actualizado: rec.enviado });
+    await base.collection("encuestas").doc(id).set(rec);
+    store.del(DRAFT_KEY);
+    host.innerHTML = `<div class="done-screen"><h2>Registrado como «${esc(estado)}»</h2><p class="lead">Seleccione al siguiente participante del mismo estrato (${esc(S.meta.estrato)}) en la lista aleatoria.</p><button class="btn btn-primary" id="again">Nueva encuesta</button></div>`;
+    $("#again").onclick = () => { S = blank(); renderSurvey(); };
+  } catch { host.innerHTML = `<div class="banner bad">No se pudo registrar. Intente de nuevo.</div>`; }
+}
+function showDone(host, rec) {
+  host.innerHTML = `<div class="done-screen"><div class="lottie" id="lot-ok"></div><h2>Encuesta enviada</h2><p class="lead">Código <b class="mono">${esc(rec.codigo)}</b> · ${esc(rec.estrato)} · REBA final ${rec.puntajes.rebaFinal ?? "—"}. Gracias por su participación.</p><button class="btn btn-primary" id="again">Iniciar nueva encuesta</button></div>`;
+  playLottie($("#lot-ok", host), lottieSuccess(cssVar("--good")), false);
+  $("#again", host).onclick = () => { S = blank(); renderSurvey(); window.scrollTo({ top: 0 }); };
+}
+
+/* =====================================================================
+   PANEL ADMIN
+   ===================================================================== */
+const Admin = {
+  started: false, subs: [], data: new Map(), names: {},
+  unlocked: false,
+  start() {
+    const v = $("#view-adm");
+    if (!P.ready) { v.innerHTML = `<div class="card login"><div class="saving"><span class="spin"></span>Conectando…</div></div>`; return; }
+    if (!P.db) { v.innerHTML = this.shell(); this.render(); return; }
+    if (!this.unlocked) { Gate.show(); return; }
+    if (this.started) { if (!$("#adm-body")) v.innerHTML = this.shell(); this.render(); return; }
+    this.started = true; v.innerHTML = this.shell(); this.render();
+    if (!P.canAdmin) return;
+    this.subs.push(P.db.collection("respuestas").onSnapshot(snap => {
+      snap.docChanges().forEach(ch => {
+        const uid = ch.doc.id;
+        if (ch.type === "added" && !this.data.has(uid)) {
+          this.data.set(uid, []);
+          this.subs.push(P.db.collection(`respuestas/${uid}/encuestas`).onSnapshot(s2 => { this.data.set(uid, s2.docs.map(d => d.data())); this.loadNames(); this.render(); }, () => {}));
+        }
+      });
+      this.render();
+    }, () => { this.render(); }));
+  },
+  async loadNames() {
+    if (!P.user || !P.user.profiles) return;
+    const ids = [...this.data.keys()].filter(id => !(id in this.names));
+    if (!ids.length) return;
+    try { const ps = await P.user.profiles(ids); ids.forEach(id => this.names[id] = (ps[id] && ps[id].name) || "Encuestador"); this.render(); } catch {}
+  },
+  all() { return [...this.data.values()].flat().sort((a, b) => (b.enviado || "").localeCompare(a.enviado || "")); },
+  shell() {
+    return `<div class="admin-head"><div><p class="eyebrow">Panel de seguimiento</p><h1>Avance del trabajo de campo</h1><p class="lead" style="margin-top:6px">Muestra estratificada: 121 participantes (68 egresados y 53 internos).</p></div>
+      <div class="toolbar"><button class="btn btn-ghost" id="exp-csv">Exportar CSV</button><button class="btn btn-ghost" id="exp-json">Exportar JSON</button>${P.db && P.canAdmin ? `<button class="btn btn-ghost" id="pw-btn">Cambiar contraseña</button>` : ""}${P.db ? `<button class="btn btn-ghost" id="logout">${LOCK.replace("<svg", '<svg width="16" height="16"')} Cerrar sesión</button>` : ""}</div></div>
+      <div id="pw-change" class="card" style="padding:14px;margin-bottom:14px" hidden></div>
+      <div id="adm-body"></div>`;
+  },
+  render() {
+    const body = $("#adm-body"); if (!body) return;
+    if (!P.db) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Panel sin conexión</b><span>Abra la página publicada con su cuenta de administrador para ver el avance, las fotos y exportar los datos.</span></div>`; return; }
+    if (!P.canAdmin) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Acceso restringido</b><span>Solo el investigador y los editores del estudio pueden ver el panel. Los encuestadores usan la pestaña «Encuesta».</span></div>`; return; }
+    const rows = this.all();
+    const comp = rows.filter(r => r.estado === "completa");
+    const eg = comp.filter(r => r.estrato === "Egresado").length, it = comp.filter(r => r.estrato === "Interno").length;
+    const rech = rows.filter(r => r.estado === "rechazó").length, noel = rows.filter(r => r.estado === "no elegible").length;
+    const fotos = comp.reduce((a, r) => a + (r.fotos || []).length, 0);
+    const pctBar = (n, m, col) => `<div class="bar"><i style="width:${Math.min(100, n / m * 100).toFixed(1)}%;background:${col}"></i></div>`;
+    const lv = [0, 0, 0, 0, 0]; comp.forEach(r => { const l = rebaLevel(r.puntajes?.rebaFinal); if (l) lv[l.n - 1]++; });
+    const maxLv = Math.max(1, ...lv);
+    const nasaVals = comp.map(r => r.puntajes?.nasa).filter(v => v != null).sort((a, b) => a - b);
+    const med = nasaVals.length ? (nasaVals.length % 2 ? nasaVals[(nasaVals.length - 1) / 2] : (nasaVals[nasaVals.length / 2 - 1] + nasaVals[nasaVals.length / 2]) / 2) : null;
+    const prev12 = comp.length ? comp.filter(r => r.puntajes?.sintomas12m).length / comp.length * 100 : null;
+    const regPrev = REGIONS.map(rg => ({ t: rg.t, n: comp.filter(r => (r.puntajes?.regiones12m || []).includes(rg.id)).length })).map(x => ({ ...x, p: comp.length ? x.n / comp.length * 100 : 0 })).sort((a, b) => b.p - a.p);
+    const seqCols = ["var(--seq2)", "var(--seq3)", "var(--seq4)", "var(--seq5)", "var(--bad)"];
+    body.innerHTML = `
+      <div class="kpis">
+        <div class="card kpi"><span class="eyebrow">Encuestas completas</span><b class="mono">${comp.length}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${pctBar(comp.length, CFG.meta.total, "var(--primary)")}</div>
+        <div class="card kpi"><span class="eyebrow">Egresados</span><b class="mono">${eg}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${pctBar(eg, CFG.meta.egresado, "var(--s1)")}</div>
+        <div class="card kpi"><span class="eyebrow">Internos</span><b class="mono">${it}<span class="muted" style="font-size:1rem"> / ${CFG.meta.interno}</span></b>${pctBar(it, CFG.meta.interno, "var(--s2)")}</div>
+        <div class="card kpi"><span class="eyebrow">Rechazos · no elegibles</span><b class="mono">${rech} · ${noel}</b><span class="muted" style="font-size:.82rem">Se reemplazan dentro del estrato</span></div>
+      </div>
+      ${rows.length ? `
+      <div class="admin-grid">
+        <div class="card panel"><h3>Prevalencia de síntomas en 12 meses por región</h3><p class="muted" style="font-size:.85rem">Global: <b class="mono">${prev12 == null ? "—" : prev12.toFixed(1) + " %"}</b> de ${comp.length} participantes</p>
+          <div class="hbars">${regPrev.map(x => `<div class="hbar" title="${esc(x.t)}: ${x.n} de ${comp.length} (${x.p.toFixed(1)} %)"><span>${esc(x.t)}</span><div class="track"><div class="fill" style="width:${x.p.toFixed(1)}%;background:var(--seq4)"></div></div><span class="v">${x.p.toFixed(0)} %</span></div>`).join("")}</div></div>
+        <div class="card panel"><h3>Nivel de riesgo REBA (puntaje final)</h3><p class="muted" style="font-size:.85rem">NASA-TLX mediana: <b class="mono">${med == null ? "—" : med.toFixed(1)}</b> (punto de corte carga alta/baja)</p>
+          <div class="vbars">${lv.map((n, i) => `<div class="vbar" title="${["Inapreciable", "Bajo", "Medio", "Alto", "Muy alto"][i]}: ${n}"><span class="n">${n}</span><div class="col" style="height:${(n / maxLv * 100).toFixed(1)}%;background:${seqCols[i]}"></div></div>`).join("")}</div>
+          <div class="vlabels">${["Inapreciable", "Bajo", "Medio", "Alto", "Muy alto"].map(t => `<span>${t}</span>`).join("")}</div></div>
+      </div>
+      <div class="card panel" style="margin-top:14px"><div class="admin-head" style="margin:0"><div><h3>Registros</h3><p class="muted" style="font-size:.85rem">${rows.length} registros · toque una fila para ver el detalle y las fotos</p></div>
+        <div class="toolbar"><select class="input" id="f-estrato" style="min-height:38px;width:auto"><option value="">Todos los estratos</option><option>Egresado</option><option>Interno</option></select><select class="input" id="f-estado" style="min-height:38px;width:auto"><option value="">Todos los estados</option><option>completa</option><option>rechazó</option><option>no elegible</option></select></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Código</th><th>Fecha</th><th>Estrato</th><th>Estado</th><th>Encuestador</th><th>NASA</th><th>REBA</th><th>Síntomas 12 m</th><th>Fotos</th></tr></thead><tbody id="tb"></tbody></table></div></div>
+      <div class="card panel" style="margin-top:14px"><div class="admin-head" style="margin:0"><div><h3>Fotografías de campo</h3><p class="muted" style="font-size:.85rem">${fotos} foto(s) en encuestas completas</p></div><button class="btn btn-ghost" id="load-gal">Cargar galería</button></div><div class="gallery" id="gal"></div></div>`
+      : `<div class="card empty" style="margin-top:14px">${emptyIco()}<b>Aún no hay encuestas registradas</b><span>Cuando los encuestadores envíen la primera encuesta desde la pestaña «Encuesta», aparecerán aquí el avance por estrato, la prevalencia de síntomas, los niveles REBA y las fotografías.</span></div>`}`;
+    const tb = $("#tb");
+    if (tb) {
+      const draw = () => {
+        const fe = $("#f-estrato").value, fs = $("#f-estado").value;
+        const list = rows.filter(r => (!fe || r.estrato === fe) && (!fs || r.estado === fs));
+        tb.innerHTML = list.map(r => { const l = rebaLevel(r.puntajes?.rebaFinal); return `<tr data-id="${esc(r.id)}" data-u="${esc(r.encuestador)}"><td class="num"><b>${esc(r.codigo)}</b></td><td class="num">${esc(r.fecha)}</td><td><span class="chip" style="background:color-mix(in srgb,var(--${r.estrato === "Egresado" ? "s1" : "s2"}) 18%,transparent)">${esc(r.estrato)}</span></td><td><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(r.estado)}</span></td><td>${esc(this.names[r.encuestador] || "…")}</td><td class="num">${r.puntajes?.nasa ?? "—"}</td><td>${l ? `<span class="lvl lvl-${l.n}" style="padding:2px 8px;font-size:.78rem">${r.puntajes.rebaFinal} · ${l.t}</span>` : "—"}</td><td>${r.estado === "completa" ? (r.puntajes?.sintomas12m ? "Sí" : "No") : "—"}</td><td class="num">${(r.fotos || []).length}</td></tr>`; }).join("") || `<tr><td colspan="9" class="muted">Sin registros con estos filtros.</td></tr>`;
+        $$("tr[data-id]", tb).forEach(tr => tr.onclick = () => this.detail(rows.find(r => r.id === tr.dataset.id)));
+      };
+      $("#f-estrato").onchange = draw; $("#f-estado").onchange = draw; draw();
+      $("#load-gal").onclick = () => this.gallery(comp);
+    }
+    const pb = $("#pw-btn"); if (pb) pb.onclick = () => Gate.change();
+    const lo = $("#logout"); if (lo) lo.onclick = () => Gate.logout();
+    $("#exp-csv").onclick = () => this.export("csv", rows);
+    $("#exp-json").onclick = () => this.export("json", rows);
+  },
+  async photoSrc(r, f) {
+    if (f.asset) return "/_blob/" + f.asset;
+    if (f.doc) { try { const d = await P.db.doc(`respuestas/${r.encuestador}/fotos/${f.doc}`).get(); return d.exists ? d.data().data : null; } catch { return null; } }
+    return null;
+  },
+  async gallery(comp) {
+    const g = $("#gal"); g.innerHTML = `<div class="saving"><span class="spin"></span>Cargando fotos…</div>`;
+    const items = [];
+    for (const r of comp) for (const f of (r.fotos || [])) { const src = await this.photoSrc(r, f); if (src) items.push({ src, cap: `${r.codigo} · obs. ${f.obs} · ${(f.ts || "").slice(0, 10)}` }); }
+    g.innerHTML = items.length ? items.map(it => `<figure><img src="${it.src}" alt="${esc(it.cap)}" loading="lazy"><figcaption class="mono">${esc(it.cap)}</figcaption></figure>`).join("") : `<p class="muted">Todavía no hay fotografías.</p>`;
+    $$("img", g).forEach(im => im.onclick = () => lightbox(im.src));
+  },
+  async detail(r) {
+    const d = $("#drawer"), bg = $("#drawer-bg");
+    const p = r.puntajes || {}; const l = rebaLevel(p.rebaFinal);
+    const sus = p.suseso ? SUSESO.map(s => `<span>${s.dim}</span><span>${p.suseso[s.key]}</span>`).join("") : "";
+    d.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><p class="eyebrow">Detalle de encuesta</p><h2 class="mono">${esc(r.codigo)}</h2></div><button class="btn btn-ghost" id="close-d" aria-label="Cerrar">Cerrar</button></div>
+      <div class="meta" style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0"><span class="chip">${esc(r.estrato)}</span><span class="chip ${r.estado === "completa" ? "g" : "w"}">${esc(r.estado)}</span><span class="chip">${esc(r.fecha)}</span><span class="chip">${esc(r.establecimiento || "—")}</span></div>
+      ${r.estado !== "completa" ? `<p class="muted">${(r.motivos || []).map(esc).join("; ") || "Sin datos adicionales."}</p>` : `
+      <h3 style="margin-top:14px">Puntajes</h3><div class="kv" style="margin-top:6px"><span>NASA-TLX (Raw)</span><span>${p.nasa ?? "—"}</span><span>Satisfacción laboral (15–105)</span><span>${p.warr ?? "—"}</span><span>REBA (obs. 1 · 2 · 3)</span><span>${(p.reba || []).join(" · ")}</span><span>REBA final</span><span>${p.rebaFinal ?? "—"} ${l ? "· " + l.t : ""}</span><span>IMC</span><span>${p.imc ?? "—"}</span>${sus}</div>
+      <h3 style="margin-top:14px">Síntomas (Nórdico, 12 meses)</h3><p style="margin-top:4px">${(p.regiones12m || []).map(id => REGIONS.find(x => x.id === id).t).join(", ") || "Sin síntomas"}</p>
+      <h3 style="margin-top:14px">Ficha</h3><div class="kv" style="margin-top:6px">${Object.entries(r.ficha || {}).map(([k, v]) => `<span>${esc((FICHA.find(q => q.id === k) || {}).t || k)}</span><span>${esc(v)}</span>`).join("")}</div>
+      <h3 style="margin-top:14px">Observación REBA</h3><p>${esc(r.reba?.tarea || "")} · lado ${esc(r.reba?.lado || "")}</p>
+      <h3 style="margin-top:14px">Fotografías</h3><div class="gallery" id="d-gal"><p class="muted">Cargando…</p></div>
+      <h3 style="margin-top:14px">Consentimiento</h3><p class="muted" style="font-size:.88rem">${esc(r.consentimiento?.nombre || "")} · DNI ${esc(r.consentimiento?.dni || "")} · Fotos: ${esc(r.consentimiento?.foto || "")}</p>${r.consentimiento?.firma ? `<img src="${r.consentimiento.firma}" alt="Firma del participante" style="max-width:260px;background:#fff;border-radius:8px;border:1px solid var(--line);margin-top:6px">` : ""}`}`;
+    bg.classList.add("open"); d.classList.add("open");
+    const close = () => { bg.classList.remove("open"); d.classList.remove("open"); };
+    $("#close-d").onclick = close; bg.onclick = close;
+    const dg = $("#d-gal");
+    if (dg) { const srcs = []; for (const f of (r.fotos || [])) { const s = await this.photoSrc(r, f); if (s) srcs.push({ s, f }); } dg.innerHTML = srcs.length ? srcs.map(({ s, f }) => `<figure><img src="${s}" alt="Observación ${f.obs}"><figcaption class="mono">Obs. ${f.obs}</figcaption></figure>`).join("") : `<p class="muted">Sin fotografías.</p>`; $$("img", dg).forEach(im => im.onclick = () => lightbox(im.src)); }
+  },
+  async export(kind, rows) {
+    if (!rows.length) { toast("Aún no hay registros para exportar"); return; }
+    if (!P.downloads) { toast("La descarga no está disponible en esta vista"); return; }
+    let data, filename;
+    if (kind === "json") { data = JSON.stringify(rows.map(r => { const c = JSON.parse(JSON.stringify(r)); if (c.consentimiento) delete c.consentimiento.firma; return c; }), null, 2); filename = "estudio_tme_registros.json"; }
+    else {
+      const cols = ["codigo", "estrato", "estado", "fecha", "establecimiento", ...FICHA.filter(q => q.id).map(q => "ficha_" + q.id), "imc", ...NASA.map(x => "nasa_" + x.id), "nasa_raw", ...Array.from({ length: 20 }, (_, i) => "suseso_" + (i + 1)), ...SUSESO.map(s => "suseso_" + s.key), ...WARR.map((_, i) => "warr_" + (i + 1)), "warr_total", ...REGIONS.flatMap(r => ["nord_" + r.id + "_12m", "nord_" + r.id + "_7d", "nord_" + r.id + "_imp"]), "sintomas_12m", "reba_tarea", "reba_lado", "reba_obs1", "reba_obs2", "reba_obs3", "reba_final", "reba_nivel", "n_fotos"];
+      const line = r => { const p = r.puntajes || {}; const o = { codigo: r.codigo, estrato: r.estrato, estado: r.estado, fecha: r.fecha, establecimiento: r.establecimiento, imc: p.imc, nasa_raw: p.nasa, warr_total: p.warr, sintomas_12m: p.sintomas12m == null ? "" : p.sintomas12m ? 1 : 0, reba_tarea: r.reba?.tarea, reba_lado: r.reba?.lado, reba_final: p.rebaFinal, reba_nivel: p.rebaNivel, n_fotos: (r.fotos || []).length };
+        FICHA.filter(q => q.id).forEach(q => o["ficha_" + q.id] = r.ficha?.[q.id]); NASA.forEach(x => o["nasa_" + x.id] = r.nasa?.[x.id]);
+        for (let i = 1; i <= 20; i++) o["suseso_" + i] = r.suseso?.["s" + i]; SUSESO.forEach(s => o["suseso_" + s.key] = p.suseso?.[s.key]);
+        WARR.forEach((_, i) => o["warr_" + (i + 1)] = r.warr?.["w" + (i + 1)]);
+        REGIONS.forEach(rg => { const d = r.nordico?.[rg.id] || {}; o["nord_" + rg.id + "_12m"] = d.m12; o["nord_" + rg.id + "_7d"] = d.d7; o["nord_" + rg.id + "_imp"] = d.imp; });
+        (p.reba || []).forEach((v, i) => o["reba_obs" + (i + 1)] = v);
+        return cols.map(c => { const v = o[c] ?? ""; const s = String(v); return /[",;\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(","); };
+      data = "﻿" + [cols.join(","), ...rows.map(line)].join("\n"); filename = "estudio_tme_registros.csv";
+    }
+    try { await P.downloads.save({ filename, data }); toast("Archivo listo"); } catch { toast("Descarga cancelada"); }
+  }
+};
+function emptyIco() { return `<svg viewBox="0 0 64 64" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round"><rect x="10" y="8" width="44" height="50" rx="6"/><path d="M22 8v6h20V8M20 28h24M20 38h24M20 48h14"/></svg>`; }
+function lightbox(src) { const lb = document.createElement("div"); lb.className = "lightbox"; lb.innerHTML = `<img src="${src}" alt="Fotografía ampliada">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); }
+
+
+/* =====================================================================
+   INICIO
+   ===================================================================== */
+const LOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
+function renderHome() {
+  const v = $("#view-home");
+  const d = store.get(DRAFT_KEY);
+  const pending = d && d.meta && d.meta.codigo && d.step > 0;
+  v.innerHTML = `<div class="home">
+    <div class="home-hero">
+      <div>
+        <p class="eyebrow">Maestría en Salud Pública · UNP</p>
+        <h1 style="margin-top:6px">Factores ocupacionales y síntomas musculoesqueléticos en fisioterapeutas</h1>
+        <p class="lead" style="margin-top:10px">Aplicación de campo del estudio: seis instrumentos en un solo recorrido y un panel para seguir el avance de la muestra (121 participantes: 68 egresados y 53 internos de la UCSS).</p>
+      </div>
+      <div class="hero-anim" aria-hidden="true" style="max-width:240px"><div class="lottie" id="lot-home"></div><div class="center-ico"><svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="4" r="2"/><path d="M12 6.5v7.5M12 8.5l-4.5 3M12 8.5l4.5 3M12 14l-3.2 6.5M12 14l3.2 6.5"/></svg></div></div>
+    </div>
+    ${pending ? `<div class="card resume"><div><b>Encuesta en curso en este dispositivo</b><br><span class="muted">Código <span class="mono">${esc(d.meta.codigo)}</span> · paso ${d.step + 1} de ${STEPS.length} (${esc(STEPS[d.step].t)})</span></div><a class="btn btn-primary" href="#encuesta">Continuar ${ICONS.next}</a></div>` : ""}
+    <div class="choices">
+      <a class="card choice enc" href="#encuesta">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3M9 10h6M9 14h6M9 18h3"/></svg></span>
+        <div><p class="eyebrow">Encuestadores</p><h2>Aplicar encuesta</h2></div>
+        <ul><li>Presentación y consentimiento con firma</li><li>Ficha, NASA-TLX, SUSESO/ISTAS21, satisfacción laboral y Nórdico</li><li>Observación REBA con diagramas y fotos opcionales</li></ul>
+        <span class="go">${pending ? "Continuar o iniciar" : "Iniciar encuesta"} ${ICONS.next}</span>
+      </a>
+      <a class="card choice adm" href="#admin">
+        <span class="chip a lock-badge">${LOCK.replace("<svg", '<svg width="13" height="13"')} Con contraseña</span>
+        <span class="ico">${LOCK}</span>
+        <div><p class="eyebrow">Investigador y asesora</p><h2>Panel de administración</h2></div>
+        <ul><li>Avance por estrato frente a la meta</li><li>Prevalencia de síntomas y niveles REBA</li><li>Fotografías de campo y exportación CSV/JSON</li></ul>
+        <span class="go">Ingresar ${ICONS.next}</span>
+      </a>
+    </div>
+  </div>`;
+  playLottie($("#lot-home", v), lottieRings(cssVar("--primary")), true);
+}
+
+/* =====================================================================
+   ACCESO AL PANEL (contraseña)
+   ===================================================================== */
+const SESSION_KEY = "tme_admin_sesion";
+const ses = {
+  get() { try { return sessionStorage.getItem(SESSION_KEY); } catch { return null; } },
+  set(v) { try { sessionStorage.setItem(SESSION_KEY, v); } catch {} },
+  del() { try { sessionStorage.removeItem(SESSION_KEY); } catch {} }
+};
+async function hashPass(pw, salt, iter = 150000) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt: enc.encode(salt), iterations: iter, hash: "SHA-256" }, key, 256);
+  return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+function randomSalt() { const a = new Uint8Array(16); crypto.getRandomValues(a); return [...a].map(b => b.toString(16).padStart(2, "0")).join(""); }
+const Gate = {
+  cfg: null,
+  async load() { try { const d = await P.db.doc("config/admin").get(); this.cfg = d.exists ? d.data() : null; } catch { this.cfg = undefined; } return this.cfg; },
+  ok() { const t = ses.get(); return !!(t && this.cfg && t === this.cfg.hash.slice(0, 16)); },
+  async show() {
+    const v = $("#view-adm");
+    v.innerHTML = `<div class="card login"><div class="saving"><span class="spin"></span>Verificando acceso…</div></div>`;
+    await this.load();
+    if (this.cfg === undefined) { v.innerHTML = `<div class="card login"><span class="ico">${LOCK}</span><h2>Sin conexión</h2><p class="muted" style="text-align:center">No se pudo verificar la contraseña. Revise la conexión y vuelva a intentarlo.</p><button class="btn btn-primary" id="g-retry">Reintentar</button></div>`; $("#g-retry").onclick = () => this.show(); return; }
+    if (this.ok()) { Admin.unlocked = true; Admin.start(); return; }
+    if (!this.cfg) {
+      if (!P.canAdmin) { v.innerHTML = `<div class="card login"><span class="ico">${LOCK}</span><h2>Panel no configurado</h2><p class="muted" style="text-align:center">El investigador aún no ha creado la contraseña del panel. Para aplicar encuestas use la opción «Aplicar encuesta».</p><a class="btn btn-ghost" href="#inicio">Volver al inicio</a></div>`; return; }
+      v.innerHTML = `<form class="card login" id="g-form" autocomplete="off"><span class="ico">${LOCK}</span><h2>Crear contraseña del panel</h2><p class="muted" style="text-align:center">Es la primera vez que se abre el panel. Defina una contraseña de al menos 8 caracteres y compártala solo con quien deba ver los resultados.</p>
+        <div class="field"><label for="g-p1">Nueva contraseña</label><div class="pw"><input class="input" type="password" id="g-p1" minlength="8" autocomplete="new-password"><button type="button" data-eye="g-p1">Ver</button></div></div>
+        <div class="field"><label for="g-p2">Repita la contraseña</label><div class="pw"><input class="input" type="password" id="g-p2" autocomplete="new-password"><button type="button" data-eye="g-p2">Ver</button></div></div>
+        <p class="err" id="g-err" role="alert"></p><button class="btn btn-accent" type="submit">Guardar y entrar</button><a class="btn btn-ghost" href="#inicio">Cancelar</a></form>`;
+      this.eyes(v);
+      $("#g-form").onsubmit = async e => { e.preventDefault(); const a = $("#g-p1").value, b = $("#g-p2").value, err = $("#g-err");
+        if (a.length < 8) { err.textContent = "La contraseña debe tener al menos 8 caracteres."; return; }
+        if (a !== b) { err.textContent = "Las contraseñas no coinciden."; return; }
+        err.textContent = ""; const salt = randomSalt(); const hash = await hashPass(a, salt);
+        try { await P.db.doc("config/admin").set({ salt, hash, iter: 150000, actualizado: new Date().toISOString() }); this.cfg = { salt, hash }; ses.set(hash.slice(0, 16)); Admin.unlocked = true; toast("Contraseña creada"); Admin.start(); }
+        catch { err.textContent = "No se pudo guardar. Solo el propietario o un editor del estudio puede crear la contraseña."; } };
+      return;
+    }
+    v.innerHTML = `<form class="card login" id="g-form" autocomplete="off"><span class="ico">${LOCK}</span><h2>Panel de administración</h2><p class="muted" style="text-align:center">Ingrese la contraseña del panel para ver el avance, las fotografías y exportar los datos.</p>
+      <div class="field"><label for="g-p">Contraseña</label><div class="pw"><input class="input" type="password" id="g-p" autocomplete="current-password"><button type="button" data-eye="g-p">Ver</button></div></div>
+      <p class="err" id="g-err" role="alert"></p><button class="btn btn-accent" type="submit">Ingresar</button><a class="btn btn-ghost" href="#inicio">Volver al inicio</a></form>`;
+    this.eyes(v); setTimeout(() => $("#g-p")?.focus(), 50);
+    $("#g-form").onsubmit = async e => { e.preventDefault(); const pw = $("#g-p").value, err = $("#g-err"), f = $("#g-form");
+      if (!pw) { err.textContent = "Escriba la contraseña."; return; }
+      err.textContent = "Verificando…";
+      const h = await hashPass(pw, this.cfg.salt, this.cfg.iter || 150000);
+      if (h === this.cfg.hash) { ses.set(h.slice(0, 16)); Admin.unlocked = true; toast("Acceso concedido"); Admin.start(); }
+      else { err.textContent = "Contraseña incorrecta. Inténtelo de nuevo."; f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); $("#g-p").select(); } };
+  },
+  eyes(v) { $$("[data-eye]", v).forEach(b => b.onclick = () => { const i = $("#" + b.dataset.eye); i.type = i.type === "password" ? "text" : "password"; b.textContent = i.type === "password" ? "Ver" : "Ocultar"; }); },
+  async change() {
+    const box = $("#pw-change"); if (!box) return;
+    box.hidden = !box.hidden; if (box.hidden) return;
+    box.innerHTML = `<div class="grid3" style="align-items:end"><div class="field"><label for="c-p1">Nueva contraseña</label><input class="input" type="password" id="c-p1" autocomplete="new-password"></div><div class="field"><label for="c-p2">Repita la contraseña</label><input class="input" type="password" id="c-p2" autocomplete="new-password"></div><button class="btn btn-accent" id="c-save">Guardar contraseña</button></div><p class="err" id="c-err"></p>`;
+    $("#c-save").onclick = async () => { const a = $("#c-p1").value, b = $("#c-p2").value, err = $("#c-err");
+      if (a.length < 8) { err.textContent = "Al menos 8 caracteres."; return; } if (a !== b) { err.textContent = "Las contraseñas no coinciden."; return; }
+      const salt = randomSalt(), hash = await hashPass(a, salt);
+      try { await P.db.doc("config/admin").set({ salt, hash, iter: 150000, actualizado: new Date().toISOString() }); this.cfg = { salt, hash }; ses.set(hash.slice(0, 16)); box.hidden = true; toast("Contraseña actualizada"); }
+      catch { err.textContent = "No se pudo guardar. Solo el propietario o un editor puede cambiarla."; } };
+  },
+  logout() { ses.del(); Admin.unlocked = false; Admin.subs.forEach(u => { try { u(); } catch {} }); Admin.subs = []; Admin.data = new Map(); Admin.started = false; location.hash = "#inicio"; toast("Sesión de administración cerrada"); }
+};
+
+/* =====================================================================
+   RUTAS
+   ===================================================================== */
+function route() { return location.hash === "#admin" ? "admin" : location.hash === "#encuesta" ? "encuesta" : "inicio"; }
+function applyRoute() {
+  const r = route();
+  $("#view-home").hidden = r !== "inicio"; $("#view-enc").hidden = r !== "encuesta"; $("#view-adm").hidden = r !== "admin";
+  $("#tab-home").setAttribute("aria-current", r === "inicio" ? "page" : "false");
+  $("#tab-enc").setAttribute("aria-current", r === "encuesta" ? "page" : "false");
+  $("#tab-adm").setAttribute("aria-current", r === "admin" ? "page" : "false");
+  if (r === "admin") Admin.start(); else if (r === "encuesta") { S = store.get(DRAFT_KEY) || S; renderSurvey(); } else renderHome();
+  window.scrollTo({ top: 0 });
+}
+window.addEventListener("hashchange", applyRoute);
+applyRoute();
+initPlatform();
+</script>
+
+</body>
+</html>
