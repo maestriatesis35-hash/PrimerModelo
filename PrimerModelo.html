@@ -534,7 +534,8 @@ h3{line-height:1.3}
 .q + .q{margin-top:10px}
 .q-label,.field>label{font-size:1rem;line-height:1.45}
 .q-num{font-size:.84rem}
-.field{gap:8px}
+.field{gap:8px;align-content:start}
+input.input,select.input{height:48px}
 .field small{font-size:.86rem;line-height:1.45}
 .input,select.input{min-height:48px;padding:12px 14px;font-size:1rem}
 .check{padding:14px 16px;gap:12px;line-height:1.5}
@@ -1047,12 +1048,11 @@ function stepPres(host) {
   </ol>
   <div class="section-title"><span class="tag">Enc.</span><h3>Datos de registro (encuestador)</h3></div>
   <div class="grid3">
-    <div class="field"><label for="m-estrato">Estrato</label><select class="input" id="m-estrato"><option value="">Seleccione…</option><option ${S.meta.estrato === "Egresado" ? "selected" : ""}>Egresado</option><option ${S.meta.estrato === "Interno" ? "selected" : ""}>Interno</option></select><small>Meta: 68 egresados · 53 internos</small></div>
-    <div class="field"><label for="m-codigo">Código del participante</label><div style="display:flex;gap:6px"><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="Elija el estrato" readonly aria-readonly="true" style="background:var(--surface-2)"><button type="button" class="btn btn-ghost" id="m-regen" style="min-height:44px;padding:8px 12px" title="Generar otro código" aria-label="Generar otro código" ${S.meta.estrato ? "" : "disabled"}>↻</button></div><small>Se asigna al azar al elegir el estrato</small></div>
+    <div class="field"><label for="m-estrato">Estrato</label><select class="input" id="m-estrato"><option value="">Seleccione…</option><option ${S.meta.estrato === "Egresado" ? "selected" : ""}>Egresado</option><option ${S.meta.estrato === "Interno" ? "selected" : ""}>Interno</option></select></div>
+    <div class="field"><label for="m-codigo">Código del participante</label><div style="display:flex;gap:6px"><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="Elija el estrato" readonly aria-readonly="true" style="background:var(--surface-2)"><button type="button" class="btn btn-ghost" id="m-regen" style="min-height:48px;height:48px;padding:8px 14px" title="Generar otro código" aria-label="Generar otro código" ${S.meta.estrato ? "" : "disabled"}>↻</button></div></div>
     <div class="field"><label for="m-fecha">Fecha</label><input class="input" type="date" id="m-fecha" value="${esc(S.meta.fecha)}"></div>
   </div>
-  <div class="field" style="margin-top:14px"><label for="m-est">Establecimiento o sede</label><input class="input" id="m-est" value="${esc(S.meta.establecimiento)}" placeholder="Nombre del establecimiento donde se realiza la observación"></div>
-  <p class="muted" style="margin-top:14px;font-size:.88rem">${esc(CFG.institucion)} · Investigador: ${esc(CFG.investigador)} · Asesora: ${esc(CFG.asesora)}</p>`;
+  <div class="field" style="margin-top:14px"><label for="m-est">Establecimiento o sede</label><input class="input" id="m-est" value="${esc(S.meta.establecimiento)}" placeholder="Nombre del establecimiento donde se realiza la observación"></div>`;
   playLottie($("#lot-rings", host), lottieRings(cssVar("--primary")), true);
   const est = $("#m-estrato", host), cod = $("#m-codigo", host);
   const regen = $("#m-regen", host);
