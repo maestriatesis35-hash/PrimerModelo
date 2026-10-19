@@ -8,7 +8,9 @@
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block">
+<meta name="theme-color" content="#0B4F6C">
 </head>
 <body>
 <style>
@@ -23,8 +25,8 @@
   --grad:linear-gradient(135deg,#E2F6F8 0%,#EEF1FF 55%,#FFF0E3 100%);
   --shadow:0 1px 2px rgba(27,52,64,.05),0 8px 24px rgba(27,52,64,.06);
   --shadow-lg:0 2px 4px rgba(27,52,64,.05),0 18px 40px rgba(11,129,145,.14);
-  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
-  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-display:"Manrope","Segoe UI",system-ui,sans-serif;
+  --f-body:"Manrope","Segoe UI",system-ui,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   --r:14px; --r-sm:9px; --topbar-h:60px;
 }
@@ -490,7 +492,8 @@ tbody tr:hover{background:var(--primary-soft)}
   .adm-hero .kpis{gap:8px}
   .kpi{padding:10px 12px;gap:2px}
   .kpi b{font-size:1.45rem}
-  .kpi .hint,.k-rech .sub{display:none}
+  .kpi .hint{display:none}
+  .k-rech .sub{display:none}
   .kpi .eyebrow{font-size:.74rem}
   .k-rech .eyebrow::after{content:""}
   .admin-head .lead{font-size:.92rem}
@@ -653,18 +656,176 @@ td{padding:12px;font-size:.92rem}
   .cc-txt b{font-size:1rem}
   .cc-txt small{font-size:.82rem}
 }
+
+/* ---------- identidad visual TME ----------
+   Azul clínico (fisioterapia y salud ocupacional) con naranja «movimiento» como acento,
+   fondo frío claro, Manrope, iconos Material Symbols en cuadros de color y un motivo de
+   vértebras. Las ideas de organización (pasos numerados, botones fijos abajo, cuadros de
+   icono) siguen buenas prácticas generales; la paleta y la gráfica son propias del estudio. */
+:root{
+  --bg:#F4F7FA; --surface:#FFFFFF; --surface-2:#EEF3F7; --ink:#14283A; --ink-2:#435A6E; --muted:#667C8F;
+  --line:#DFE7EE; --primary:#0B4F6C; --primary-ink:#FFFFFF; --primary-soft:#E0EFF6;
+  --accent:#EA6A1F; --accent-soft:#FFEEDF; --amber:#B7791F; --amber-soft:#FDF1D8;
+  --violet:#5B5BD6; --violet-soft:#ECECFE; --green:#1E8A5A; --green-soft:#E1F5EA;
+  --good:#1E8A5A; --good-soft:#E1F5EA; --warn:#B7791F; --warn-soft:#FDF1D8; --bad:#D14343; --bad-soft:#FDE6E6;
+  --s1:#1287B5; --s2:#EA6A1F;
+  --seq1:#DCEFF7; --seq2:#A9D6EA; --seq3:#5AAFD3; --seq4:#1A85B0; --seq5:#0B4F6C;
+  --grad:linear-gradient(135deg,#E3F1F8 0%,#F4F7FA 55%,#FFF1E6 100%);
+  --shadow:0 1px 2px rgba(20,40,58,.05),0 10px 28px rgba(20,40,58,.07);
+  --shadow-lg:0 18px 40px rgba(11,79,108,.18);
+  --r:20px; --r-sm:12px;
+}
+body{background:var(--bg)}
+h1,h2,h3{font-weight:800}
+h1{letter-spacing:-.025em}
+.ms{font-family:"Material Symbols Outlined";font-weight:normal;font-style:normal;font-size:22px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;direction:ltr;font-feature-settings:"liga";-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased;font-variation-settings:"FILL" 0,"wght" 500,"GRAD" 0,"opsz" 24;width:1em;overflow:hidden;flex:none;vertical-align:middle;user-select:none}
+.ms.fill{font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 0,"opsz" 24}
+.no-ms .ms{visibility:hidden;width:0}
+.btn .ms{font-size:20px}
+/* barra superior con línea de color */
+.topbar{background:rgba(255,255,255,.92);border-bottom:1px solid var(--line)}
+.topbar::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#0B4F6C,#1A85B0 55%,#EA6A1F)}
+.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(150deg,#1A85B0,#0B4F6C);box-shadow:0 6px 16px rgba(11,79,108,.28)}
+.brand-mark .ms{color:#fff;font-size:26px}
+.brand b{font-size:1.1rem;letter-spacing:-.01em}
+.tabs{background:var(--surface-2);border:1px solid var(--line)}
+.tabs a .ms{font-size:19px}
+.tabs a[aria-current="page"]{background:var(--surface);color:var(--primary);box-shadow:0 4px 14px rgba(11,79,108,.14)}
+.card{border-radius:var(--r);border-color:var(--line)}
+.btn{border-radius:14px}
+.btn-primary{background:linear-gradient(150deg,#1A85B0,#0B4F6C);box-shadow:0 8px 20px rgba(11,79,108,.24)}
+.btn-primary:hover{box-shadow:0 10px 26px rgba(11,79,108,.32)}
+.btn-accent{background:linear-gradient(150deg,#F28B3C,#EA6A1F);box-shadow:0 8px 20px rgba(234,106,31,.25)}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{background:var(--primary-soft);border-color:var(--seq2);color:var(--primary)}
+.input,select.input,textarea.input{border-radius:12px;border-color:var(--line);background:#fff}
+.input:focus{border-color:var(--seq4);box-shadow:0 0 0 4px var(--primary-soft)}
+.pill span{background:#fff;border-color:var(--line);border-radius:12px}
+.pill input:checked + span{background:var(--primary);border-color:var(--primary);box-shadow:0 6px 14px rgba(11,79,108,.22)}
+.likert7 .pill span{border-radius:12px}
+.q{background:#fff;border-color:var(--line);border-radius:16px;border-left:4px solid var(--seq1)}
+.q.invalid{border-left-color:var(--bad)}
+.check{border-color:var(--line);border-radius:14px;background:#fff}
+.consent-doc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--seq3);border-radius:16px}
+.chip.code{background:var(--primary-soft);color:var(--primary);font-size:.86rem;letter-spacing:.03em}
+.section-title .tag{background:var(--primary-soft);color:var(--primary);font-family:var(--f-body);font-weight:800;border-radius:10px;min-width:34px;height:34px;display:inline-grid;place-items:center;padding:0 8px}
+.section-title .tag .ms{font-size:20px}
+/* cuadros de icono */
+.tile{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none}
+.tile .ms{font-size:24px}
+.t-accent{background:var(--accent-soft);color:var(--accent)}
+.t-primary{background:var(--primary-soft);color:var(--primary)}
+.t-amber{background:var(--amber-soft);color:var(--amber)}
+.t-violet{background:var(--violet-soft);color:var(--violet)}
+.t-green{background:var(--green-soft);color:var(--green)}
+/* inicio */
+.home{gap:18px}
+.home-intro{display:grid;gap:10px;max-width:860px}
+.kicker{display:inline-flex;align-items:center;gap:8px;color:var(--primary);font-weight:800;font-size:.92rem}
+.kicker .ms{font-size:20px;background:var(--primary-soft);border-radius:8px;padding:3px;width:auto}
+.home-intro h1{font-size:clamp(1.7rem,4.4vw,2.7rem);line-height:1.14}
+.home-intro h1 mark{background:linear-gradient(transparent 62%,rgba(234,106,31,.32) 62%,rgba(234,106,31,.32) 92%,transparent 92%);color:inherit;padding:0 2px}
+.ctas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.cta{display:grid;grid-template-rows:auto 1fr;border-radius:22px;overflow:hidden;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.cta:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.cta-top{position:relative;height:116px;overflow:hidden}
+.cta-enc .cta-top{background:linear-gradient(150deg,#1A85B0,#0B4F6C)}
+.cta-adm .cta-top{background:linear-gradient(150deg,#33496A,#14283A)}
+.vert{position:absolute;left:22px;top:14px;bottom:14px;display:flex;flex-direction:column;justify-content:space-between}
+.vert i{display:block;width:30px;height:7px;border-radius:4px;background:rgba(255,255,255,.28)}
+.vert i:nth-child(n+4){width:34px}.vert i:nth-child(n+7){width:38px;background:rgba(255,255,255,.36)}
+.cta-adm .vert i:nth-child(n+7){background:rgba(234,106,31,.75)}
+.cta-anim{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:120px;height:120px;pointer-events:none}
+.cta-anim .lottie{position:absolute;inset:0;opacity:.7}
+.cta-anim .ms{position:absolute;inset:0;margin:auto;width:1em;height:1em;font-size:46px;color:#fff;font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 0,"opsz" 48}
+.cta-big{position:absolute;right:22px;top:50%;transform:translateY(-50%);font-size:70px!important;color:rgba(255,255,255,.85)}
+.cta-lock{position:absolute;top:12px;left:72px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);color:#fff;padding:5px 11px;border-radius:999px;font-size:.82rem;font-weight:700}
+.cta-lock .ms{font-size:16px}
+.cta-body{display:grid;gap:8px;align-content:start;padding:18px 20px 20px}
+.cta-tag{font-size:.84rem;font-weight:700;color:var(--muted)}
+.cta h2{font-size:1.45rem}
+.cta p{color:var(--ink-2);font-size:.96rem}
+.cta-go{justify-self:start;display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-weight:800;color:var(--primary);padding:10px 16px;border-radius:12px;background:var(--primary-soft);transition:background .2s}
+.cta-adm .cta-go{color:var(--ink);background:var(--surface-2)}
+.cta-go .ms{font-size:20px;transition:transform .2s}
+.cta:hover .cta-go .ms{transform:translateX(4px)}
+.instr{padding:18px 20px;display:grid;gap:14px}
+.instr h3{font-size:1.05rem}
+.instr-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.ins{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:var(--surface-2)}
+.ins b{display:block;font-size:.95rem}
+.ins span:not(.ms){font-size:.84rem;color:var(--muted);line-height:1.3}
+.instr-foot{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--ink-2)}
+.instr-foot .ms{color:var(--green);font-size:20px}
+.row-link{display:flex;align-items:center;gap:14px;padding:14px 16px;flex-wrap:wrap}
+.rl-txt{flex:1;min-width:200px;display:grid;gap:2px}
+.rl-txt span{font-size:.9rem;color:var(--muted)}
+/* encuesta */
+.step-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:start}
+.step-ico{width:50px;height:50px;border-radius:15px;background:linear-gradient(150deg,#1A85B0,#0B4F6C);color:#fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(11,79,108,.22)}
+.step-ico .ms{font-size:27px}
+.rail li.done .dot{background:var(--primary);border-color:var(--primary)}
+.rail .dot .ms{font-size:16px}
+.rail li button[aria-current="step"]{background:var(--accent-soft)}
+.rail li button[aria-current="step"] .dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(234,106,31,.18)}
+.stepper{list-style:none;margin:0;padding:4px 2px;display:flex;align-items:center}
+.stepper li{display:flex}
+.stepper .ln{flex:1;height:3px;background:var(--line);min-width:4px;margin:0 2px;border-radius:2px}
+.stepper .ln.on{background:var(--seq3)}
+.stepper .sd{width:30px;height:30px;border-radius:9px;border:0;display:grid;place-items:center;font-weight:800;font-size:.84rem;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--ink-2);cursor:pointer;padding:0;transition:transform .2s,box-shadow .2s}
+.stepper .sd:disabled{cursor:default}
+.stepper .sd.done{background:var(--primary);color:#fff;box-shadow:none}
+.stepper .sd.done .ms{font-size:16px}
+.stepper .sd.cur{background:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(234,106,31,.2);transform:scale(1.08)}
+.mp-cap{font-size:.9rem;color:var(--muted);margin-top:8px}
+.mp-cap b{color:var(--ink)}
+.mobile-progress{background:linear-gradient(var(--bg) 80%,transparent)}
+.step{--pad:clamp(14px,2.6vw,26px);padding:var(--pad)}
+.navwrap{position:sticky;bottom:0;z-index:12;margin:18px calc(-1 * var(--pad)) calc(-1 * var(--pad));padding:10px var(--pad) 12px;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);border-radius:0 0 var(--r) var(--r)}
+.navwrap .err:empty{display:none}
+.navwrap .navbar{margin:0;padding:0;border:0}
+.opt .box{border-radius:14px;border-color:var(--line)}
+.group{border-radius:18px;border-color:var(--line);background:#fff}
+.cchoice .cc-box{border-radius:18px}
+/* panel */
+.search .ms{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:20px}
+.kpi .ico{width:38px;height:38px;border-radius:12px}
+.kpi .ico .ms{font-size:20px}
+.adm-hero{border-radius:24px}
+@media (max-width: 920px){
+  .ctas{grid-template-columns:minmax(0,1fr)}
+  .instr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 560px){
+  .tabs a .ms{display:none}
+  .brand-mark{width:38px;height:38px;border-radius:12px}
+  .cta-top{height:96px}
+  .cta-anim{width:100px;height:100px}
+  .cta h2{font-size:1.3rem}
+  .instr{padding:16px}
+  .instr-grid{gap:8px}
+  .ins{flex-direction:column;align-items:flex-start;gap:6px}
+  .step-head{grid-template-columns:auto minmax(0,1fr)}
+  .step-head .meta{grid-column:1/-1}
+  .step-ico{width:44px;height:44px;border-radius:13px}
+  .step-ico .ms{font-size:24px}
+  .stepper .sd{width:28px;height:28px;font-size:.8rem}
+  .score-card{bottom:84px}
+  .dates{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 10px;align-items:center}
+  .dates .input{width:100%}
+}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
 <div class="topbar"><div class="topbar-in">
   <div class="brand">
-    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="var(--primary-ink)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v7M12 9l-4 3M12 9l4 3M12 14l-3 6M12 14l3 6"/></svg></div>
-    <div><b>Estudio TME · Fisioterapia</b><small>UCSS 2026 · Escuela de Posgrado UNP</small></div>
+    <div class="brand-mark" aria-hidden="true"><span class="ms">orthopedics</span></div>
+    <div><b>Estudio TME</b><small>Fisioterapia · UCSS 2026</small></div>
   </div>
   <nav class="tabs" aria-label="Vistas">
-    <a href="#inicio" id="tab-home">Inicio</a>
-    <a href="#encuesta" id="tab-enc">Encuesta</a>
-    <a href="#admin" id="tab-adm">Admin <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="vertical-align:-1px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></a>
+    <a href="#inicio" id="tab-home"><span class="ms" aria-hidden="true">home</span>Inicio</a>
+    <a href="#encuesta" id="tab-enc"><span class="ms" aria-hidden="true">fact_check</span>Encuesta</a>
+    <a href="#admin" id="tab-adm"><span class="ms" aria-hidden="true">lock</span>Admin</a>
   </nav>
 </div></div>
 
@@ -697,6 +858,14 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// iconos Material Symbols; si la fuente no carga (sin internet) se ocultan para no mostrar su nombre
+const ms = (n, cls = "") => `<span class="ms ${cls}" aria-hidden="true">${n}</span>`;
+(function () {
+  const off = () => document.documentElement.classList.add("no-ms");
+  if (!document.fonts || !document.fonts.load) return;
+  const t = setTimeout(off, 5000);
+  document.fonts.load('24px "Material Symbols Outlined"', "home").then(f => { clearTimeout(t); if (!f.length) off(); }).catch(() => { clearTimeout(t); off(); });
+})();
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2800); }
 function hoy() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 const store = {
@@ -1029,12 +1198,8 @@ function eligibility(st = S) {
 /* =====================================================================
    RENDER — ENCUESTA
    ===================================================================== */
-const ICONS = {
-  next: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`,
-  prev: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>`,
-  cam: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>`,
-  send: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 12l16-8-6 16-2-6z"/></svg>`
-};
+const ICONS = { next: ms("arrow_forward"), prev: ms("arrow_back"), cam: ms("photo_camera"), send: ms("send") };
+const STEP_IC = { pres: "badge", cons: "verified_user", ficha: "id_card", nasa: "psychology", suseso: "groups", warr: "sentiment_satisfied", nordic: "accessibility_new", reba: "sports_gymnastics", send: "send" };
 function renderSurvey() {
   const v = $("#view-enc");
   const pct = Math.round(S.step / (STEPS.length - 1) * 100);
@@ -1042,11 +1207,11 @@ function renderSurvey() {
   <div class="survey">
     <aside class="rail card" aria-label="Pasos">
       <p class="eyebrow" style="margin:2px 6px 10px">Recorrido de la encuesta</p>
-      <ol>${STEPS.map((s, i) => `<li class="${i < S.maxStep || (i < S.step) ? "done" : ""}"><button data-go="${i}" ${i > S.maxStep ? "disabled" : ""} ${i === S.step ? 'aria-current="step"' : ""}><span class="dot">${i < S.maxStep && i !== S.step ? "✓" : i + 1}</span><span>${s.t}<span class="who">${s.who}</span></span></button></li>`).join("")}</ol>
-      <div class="rail-foot">Código: <b class="mono">${esc(S.meta.codigo || "—")}</b><br>Estrato: <b>${esc(S.meta.estrato || "—")}</b><br><button class="btn btn-ghost" style="margin-top:10px;min-height:36px;padding:6px 12px;font-size:.82rem" id="reset">Descartar y empezar de nuevo</button></div>
+      <ol>${STEPS.map((s, i) => `<li class="${i < S.maxStep || (i < S.step) ? "done" : ""}"><button data-go="${i}" ${i > S.maxStep ? "disabled" : ""} ${i === S.step ? 'aria-current="step"' : ""}><span class="dot">${i < S.maxStep && i !== S.step ? ms("check") : i + 1}</span><span>${s.t}<span class="who">${s.who}</span></span></button></li>`).join("")}</ol>
+      <div class="rail-foot">Código: <b class="mono">${esc(S.meta.codigo || "—")}</b><br>Estrato: <b>${esc(S.meta.estrato || "—")}</b><br><button class="btn btn-ghost" style="margin-top:10px;min-height:44px;padding:8px 14px;font-size:.88rem" id="reset">${ms("restart_alt")} Descartar y empezar de nuevo</button></div>
     </aside>
     <div style="min-width:0">
-      <div class="mobile-progress"><div class="mp-row"><b>${S.step + 1}/${STEPS.length} · ${STEPS[S.step].t}</b><span class="muted">${STEPS[S.step].who}</span></div><div class="mp-bar"><i style="width:${Math.max(pct, 4)}%"></i></div></div>
+      <div class="mobile-progress"><ol class="stepper">${STEPS.map((s, i) => `${i ? `<li class="ln${i <= S.maxStep ? " on" : ""}" aria-hidden="true"></li>` : ""}<li><button data-go="${i}" class="sd${i === S.step ? " cur" : i < S.maxStep || i < S.step ? " done" : ""}" ${i > S.maxStep ? "disabled" : ""} aria-label="Paso ${i + 1}: ${s.t}" ${i === S.step ? 'aria-current="step"' : ""}>${i < S.maxStep && i !== S.step ? ms("check") : i + 1}</button></li>`).join("")}</ol><p class="mp-cap"><b>${STEPS[S.step].t}</b> · ${STEPS[S.step].who}</p></div>
       <article class="card step" id="step"></article>
     </div>
   </div>`;
@@ -1062,10 +1227,11 @@ function confirmReset() {
 }
 function head(i, sub, chips = "") {
   const s = STEPS[i];
-  return `<div class="step-head"><div><p class="eyebrow">Paso ${i + 1} de ${STEPS.length} · ${s.who}</p><h2>${s.t}</h2>${sub ? `<p class="lead" style="margin-top:6px">${sub}</p>` : ""}</div><div class="meta">${chips}</div></div>`;
+  const code = S.meta.codigo ? `<span class="chip code mono">${esc(S.meta.codigo)}</span>` : "";
+  return `<div class="step-head"><span class="step-ico">${ms(STEP_IC[s.id])}</span><div class="sh-txt"><p class="eyebrow">Paso ${i + 1} de ${STEPS.length} · ${s.who}</p><h2>${s.t}</h2>${sub ? `<p class="lead" style="margin-top:6px">${sub}</p>` : ""}</div><div class="meta">${code}${chips}</div></div>`;
 }
 function nav(host, { back = true, nextLabel = "Siguiente", onNext }) {
-  const d = document.createElement("div");
+  const d = document.createElement("div"); d.className = "navwrap";
   d.innerHTML = `<p class="err" id="err" role="alert"></p><div class="navbar">${back ? `<button class="btn btn-ghost" id="prev">${ICONS.prev} Anterior</button>` : "<span></span>"}<button class="btn btn-primary" id="next">${nextLabel} ${ICONS.next}</button></div>`;
   host.appendChild(d);
   if (back) $("#prev", host).onclick = () => go(S.step - 1);
@@ -1097,10 +1263,10 @@ function stepPres(host) {
   <ol class="flow">
     <li>Consentimiento informado</li><li>Ficha sociodemográfica y ocupacional</li><li>NASA-TLX: carga de trabajo percibida</li><li>SUSESO/ISTAS21: factores psicosociales</li><li>Escala de satisfacción laboral</li><li>Cuestionario Nórdico de síntomas</li><li class="enc">Observación REBA (encuestador)</li><li class="enc">Revisión y envío</li>
   </ol>
-  <div class="section-title"><span class="tag">Enc.</span><h3>Datos de registro (encuestador)</h3></div>
+  <div class="section-title"><span class="tag">${ms("assignment_ind")}</span><h3>Datos de registro (encuestador)</h3></div>
   <div class="grid3">
     <div class="field"><label for="m-estrato">Estrato</label><select class="input" id="m-estrato"><option value="">Seleccione…</option><option ${S.meta.estrato === "Egresado" ? "selected" : ""}>Egresado</option><option ${S.meta.estrato === "Interno" ? "selected" : ""}>Interno</option></select></div>
-    <div class="field"><label for="m-codigo">Código del participante</label><div style="display:flex;gap:6px"><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="Elija el estrato" readonly aria-readonly="true" style="background:var(--surface-2)"><button type="button" class="btn btn-ghost" id="m-regen" style="min-height:48px;height:48px;padding:8px 14px" title="Generar otro código" aria-label="Generar otro código" ${S.meta.estrato ? "" : "disabled"}>↻</button></div></div>
+    <div class="field"><label for="m-codigo">Código del participante</label><div style="display:flex;gap:6px"><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="Elija el estrato" readonly aria-readonly="true" style="background:var(--surface-2)"><button type="button" class="btn btn-ghost" id="m-regen" style="min-height:48px;height:48px;padding:8px 14px" title="Generar otro código" aria-label="Generar otro código" ${S.meta.estrato ? "" : "disabled"}>${ms("refresh")}</button></div></div>
     <div class="field"><label for="m-fecha">Fecha</label><input class="input" type="date" id="m-fecha" value="${esc(S.meta.fecha)}"></div>
   </div>
   <div class="field" style="margin-top:14px"><label for="m-est">Establecimiento o sede</label><input class="input" id="m-est" value="${esc(S.meta.establecimiento)}" placeholder="Nombre del establecimiento donde se realiza la observación"></div>`;
@@ -1137,7 +1303,7 @@ function stepCons(host) {
     <div><h3>8. Confidencialidad</h3><p>Sus datos se identificarán con un código, se almacenarán con acceso restringido y se usarán solo con fines académicos. Las fotografías se eliminarán al terminar la puntuación REBA. Los resultados se publicarán de forma agrupada (Ley N.° 29733).</p></div>
     <div><h3>9 y 10. Contactos</h3><p>Investigador: ${esc(CFG.contactoInv)}<br>${esc(CFG.contactoComite)}</p></div>
   </div>
-  <div class="section-title"><span class="tag">Dec.</span><h3>Declaración de consentimiento</h3></div>
+  <div class="section-title"><span class="tag">${ms("draw")}</span><h3>Declaración de consentimiento</h3></div>
   <label class="check" id="q-leido"><input type="checkbox" id="c-leido" ${c.leido ? "checked" : ""}><span>Declaro que he leído (o se me ha leído) la información anterior, que he podido hacer preguntas y que estas han sido respondidas.</span></label>
   <div class="q" id="q-acepta" style="margin-top:10px"><span class="q-label">¿Acepta participar de manera voluntaria en este estudio?</span>${consentChoices(c.acepta)}<div id="cons-msg" aria-live="polite">${consentMsg(c.acepta)}</div></div>
   <div id="cons-yes" ${c.acepta === "Sí, acepto" ? "" : "hidden"}>
@@ -1603,15 +1769,15 @@ const Admin = {
     body.innerHTML = `
       <section class="adm-hero anim grow">
         <div class="ring" data-tip="${comp.length} de ${CFG.meta.total} encuestas completas">
-          <svg viewBox="0 0 150 150" aria-hidden="true"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3FD0DC"/><stop offset="1" stop-color="#0B8191"/></linearGradient></defs><circle class="trk" cx="75" cy="75" r="64"/><circle class="val" cx="75" cy="75" r="64" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${first ? C.toFixed(1) : (C * (1 - p0 / 100)).toFixed(1)}" data-off="${(C * (1 - p0 / 100)).toFixed(1)}"/></svg>
+          <svg viewBox="0 0 150 150" aria-hidden="true"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5AAFD3"/><stop offset="1" stop-color="#0B4F6C"/></linearGradient></defs><circle class="trk" cx="75" cy="75" r="64"/><circle class="val" cx="75" cy="75" r="64" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${first ? C.toFixed(1) : (C * (1 - p0 / 100)).toFixed(1)}" data-off="${(C * (1 - p0 / 100)).toFixed(1)}"/></svg>
           <div class="lbl"><b class="mono">${cnum(p0, true)}<small style="font-size:1rem">%</small></b><span>de la meta</span></div>
         </div>
         <p class="ring-cap"><b>${comp.length} de ${CFG.meta.total}</b> encuestas completas<br><span class="muted">Faltan ${Math.max(0, CFG.meta.total - comp.length)}</span>${dups ? `<br><b style="color:var(--bad);font-size:.9rem">${dups} código(s) duplicado(s)</b>` : ""}</p>
         <div class="kpis">
-          <div class="card kpi k-total anim" style="--i:1"><span class="ico" style="background:var(--primary-soft);color:var(--primary)">${IC.check}</span><span class="eyebrow">Encuestas completas</span><b class="mono">${cnum(comp.length)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${bar(comp.length, CFG.meta.total, "linear-gradient(90deg,#14A3B5,#0B8191)")}${dups ? `<span class="warn-line">${dups} duplicado(s)</span>` : `<span class="sub">Faltan ${Math.max(0, CFG.meta.total - comp.length)}</span>`}</div>
-          <div class="card kpi anim" style="--i:2"><span class="ico" style="background:#DDF6F9;color:var(--s1)">${IC.cap}</span><span class="eyebrow">Egresados</span><b class="mono">${cnum(eg)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${bar(eg, CFG.meta.egresado, "var(--s1)")}<span class="sub">Faltan ${Math.max(0, CFG.meta.egresado - eg)}</span></div>
+          <div class="card kpi k-total anim" style="--i:1"><span class="ico" style="background:var(--primary-soft);color:var(--primary)">${IC.check}</span><span class="eyebrow">Encuestas completas</span><b class="mono">${cnum(comp.length)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${bar(comp.length, CFG.meta.total, "linear-gradient(90deg,#5AAFD3,#0B4F6C)")}${dups ? `<span class="warn-line">${dups} duplicado(s)</span>` : `<span class="sub">Faltan ${Math.max(0, CFG.meta.total - comp.length)}</span>`}</div>
+          <div class="card kpi anim" style="--i:2"><span class="ico" style="background:var(--primary-soft);color:var(--s1)">${IC.cap}</span><span class="eyebrow">Egresados</span><b class="mono">${cnum(eg)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${bar(eg, CFG.meta.egresado, "var(--s1)")}<span class="sub">Faltan ${Math.max(0, CFG.meta.egresado - eg)}</span></div>
           <div class="card kpi anim" style="--i:3"><span class="ico" style="background:var(--accent-soft);color:var(--s2)">${IC.user}</span><span class="eyebrow">Internos</span><b class="mono">${cnum(it)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.interno}</span></b>${bar(it, CFG.meta.interno, "var(--s2)")}<span class="sub">Faltan ${Math.max(0, CFG.meta.interno - it)}</span></div>
-          <div class="card kpi k-rech anim" style="--i:4"><span class="ico" style="background:var(--bad-soft);color:var(--bad)">${IC.swap}</span><span class="eyebrow">Rechazos y no elegibles</span><b class="mono">${cnum(rech + noel)}</b><span class="sub">${rech} rechazo(s) · ${noel} no elegible(s)</span><span class="sub hint">Se reemplazan en el estrato</span></div>
+          <div class="card kpi k-rech anim" style="--i:4"><span class="ico" style="background:var(--bad-soft);color:var(--bad)">${IC.swap}</span><span class="eyebrow">Reemplazos</span><b class="mono">${cnum(rech + noel)}</b><span class="sub">${rech} rechazo(s) · ${noel} no elegible(s)</span><span class="sub hint">Se reemplazan en el estrato</span></div>
         </div>
       </section>
       ${rows.length ? `
@@ -1619,7 +1785,7 @@ const Admin = {
         <div class="seg" aria-label="Estrato">${[["", "Todos"], ["Egresado", "Egresados"], ["Interno", "Internos"]].map(([v, t]) => `<button data-f="estrato" data-v="${v}" aria-pressed="${F.estrato === v}">${t} <span class="n">${nEstr(v)}</span></button>`).join("")}</div>
         <div class="seg" aria-label="Estado">${[["", "Todos"], ["completa", "Completas"], ["rechazó", "Rechazos"], ["no elegible", "No elegibles"]].map(([v, t]) => `<button data-f="estado" data-v="${v}" aria-pressed="${F.estado === v}">${t} <span class="n">${nEst(v)}</span></button>`).join("")}</div>
         <label class="search">${IC.search}<input class="input" id="f-q" type="search" placeholder="Buscar código o establecimiento" value="${esc(F.q || "")}" aria-label="Buscar"></label>
-        <span class="dates">Desde <input class="input" type="date" id="f-desde" value="${esc(F.desde || "")}" aria-label="Desde"> hasta <input class="input" type="date" id="f-hasta" value="${esc(F.hasta || "")}" aria-label="Hasta"></span>
+        <span class="dates"><span>Desde</span> <input class="input" type="date" id="f-desde" value="${esc(F.desde || "")}" aria-label="Desde"> <span>hasta</span> <input class="input" type="date" id="f-hasta" value="${esc(F.hasta || "")}" aria-label="Hasta"></span>
         ${active ? `<button class="clear" id="f-clear">Limpiar filtros ×</button>` : ""}
         <p class="fnote">${active ? `Mostrando <b>${rowsF.length}</b> de ${rows.length} registros. Los filtros se aplican a gráficos, registros y fotos; las metas muestran el total.` : `Los filtros se aplican a gráficos, registros y fotos.`}</p>
       </div>
@@ -1725,16 +1891,7 @@ const Admin = {
     try { await P.downloads.save({ filename, data }); toast("Archivo listo"); } catch { toast("Descarga cancelada"); }
   }
 };
-const IC = {
-  dl: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>`,
-  key: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>`,
-  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>`,
-  cap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>`,
-  user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>`,
-  swap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>`,
-  search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>`,
-  img: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>`
-};
+const IC = { dl: ms("download"), key: ms("key"), check: ms("task_alt"), cap: ms("school"), user: ms("person"), swap: ms("sync_alt"), search: ms("search"), img: ms("photo_library") };
 function countUp(el, to, dec, fmt) {
   if (reduceMotion || !to) { el.textContent = dec ? fmt(to) : to; return; }
   const t0 = performance.now(), dur = 1100;
@@ -1758,38 +1915,51 @@ function lightbox(src) { const lb = document.createElement("div"); lb.className 
 /* =====================================================================
    INICIO
    ===================================================================== */
-const LOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>`;
+const LOCK = ms("lock");
 function renderHome() {
   const v = $("#view-home");
   const d = store.get(DRAFT_KEY);
   const pending = d && d.meta && d.meta.codigo && d.step > 0;
   v.innerHTML = `<div class="home">
-    <div class="home-hero">
-      <div>
-        <p class="eyebrow">Maestría en Salud Pública · UNP</p>
-        <h1 style="margin-top:6px">Factores ocupacionales y síntomas musculoesqueléticos en fisioterapeutas</h1>
-        <p class="lead" style="margin-top:10px">Aplicación de campo del estudio: seis instrumentos en un solo recorrido y un panel para seguir el avance de la muestra (121 participantes: 68 egresados y 53 internos de la UCSS).</p>
+    <div class="home-intro">
+      <p class="kicker">${ms("accessibility_new")} Salud ocupacional · Maestría en Salud Pública</p>
+      <h1>Factores ocupacionales y síntomas musculoesqueléticos en <mark>fisioterapeutas</mark></h1>
+      <p class="lead">Egresados e internos de la UCSS en actividad asistencial, 2026. Muestra de 121 participantes: 68 egresados y 53 internos.</p>
+    </div>
+    ${pending ? `<div class="card row-link resume"><span class="tile t-accent">${ms("pending_actions")}</span><div class="rl-txt"><b>Encuesta en curso en este dispositivo</b><span>Código <span class="mono">${esc(d.meta.codigo)}</span> · paso ${d.step + 1} de ${STEPS.length} (${esc(STEPS[d.step].t)})</span></div><div class="toolbar" id="resume-act"><button class="btn btn-ghost" id="del-draft">${ms("delete")} Eliminar</button><a class="btn btn-primary" href="#encuesta">Continuar ${ICONS.next}</a></div></div>` : ""}
+    <div class="ctas">
+      <a class="cta cta-enc" href="#encuesta">
+        <div class="cta-top"><span class="vert" aria-hidden="true">${"<i></i>".repeat(9)}</span><div class="cta-anim" aria-hidden="true"><div class="lottie" id="lot-home"></div><span class="ms">accessibility_new</span></div></div>
+        <div class="cta-body">
+          <span class="cta-tag">Encuestadores</span>
+          <h2>Aplicar encuesta</h2>
+          <p>Consentimiento, ficha, cuatro cuestionarios y observación REBA de tres movilizaciones.</p>
+          <span class="cta-go">${pending ? "Continuar o iniciar" : "Iniciar encuesta"} ${ms("arrow_forward")}</span>
+        </div>
+      </a>
+      <a class="cta cta-adm" href="#admin">
+        <div class="cta-top"><span class="vert" aria-hidden="true">${"<i></i>".repeat(9)}</span><span class="cta-big ms" aria-hidden="true">monitoring</span><span class="cta-lock">${ms("lock")} Con contraseña</span></div>
+        <div class="cta-body">
+          <span class="cta-tag">Investigador y asesora</span>
+          <h2>Panel de administración</h2>
+          <p>Avance por estrato, síntomas por región, niveles REBA, fotos y descargas.</p>
+          <span class="cta-go">Ingresar ${ms("arrow_forward")}</span>
+        </div>
+      </a>
+    </div>
+    <section class="card instr">
+      <h3>Instrumentos del estudio</h3>
+      <div class="instr-grid">
+        <div class="ins"><span class="tile t-primary">${ms("psychology")}</span><div><b>NASA-TLX</b><span>Carga de trabajo percibida</span></div></div>
+        <div class="ins"><span class="tile t-violet">${ms("groups")}</span><div><b>SUSESO/ISTAS21</b><span>Factores psicosociales</span></div></div>
+        <div class="ins"><span class="tile t-green">${ms("sentiment_satisfied")}</span><div><b>Warr, Cook y Wall</b><span>Satisfacción laboral</span></div></div>
+        <div class="ins"><span class="tile t-accent">${ms("accessibility_new")}</span><div><b>Nórdico</b><span>Síntomas por región corporal</span></div></div>
+        <div class="ins"><span class="tile t-amber">${ms("sports_gymnastics")}</span><div><b>REBA</b><span>Postura en movilizaciones</span></div></div>
       </div>
-      <div class="hero-anim" aria-hidden="true" style="max-width:240px"><div class="lottie" id="lot-home"></div><div class="center-ico"><svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="4" r="2"/><path d="M12 6.5v7.5M12 8.5l-4.5 3M12 8.5l4.5 3M12 14l-3.2 6.5M12 14l3.2 6.5"/></svg></div></div>
-    </div>
-    ${pending ? `<div class="card resume"><div><b>Encuesta en curso en este dispositivo</b><br><span class="muted">Código <span class="mono">${esc(d.meta.codigo)}</span> · paso ${d.step + 1} de ${STEPS.length} (${esc(STEPS[d.step].t)})</span></div><div class="toolbar" id="resume-act"><button class="btn btn-ghost" id="del-draft">Eliminar</button><a class="btn btn-primary" href="#encuesta">Continuar ${ICONS.next}</a></div></div>` : ""}
-    <div class="choices">
-      <a class="card choice enc" href="#encuesta">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3M9 10h6M9 14h6M9 18h3"/></svg></span>
-        <div><p class="eyebrow">Encuestadores</p><h2>Aplicar encuesta</h2></div>
-        <ul><li>Presentación y consentimiento informado</li><li>Ficha, NASA-TLX, SUSESO/ISTAS21, satisfacción laboral y Nórdico</li><li>Observación REBA con diagramas y fotos opcionales</li></ul>
-        <span class="go">${pending ? "Continuar o iniciar" : "Iniciar encuesta"} ${ICONS.next}</span>
-      </a>
-      <a class="card choice adm" href="#admin">
-        <span class="chip a lock-badge">${LOCK.replace("<svg", '<svg width="13" height="13"')} Con contraseña</span>
-        <span class="ico">${LOCK}</span>
-        <div><p class="eyebrow">Investigador y asesora</p><h2>Panel de administración</h2></div>
-        <ul><li>Avance por estrato frente a la meta</li><li>Prevalencia de síntomas y niveles REBA</li><li>Fotografías de campo y exportación CSV/JSON</li></ul>
-        <span class="go">Ingresar ${ICONS.next}</span>
-      </a>
-    </div>
+      <p class="instr-foot">${ms("shield_person")} Registro anónimo: sin nombre, DNI ni firma. Las fotos son opcionales y requieren autorización.</p>
+    </section>
   </div>`;
-  playLottie($("#lot-home", v), lottieRings(cssVar("--primary")), true);
+  playLottie($("#lot-home", v), lottieRings("#FFFFFF"), true);
   const del = $("#del-draft", v);
   if (del) del.onclick = () => {
     const act = $("#resume-act", v);
