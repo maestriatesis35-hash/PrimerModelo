@@ -327,6 +327,7 @@ td.who{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
 @keyframes growX{from{width:0}}
 @keyframes growY{from{height:0}}
 @keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.noanim .anim,.noanim .grow .fill,.noanim .grow .bar i,.noanim .grow .col{animation:none}
 .anim{animation:rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 70ms)}
 .grow .fill,.grow .bar i{animation:growX .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0) * 40ms + 150ms)}
 .grow .col{animation:growY .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0) * 25ms + 150ms)}
@@ -448,6 +449,65 @@ tbody tr:hover{background:var(--primary-soft)}
   .score-card{position:sticky;bottom:0;top:auto;z-index:10;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px}
   .score-card .calc,.score-card .hide-sm{display:none}
   .score-num{font-size:2.2rem}
+}
+
+/* ---------- espacios compactos ---------- */
+.wrap{padding-block:16px 40px}
+.admin-head{margin-bottom:14px}
+.admin-grid{align-items:start}
+.stack{display:grid;gap:14px;min-width:0}
+.days{height:110px}
+.hbars{gap:5px;margin-top:10px}
+.panel{padding:14px 16px}
+.ring-cap{display:none}
+.step{padding:clamp(14px,2.6vw,26px)}
+.step-head{margin-bottom:12px}
+.section-title{margin:16px 0 8px}
+.q + .q{margin-top:8px}
+.q{padding:10px 12px;gap:8px}
+.navbar{margin-top:18px;padding-top:14px}
+.home{gap:16px}
+.hero-anim{max-width:260px}
+@media (max-width: 920px){
+  .adm-hero{grid-template-columns:auto minmax(0,1fr);align-items:center}
+  .adm-hero .kpis{grid-column:1/-1}
+  .ring-cap{display:block;font-size:.95rem;line-height:1.5}
+  .adm-hero .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kpi.k-total{display:none}
+  .ring-cap b{font-family:var(--f-display);font-size:1.15rem}
+  .home .hero-anim{display:none}
+  .hero .hero-anim{display:none}
+}
+@media (max-width: 560px){
+  .topbar-in{flex-wrap:nowrap;gap:8px;padding:8px 12px}
+  .brand>div:last-child{display:none}
+  .tabs{margin-left:auto;width:auto;flex:1}
+  .tabs a{padding:7px 8px;font-size:.86rem}
+  .wrap{padding-block:12px 32px}
+  .ring{width:104px;height:104px}
+  .ring .lbl b{font-size:1.45rem}
+  .ring .lbl>span{font-size:.7rem}
+  .adm-hero .kpis{gap:8px}
+  .kpi{padding:10px 12px;gap:2px}
+  .kpi b{font-size:1.45rem}
+  .kpi .hint,.k-rech .sub{display:none}
+  .kpi .eyebrow{font-size:.74rem}
+  .k-rech .eyebrow::after{content:""}
+  .admin-head .lead{font-size:.92rem}
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px}
+  .fact{padding:8px}
+  .fact b{font-size:1.1rem}
+  .fact span{font-size:.72rem;line-height:1.25;display:block}
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .flow li{padding:8px;font-size:.8rem}
+  .choice{padding:16px;gap:8px}
+  .choice .ico{width:42px;height:42px;border-radius:12px}
+  .choice .ico svg{width:24px;height:24px}
+  .choice h2{font-size:1.2rem}
+  h1{font-size:1.55rem}
+  .choices{gap:12px}
+  .banner{padding:8px 12px;font-size:.84rem;margin-bottom:10px}
+  .mobile-progress{padding:6px 0 8px}
 }
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
@@ -1340,6 +1400,7 @@ const Admin = {
     if (!P.db) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Panel sin conexión</b><span>Abra la página publicada con su cuenta de administrador para ver el avance, las fotos y exportar los datos.</span></div>`; return; }
     if (!P.canAdmin) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Acceso restringido</b><span>Solo el investigador y los editores del estudio pueden ver el panel. Los encuestadores usan la pestaña «Encuesta».</span></div>`; return; }
     const first = !this.shown; this.shown = true;
+    body.classList.toggle("noanim", !(first || this.animNext)); this.animNext = false;
     const F = this.filt;
     const rows = this.all();
     const comp = rows.filter(r => r.estado === "completa");
@@ -1378,11 +1439,12 @@ const Admin = {
           <svg viewBox="0 0 150 150" aria-hidden="true"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3FD0DC"/><stop offset="1" stop-color="#0B8191"/></linearGradient></defs><circle class="trk" cx="75" cy="75" r="64"/><circle class="val" cx="75" cy="75" r="64" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${first ? C.toFixed(1) : (C * (1 - p0 / 100)).toFixed(1)}" data-off="${(C * (1 - p0 / 100)).toFixed(1)}"/></svg>
           <div class="lbl"><b class="mono">${cnum(p0, true)}<small style="font-size:1rem">%</small></b><span>de la meta</span></div>
         </div>
+        <p class="ring-cap"><b>${comp.length} de ${CFG.meta.total}</b> encuestas completas<br><span class="muted">Faltan ${Math.max(0, CFG.meta.total - comp.length)}</span>${dups ? `<br><b style="color:var(--bad);font-size:.9rem">${dups} código(s) duplicado(s)</b>` : ""}</p>
         <div class="kpis">
-          <div class="card kpi anim" style="--i:1"><span class="ico" style="background:var(--primary-soft);color:var(--primary)">${IC.check}</span><span class="eyebrow">Encuestas completas</span><b class="mono">${cnum(comp.length)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${bar(comp.length, CFG.meta.total, "linear-gradient(90deg,#14A3B5,#0B8191)")}${dups ? `<span class="warn-line">${dups} duplicado(s)</span>` : `<span class="sub">Faltan ${Math.max(0, CFG.meta.total - comp.length)}</span>`}</div>
+          <div class="card kpi k-total anim" style="--i:1"><span class="ico" style="background:var(--primary-soft);color:var(--primary)">${IC.check}</span><span class="eyebrow">Encuestas completas</span><b class="mono">${cnum(comp.length)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${bar(comp.length, CFG.meta.total, "linear-gradient(90deg,#14A3B5,#0B8191)")}${dups ? `<span class="warn-line">${dups} duplicado(s)</span>` : `<span class="sub">Faltan ${Math.max(0, CFG.meta.total - comp.length)}</span>`}</div>
           <div class="card kpi anim" style="--i:2"><span class="ico" style="background:#DDF6F9;color:var(--s1)">${IC.cap}</span><span class="eyebrow">Egresados</span><b class="mono">${cnum(eg)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${bar(eg, CFG.meta.egresado, "var(--s1)")}<span class="sub">Faltan ${Math.max(0, CFG.meta.egresado - eg)}</span></div>
           <div class="card kpi anim" style="--i:3"><span class="ico" style="background:var(--accent-soft);color:var(--s2)">${IC.user}</span><span class="eyebrow">Internos</span><b class="mono">${cnum(it)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.interno}</span></b>${bar(it, CFG.meta.interno, "var(--s2)")}<span class="sub">Faltan ${Math.max(0, CFG.meta.interno - it)}</span></div>
-          <div class="card kpi anim" style="--i:4"><span class="ico" style="background:var(--bad-soft);color:var(--bad)">${IC.swap}</span><span class="eyebrow">Rechazos y no elegibles</span><b class="mono">${cnum(rech + noel)}</b><span class="sub">${rech} rechazo(s) · ${noel} no elegible(s)</span><span class="sub">Se reemplazan en el estrato</span></div>
+          <div class="card kpi k-rech anim" style="--i:4"><span class="ico" style="background:var(--bad-soft);color:var(--bad)">${IC.swap}</span><span class="eyebrow">Rechazos y no elegibles</span><b class="mono">${cnum(rech + noel)}</b><span class="sub">${rech} rechazo(s) · ${noel} no elegible(s)</span><span class="sub hint">Se reemplazan en el estrato</span></div>
         </div>
       </section>
       ${rows.length ? `
@@ -1398,13 +1460,15 @@ const Admin = {
       <div class="admin-grid">
         <div class="card panel anim grow" style="--i:3"><h3><span class="dot" style="background:var(--seq4)"></span>Síntomas en los últimos 12 meses</h3><p class="note">Al menos una región: <b class="mono">${prev12 == null ? "—" : fmt(prev12) + " %"}</b> de ${compF.length} participantes</p>
           <div class="hbars">${regPrev.map((x, i) => `<div class="hbar" style="--d:${i}" data-tip="${esc(x.t)}: ${x.n} de ${compF.length} (${fmt(x.p)} %)"><span>${esc(x.t)}</span><div class="track"><div class="fill" style="width:${x.p.toFixed(1)}%;background:linear-gradient(90deg,var(--seq3),var(--seq5))"></div></div><span class="v mono">${x.p.toFixed(0)} %</span></div>`).join("")}</div></div>
+        <div class="stack">
         <div class="card panel anim grow" style="--i:4"><h3><span class="dot" style="background:var(--accent)"></span>Nivel de riesgo REBA</h3><p class="note">Mediana NASA-TLX: <b class="mono">${med == null ? "—" : fmt(med)}</b> (punto de corte carga alta/baja)</p>
           <div class="hbars">${lv.map((n, i) => `<div class="hbar" style="--d:${i}" data-tip="${LV[i]}: ${n} de ${lvTot} (${fmt(pct(n, lvTot))} %)"><span class="lvl-key"><i style="background:${lvCols[i]}"></i>${LV[i]}</span><div class="track"><div class="fill" style="width:${(n / maxLv * 100).toFixed(1)}%;background:${lvCols[i]}"></div></div><span class="v mono">${n}</span></div>`).join("")}</div>
-          <p class="note" style="margin-top:10px">${lvTot} participantes con puntaje final</p></div>
-      </div>
-      <div class="card panel anim grow" style="--i:5;margin-top:14px"><h3><span class="dot" style="background:var(--s1)"></span>Encuestas completas por día</h3><p class="note">${days.length} día(s) con trabajo de campo · máximo ${maxDay} en un día${days.length ? ` · último: ${ddmm(days[days.length - 1])}` : ""}</p>
+          <p class="note" style="margin-top:8px">${lvTot} participantes con puntaje final</p></div>
+        <div class="card panel anim grow" style="--i:5"><h3><span class="dot" style="background:var(--s1)"></span>Encuestas completas por día</h3><p class="note">${days.length} día(s) con trabajo de campo · máximo ${maxDay} en un día${days.length ? ` · último: ${ddmm(days[days.length - 1])}` : ""}</p>
         <div class="days">${days.map((d, i) => `<div class="day" style="--d:${i}" data-tip="${ddmm(d)}: ${byDay[d]} encuesta(s)"><div class="col" style="height:${(byDay[d] / maxDay * 100).toFixed(1)}%"></div></div>`).join("")}</div>
-        <div class="days-x"><span>${ddmm(days[0])}</span>${days.length > 2 ? `<span>${ddmm(days[Math.floor(days.length / 2)])}</span>` : ""}<span>${days.length > 1 ? ddmm(days[days.length - 1]) : ""}</span></div></div>` : `<div class="card empty-filter anim" style="margin-top:14px">No hay encuestas completas con estos filtros.</div>`}
+        <div class="days-x"><span>${ddmm(days[0])}</span>${days.length > 2 ? `<span>${ddmm(days[Math.floor(days.length / 2)])}</span>` : ""}<span>${days.length > 1 ? ddmm(days[days.length - 1]) : ""}</span></div></div>
+        </div>
+      </div>` : `<div class="card empty-filter anim" style="margin-top:14px">No hay encuestas completas con estos filtros.</div>`}
       <div class="card panel anim" style="--i:6;margin-top:14px"><div class="admin-head reg-head" style="margin:0"><div><h3>Registros</h3><p class="note">${rowsF.length} registro(s) · toque una fila para ver el detalle y las fotos</p></div></div>
         <div class="table-wrap"><table><thead><tr><th>Código</th><th>Fecha</th><th>Estrato</th><th>Estado</th><th>Encuestador</th><th>NASA</th><th>REBA</th><th>Síntomas 12 m</th><th>Fotos</th></tr></thead><tbody id="tb"></tbody></table></div>
         <div class="more" id="more"></div></div>
@@ -1416,13 +1480,13 @@ const Admin = {
       $$("[data-count]", body).forEach(el => countUp(el, +el.dataset.count, !!el.dataset.dec, fmt));
     }
     // filtros
-    $$("[data-f]", body).forEach(b => b.onclick = () => { F[b.dataset.f] = b.dataset.v; this.limit = 0; this.render(); });
+    $$("[data-f]", body).forEach(b => b.onclick = () => { F[b.dataset.f] = b.dataset.v; this.limit = 0; this.animNext = true; this.render(); });
     const qi = $("#f-q", body);
     if (qi) {
       qi.oninput = () => { clearTimeout(this.qt); this.qt = setTimeout(() => { F.q = qi.value; this.limit = 0; this.render(); const n = $("#f-q"); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); } }, 250); };
-      $("#f-desde", body).onchange = e => { F.desde = e.target.value; this.render(); };
-      $("#f-hasta", body).onchange = e => { F.hasta = e.target.value; this.render(); };
-      const cl = $("#f-clear", body); if (cl) cl.onclick = () => { this.filt = { estrato: "", estado: "", q: "", desde: "", hasta: "" }; this.limit = 0; this.render(); };
+      $("#f-desde", body).onchange = e => { F.desde = e.target.value; this.animNext = true; this.render(); };
+      $("#f-hasta", body).onchange = e => { F.hasta = e.target.value; this.animNext = true; this.render(); };
+      const cl = $("#f-clear", body); if (cl) cl.onclick = () => { this.filt = { estrato: "", estado: "", q: "", desde: "", hasta: "" }; this.limit = 0; this.animNext = true; this.render(); };
     }
     const tb = $("#tb");
     if (tb) {
