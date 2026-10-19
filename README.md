@@ -4,7 +4,7 @@ Aplicación de campo del anteproyecto **«Factores ocupacionales asociados a sí
 
 ## Contenido
 
-`index.html` es una página única con:
+`PrimerModelo.html` es una página única con:
 
 - **Inicio**: elección entre aplicar la encuesta o entrar al panel.
 - **Encuesta paso a paso**: presentación, consentimiento informado anónimo (sin nombre, DNI ni firma), ficha sociodemográfica y ocupacional, NASA-TLX (versión Raw), SUSESO/ISTAS21 (versión breve), Escala General de Satisfacción Laboral de Warr, Cook y Wall, Cuestionario Nórdico con mapa corporal y observación REBA con diagramas de postura y cálculo automático (tablas A, B y C).
@@ -13,11 +13,11 @@ Aplicación de campo del anteproyecto **«Factores ocupacionales asociados a sí
 ## Modo de funcionamiento
 
 - **Publicado como Artifact de Claude** (con base de datos y almacenamiento): guarda las encuestas, las fotos y la contraseña del panel.
-- **Abierto como archivo local** (`index.html`): funciona en **modo de práctica**. Permite recorrer y ensayar todos los instrumentos, pero **no envía ni guarda respuestas** en un servidor (el borrador solo se conserva en el navegador). Para el trabajo de campo real use la versión publicada como Artifact.
+- **Abierto como archivo local** (`PrimerModelo.html`): funciona en **modo de práctica**. Permite recorrer y ensayar todos los instrumentos, pero **no envía ni guarda respuestas** en un servidor (el borrador solo se conserva en el navegador). Para el trabajo de campo real use la versión publicada como Artifact.
 
 ## Uso local
 
-Abra `index.html` con un navegador (doble clic). Funciona sin instalación, también en el celular si se copia el archivo al dispositivo.
+Abra `PrimerModelo.html` con un navegador (doble clic). Funciona sin instalación, también en el celular si se copia el archivo al dispositivo.
 
 ## Privacidad
 
