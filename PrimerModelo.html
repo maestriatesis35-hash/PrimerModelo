@@ -1345,7 +1345,7 @@ function renderHome() {
       </div>
       <div class="hero-anim" aria-hidden="true" style="max-width:240px"><div class="lottie" id="lot-home"></div><div class="center-ico"><svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="4" r="2"/><path d="M12 6.5v7.5M12 8.5l-4.5 3M12 8.5l4.5 3M12 14l-3.2 6.5M12 14l3.2 6.5"/></svg></div></div>
     </div>
-    ${pending ? `<div class="card resume"><div><b>Encuesta en curso en este dispositivo</b><br><span class="muted">Código <span class="mono">${esc(d.meta.codigo)}</span> · paso ${d.step + 1} de ${STEPS.length} (${esc(STEPS[d.step].t)})</span></div><a class="btn btn-primary" href="#encuesta">Continuar ${ICONS.next}</a></div>` : ""}
+    ${pending ? `<div class="card resume"><div><b>Encuesta en curso en este dispositivo</b><br><span class="muted">Código <span class="mono">${esc(d.meta.codigo)}</span> · paso ${d.step + 1} de ${STEPS.length} (${esc(STEPS[d.step].t)})</span></div><div class="toolbar" id="resume-act"><button class="btn btn-ghost" id="del-draft">Eliminar</button><a class="btn btn-primary" href="#encuesta">Continuar ${ICONS.next}</a></div></div>` : ""}
     <div class="choices">
       <a class="card choice enc" href="#encuesta">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3M9 10h6M9 14h6M9 18h3"/></svg></span>
@@ -1363,6 +1363,13 @@ function renderHome() {
     </div>
   </div>`;
   playLottie($("#lot-home", v), lottieRings(cssVar("--primary")), true);
+  const del = $("#del-draft", v);
+  if (del) del.onclick = () => {
+    const act = $("#resume-act", v);
+    act.innerHTML = `<span class="muted" style="font-size:.88rem">¿Eliminar las respuestas no enviadas?</span><button class="btn btn-ghost" id="del-no">Cancelar</button><button class="btn btn-accent" id="del-yes">Sí, eliminar</button>`;
+    $("#del-no", v).onclick = renderHome;
+    $("#del-yes", v).onclick = () => { clearDraft(); renderHome(); toast("Encuesta en curso eliminada"); };
+  };
 }
 
 /* =====================================================================
