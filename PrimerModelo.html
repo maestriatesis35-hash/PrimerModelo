@@ -985,7 +985,7 @@ const FICHA = [
   { id: "edad", t: "Edad", type: "number", unit: "años", min: 18, max: 80 },
   { id: "sexo", t: "Sexo", type: "pills", opts: ["Masculino", "Femenino"] },
   { id: "peso", t: "Peso", type: "number", unit: "kg", min: 30, max: 200, step: "0.1" },
-  { id: "talla", t: "Talla", type: "number", unit: "cm", min: 120, max: 220 },
+  { id: "talla", t: "Talla", type: "number", unit: "m", min: 1.2, max: 2.2, step: "0.01", dec: 2, ph: "1.65" },
   { id: "mano", t: "Mano dominante", type: "pills", opts: ["Diestro(a)", "Zurdo(a)", "Ambidiestro(a)"] },
   { sec: "B. Condición laboral o formativa" },
   { id: "condicion", t: "Condición", type: "pills", opts: ["Interno", "Egresado"] },
@@ -1284,7 +1284,8 @@ function scores(st = S) {
   const reba = st.reba.obs.map(rebaCalc);
   const valid = reba.filter(Boolean).map(r => r.total);
   const rebaFinal = valid.length ? Math.max(...valid) : null;
-  const imc = st.ficha.peso && st.ficha.talla ? Math.round(st.ficha.peso / ((st.ficha.talla / 100) ** 2) * 10) / 10 : null;
+  const tm = st.ficha.talla > 3 ? st.ficha.talla / 100 : st.ficha.talla;
+  const imc = st.ficha.peso && tm ? Math.round(st.ficha.peso / (tm ** 2) * 10) / 10 : null;
   return { nasa, sus: susOk ? sus : null, warr, regs, sintomas12: regs.length > 0, reba, rebaFinal, rebaLevel: rebaLevel(rebaFinal), imc };
 }
 function eligibility(st = S) {
@@ -1460,7 +1461,8 @@ function fichaError(f = S.ficha) {
     if (!q.id) continue; if (q.only && f.condicion !== q.only) continue;
     const v = f[q.id];
     if (v == null || v === "") return { id: q.id, msg: `Falta responder: «${q.t}».` };
-    if (q.type === "number" && (v < q.min || v > q.max)) return { id: q.id, msg: `Revise el valor de «${q.t}» (entre ${q.min} y ${q.max}).` };
+    if (q.type === "number" && (v < q.min || v > q.max)) return { id: q.id, msg: `Revise el valor de «${q.t}» (entre ${q.dec ? q.min.toFixed(q.dec) : q.min} y ${q.dec ? q.max.toFixed(q.dec) : q.max} ${q.unit}).` };
+    if (q.dec && Math.round(v * 10 ** q.dec) / 10 ** q.dec !== v) return { id: q.id, msg: `Escriba «${q.t}» con ${q.dec} decimales como máximo (por ejemplo, ${q.ph}).` };
   }
   if (f.condicion !== S.meta.estrato) return { id: "condicion", msg: "La condición no coincide con el estrato registrado." };
   if (f.sexo === "Masculino" && f.embarazo === "Sí") return { id: "embarazo", msg: "La respuesta de embarazo no es compatible con el sexo registrado." };
@@ -1476,7 +1478,7 @@ function stepFicha(host) {
     n++;
     const hid = q.only && f.condicion !== q.only ? "hidden" : "";
     let ctrl = "";
-    if (q.type === "number") ctrl = `<div style="display:flex;gap:8px;align-items:center;max-width:260px"><input class="input mono" type="number" inputmode="decimal" id="f-${q.id}" min="${q.min}" max="${q.max}" step="${q.step || 1}" value="${esc(f[q.id] ?? "")}"><span class="muted">${q.unit}</span></div>`;
+    if (q.type === "number") ctrl = `<div style="display:flex;gap:8px;align-items:center;max-width:260px"><input class="input mono" type="number" inputmode="decimal" id="f-${q.id}" min="${q.min}" max="${q.max}" step="${q.step || 1}" value="${esc(f[q.id] != null && f[q.id] !== "" && q.dec ? (+f[q.id]).toFixed(q.dec) : (f[q.id] ?? ""))}"${q.ph ? ` placeholder="${q.ph}"` : ""}><span class="muted">${q.unit}</span></div>`;
     else if (q.type === "text") ctrl = `<input class="input" id="f-${q.id}" value="${esc(f[q.id] ?? "")}">`;
     else ctrl = pills("f-" + q.id, q.opts, f[q.id]);
     if (q.follow) ctrl += `<div id="fw-${q.id}" ${f[q.id] === "Sí" ? "" : "hidden"}><input class="input" id="f-${q.follow.id}" placeholder="${q.follow.t}" value="${esc(f[q.follow.id] ?? "")}"></div>`;
@@ -1493,7 +1495,8 @@ function stepFicha(host) {
       if (q.id === "sexo" && v === "Masculino" && f.embarazo !== "No aplica") { f.embarazo = "No aplica"; const r = $(`input[name="f-embarazo"][value="No aplica"]`, host); if (r) r.checked = true; }
       persist(); updElig();
     });
-    else { const el = $(`#f-${q.id}`, host); el.oninput = () => { el.closest(".q").classList.remove("invalid"); f[q.id] = q.type === "number" ? (el.value === "" ? "" : +el.value) : el.value; persist(); updElig(); }; }
+    else { const el = $(`#f-${q.id}`, host); el.oninput = () => { el.closest(".q").classList.remove("invalid"); f[q.id] = q.type === "number" ? (el.value === "" ? "" : +el.value) : el.value; persist(); updElig(); };
+      if (q.dec) el.onblur = () => { if (el.value !== "" && Math.round(+el.value * 10 ** q.dec) / 10 ** q.dec === +el.value) el.value = (+el.value).toFixed(q.dec); }; }
     if (q.follow) { const el = $(`#f-${q.follow.id}`, host); el.oninput = () => { f[q.follow.id] = el.value; persist(); }; }
   });
   updElig();
