@@ -14,34 +14,20 @@
 <style>
 /* Layout: cuaderno de campo clínico — barra superior con dos vistas; encuesta en pasos con riel de progreso; panel en rejilla de tarjetas */
 :root{
-  --bg:#F2F6F6; --surface:#FFFFFF; --surface-2:#E8EFF0; --ink:#12262E; --ink-2:#3E555D; --muted:#64787F;
-  --line:#D4E0E2; --primary:#0B5E70; --primary-ink:#FFFFFF; --primary-soft:#DCEEF1;
-  --accent:#C2741A; --accent-soft:#F7E7D2;
-  --good:#2C7A4B; --good-soft:#DCEFE3; --warn:#9A6A10; --warn-soft:#F6EBCF; --bad:#B23A2E; --bad-soft:#F6DEDA;
-  --s1:#0080A0; --s2:#C2741A;
-  --seq1:#D5ECF1; --seq2:#9CD0DC; --seq3:#4FA7BC; --seq4:#0B7C95; --seq5:#0A4F60;
-  --shadow:0 1px 2px rgba(18,38,46,.06),0 8px 24px rgba(18,38,46,.06);
+  --bg:#F5F9FC; --surface:#FFFFFF; --surface-2:#EEF4F8; --ink:#1B3440; --ink-2:#47606B; --muted:#6B8290;
+  --line:#DCE8EE; --primary:#0B8191; --primary-ink:#FFFFFF; --primary-soft:#DDF4F6;
+  --accent:#D9661F; --accent-soft:#FFEBDD;
+  --good:#23845A; --good-soft:#DDF5E8; --warn:#A06A00; --warn-soft:#FFF1CC; --bad:#C2413A; --bad-soft:#FDE3E1;
+  --s1:#14A3B5; --s2:#F2913D;
+  --seq1:#D4F0F3; --seq2:#9EDCE4; --seq3:#52BCCB; --seq4:#1A9DAE; --seq5:#0B7F8E;
+  --grad:linear-gradient(135deg,#E2F6F8 0%,#EEF1FF 55%,#FFF0E3 100%);
+  --shadow:0 1px 2px rgba(27,52,64,.05),0 8px 24px rgba(27,52,64,.06);
+  --shadow-lg:0 2px 4px rgba(27,52,64,.05),0 18px 40px rgba(11,129,145,.14);
   --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   --r:14px; --r-sm:9px; --topbar-h:60px;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0C181D; --surface:#12232A; --surface-2:#183039; --ink:#E4EEF0; --ink-2:#B8CBD0; --muted:#8FA6AD;
-  --line:#25424B; --primary:#4FB6CA; --primary-ink:#06232B; --primary-soft:#163C46;
-  --accent:#E09A45; --accent-soft:#3A2A16;
-  --good:#5CC48A; --good-soft:#163A27; --warn:#E2B45A; --warn-soft:#3A2F14; --bad:#F08A7E; --bad-soft:#40201C;
-  --s1:#1CA3BC; --s2:#C47A14;
-  --seq1:#173A43; --seq2:#1F5A67; --seq3:#2C8297; --seq4:#4FB0C5; --seq5:#9ADAE6;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0C181D; --surface:#12232A; --surface-2:#183039; --ink:#E4EEF0; --ink-2:#B8CBD0; --muted:#8FA6AD;
-  --line:#25424B; --primary:#4FB6CA; --primary-ink:#06232B; --primary-soft:#163C46;
-  --accent:#E09A45; --accent-soft:#3A2A16;
-  --good:#5CC48A; --good-soft:#163A27; --warn:#E2B45A; --warn-soft:#3A2F14; --bad:#F08A7E; --bad-soft:#40201C;
-  --s1:#1CA3BC; --s2:#C47A14;
-  --seq1:#173A43; --seq2:#1F5A67; --seq3:#2C8297; --seq4:#4FB0C5; --seq5:#9ADAE6;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
 *{box-sizing:border-box}
 html,body{min-height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -77,11 +63,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* ---------- botones ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 20px;font-weight:700;cursor:pointer;transition:transform .15s ease,box-shadow .2s,background .2s;min-height:44px}
 .btn:active{transform:scale(.97)}
-.btn-primary{background:var(--primary);color:var(--primary-ink);box-shadow:0 6px 16px color-mix(in srgb,var(--primary) 35%,transparent)}
+.btn-primary{background:linear-gradient(135deg,#14A3B5,#0B8191);color:var(--primary-ink);box-shadow:0 6px 16px color-mix(in srgb,var(--primary) 35%,transparent)}
 .btn-primary:hover{box-shadow:0 8px 22px color-mix(in srgb,var(--primary) 45%,transparent)}
-.btn-ghost{background:transparent;color:var(--ink-2);border:1.5px solid var(--line)}
-.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
-.btn-accent{background:var(--accent);color:#fff}
+.btn-ghost{background:var(--surface);color:var(--ink-2);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft);transform:translateY(-1px)}
+.btn-accent{background:linear-gradient(135deg,#F2913D,#D9661F);color:#fff}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .btn svg{width:18px;height:18px}
 
@@ -301,7 +287,7 @@ tbody tr:hover{background:var(--surface-2)}
 .lvl-key i{width:10px;height:10px;border-radius:3px;flex:none}
 td.who{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .more{display:flex;justify-content:center;margin-top:12px}
-.adm-actions .btn{min-height:40px;padding:8px 16px;font-size:.9rem}
+.adm-actions .btn{min-height:40px;padding:8px 16px;font-size:.9rem;white-space:nowrap}
 @media (max-width: 700px){
   .adm-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
   .adm-actions .btn{width:100%}
@@ -334,6 +320,79 @@ td.who{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
   .hbar .track{grid-area:t;height:12px}
   .hbar .v{grid-area:v}
   .admin-head h1{font-size:1.6rem}
+}
+
+/* ---------- panel renovado ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes growX{from{width:0}}
+@keyframes growY{from{height:0}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.anim{animation:rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 70ms)}
+.grow .fill,.grow .bar i{animation:growX .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0) * 40ms + 150ms)}
+.grow .col{animation:growY .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0) * 25ms + 150ms)}
+.adm-hero{background:var(--grad);border:1px solid var(--line);border-radius:22px;padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:center;position:relative;overflow:hidden}
+.adm-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(20,163,181,.18),transparent 70%);pointer-events:none}
+.ring{position:relative;width:150px;height:150px;justify-self:center}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:12}
+.ring .trk{stroke:rgba(255,255,255,.85)}
+.ring .val{stroke:url(#ringGrad);stroke-linecap:round;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)}
+.ring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;align-content:center}
+.ring .lbl b{font-family:var(--f-display);font-size:2rem;line-height:1}
+.ring .lbl>span{font-size:.8rem;color:var(--ink-2)}
+.adm-hero .kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpi{background:rgba(255,255,255,.82);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.9);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.kpi .ico{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;margin-bottom:4px}
+.kpi .ico svg{width:18px;height:18px}
+.fbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;margin-top:14px;position:sticky;top:calc(var(--topbar-h) + 8px);z-index:15;background:rgba(255,255,255,.92);backdrop-filter:blur(10px)}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:7px 13px;border-radius:999px;font-weight:700;font-size:.86rem;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .2s,color .2s,box-shadow .2s;min-height:36px}
+.seg button:hover{color:var(--primary)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--primary);box-shadow:0 2px 8px rgba(11,129,145,.18)}
+.seg .n{font-family:var(--f-mono);font-size:.72rem;background:var(--primary-soft);color:var(--primary);border-radius:999px;padding:1px 7px}
+.search{position:relative;flex:1 1 180px;min-width:160px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+.search .input{padding-left:36px;min-height:40px;border-radius:999px}
+.dates{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;color:var(--muted)}
+.dates .input{min-height:40px;width:auto;padding:6px 10px;border-radius:999px}
+.fbar .clear{border:0;background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:999px;padding:7px 13px;cursor:pointer;animation:pop .35s both;min-height:36px}
+.fnote{font-size:.82rem;color:var(--muted);width:100%}
+.panel{transition:box-shadow .25s,transform .25s cubic-bezier(.2,.8,.2,1)}
+.panel:hover{box-shadow:var(--shadow-lg)}
+.panel h3{display:flex;align-items:center;gap:8px}
+.panel h3 .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.days{display:flex;align-items:flex-end;gap:4px;height:150px;margin-top:14px;padding:0 2px;border-bottom:1px solid var(--line)}
+.days .day{flex:1;height:100%;display:flex;align-items:flex-end;cursor:pointer;min-width:4px}
+.days .col{width:100%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--seq3),var(--seq5));transition:filter .2s,transform .2s;transform-origin:bottom}
+.days .day:hover .col{filter:brightness(1.12);transform:scaleY(1.03)}
+.days-x{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);margin-top:6px;font-family:var(--f-mono)}
+.hbar{border-radius:8px;padding:2px 4px;margin:0 -4px;transition:background .2s;cursor:default}
+.hbar:hover{background:var(--surface-2)}
+.hbar .track{border-radius:6px;overflow:hidden}
+.hbar .fill{border-radius:6px}
+tbody tr{transition:background .15s,transform .15s}
+tbody tr:hover{background:var(--primary-soft)}
+.tip{position:fixed;z-index:80;pointer-events:none;background:var(--ink);color:#fff;font-size:.8rem;font-weight:700;padding:6px 10px;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,.18);opacity:0;transform:translate(-50%,calc(-100% - 10px)) scale(.95);transition:opacity .15s,transform .15s;white-space:nowrap}
+.tip.show{opacity:1;transform:translate(-50%,calc(-100% - 12px)) scale(1)}
+.empty-filter{padding:30px 16px;text-align:center;color:var(--muted)}
+@media (max-width: 920px){
+  .adm-hero{grid-template-columns:minmax(0,1fr)}
+  .adm-hero .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 700px){
+  .fbar{position:static}
+  .search{flex-basis:100%}
+  .seg{width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{flex:1 0 auto;justify-content:center;padding:7px 10px;font-size:.84rem}
+  .kpi .ico{display:none}
+  .dates{width:100%}
+  .dates .input{flex:1;min-width:0}
+}
+@media (max-width: 560px){
+  .adm-hero{padding:14px;border-radius:18px;gap:14px}
+  .ring{width:128px;height:128px}
 }
 
 /* ---------- inicio ---------- */
@@ -697,7 +756,7 @@ async function initPlatform() {
 }
 function renderConn() {
   const b = $("#conn-banner");
-  if (!P.db) b.innerHTML = `<div class="banner warn"><b>Modo de práctica.</b>&nbsp;Esta vista no está conectada al almacenamiento del estudio: puede recorrer los instrumentos, pero las respuestas no se enviarán. Abra la página publicada con su cuenta para registrar encuestas.</div>`;
+  if (!P.db) b.innerHTML = `<div class="banner warn"><div><b>Modo de práctica.</b> Esta vista no está conectada al almacenamiento del estudio: puede recorrer los instrumentos, pero las respuestas no se enviarán. Abra la página publicada con su cuenta para registrar encuestas.</div></div>`;
   else if (!P.uid) b.innerHTML = `<div class="banner warn">Inicie sesión con la cuenta del equipo de investigación para enviar encuestas.</div>`;
   else b.innerHTML = "";
 }
@@ -1230,7 +1289,7 @@ function showDone(host, rec) {
    PANEL ADMIN
    ===================================================================== */
 const Admin = {
-  started: false, subs: [], data: new Map(), names: {}, filt: { estrato: "", estado: "" },
+  started: false, subs: [], data: new Map(), names: {}, filt: { estrato: "", estado: "", q: "", desde: "", hasta: "" },
   unlocked: false,
   start() {
     const v = $("#view-adm");
@@ -1260,7 +1319,7 @@ const Admin = {
   all() { return [...this.data.values()].flat().sort((a, b) => (b.enviado || "").localeCompare(a.enviado || "")); },
   shell() {
     return `<div class="admin-head"><div><p class="eyebrow">Panel de seguimiento</p><h1>Avance del trabajo de campo</h1><p class="lead" style="margin-top:6px">Muestra estratificada: 121 participantes (68 egresados y 53 internos).</p></div>
-      <div class="toolbar adm-actions"><button class="btn btn-ghost" id="exp-csv">Exportar CSV</button><button class="btn btn-ghost" id="exp-json">Exportar JSON</button>${P.db && P.canAdmin ? `<button class="btn btn-ghost" id="pw-btn">Cambiar contraseña</button>` : ""}${P.db ? `<button class="btn btn-ghost" id="logout">${LOCK.replace("<svg", '<svg width="16" height="16"')} Cerrar sesión</button>` : ""}</div></div>
+      <div class="toolbar adm-actions"><button class="btn btn-primary" id="exp-csv">${IC.dl} Exportar CSV</button><button class="btn btn-ghost" id="exp-json">${IC.dl} Exportar JSON</button>${P.db && P.canAdmin ? `<button class="btn btn-ghost" id="pw-btn">${IC.key} Contraseña</button>` : ""}${P.db ? `<button class="btn btn-ghost" id="logout">${LOCK.replace("<svg", '<svg width="16" height="16"')} Cerrar sesión</button>` : ""}</div></div>
       <div id="pw-change" class="card" style="padding:14px;margin-bottom:14px" hidden></div>
       <div id="adm-body"></div>`;
   },
@@ -1268,66 +1327,109 @@ const Admin = {
     const body = $("#adm-body"); if (!body) return;
     if (!P.db) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Panel sin conexión</b><span>Abra la página publicada con su cuenta de administrador para ver el avance, las fotos y exportar los datos.</span></div>`; return; }
     if (!P.canAdmin) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Acceso restringido</b><span>Solo el investigador y los editores del estudio pueden ver el panel. Los encuestadores usan la pestaña «Encuesta».</span></div>`; return; }
+    const first = !this.shown; this.shown = true;
+    const F = this.filt;
     const rows = this.all();
     const comp = rows.filter(r => r.estado === "completa");
     const eg = comp.filter(r => r.estrato === "Egresado").length, it = comp.filter(r => r.estrato === "Interno").length;
     const rech = rows.filter(r => r.estado === "rechazó").length, noel = rows.filter(r => r.estado === "no elegible").length;
-    const fotos = comp.reduce((a, r) => a + (r.fotos || []).length, 0);
-    const pct = (n, m) => m ? Math.min(100, n / m * 100) : 0;
-    const pctBar = (n, m, col) => `<div class="bar" role="img" aria-label="${n} de ${m}"><i style="width:${pct(n, m).toFixed(1)}%;background:${col}"></i></div>`;
-    const lv = [0, 0, 0, 0, 0]; comp.forEach(r => { const l = rebaLevel(r.puntajes?.rebaFinal); if (l) lv[l.n - 1]++; });
-    const lvTot = lv.reduce((a, b) => a + b, 0), maxLv = Math.max(1, ...lv);
-    const nasaVals = comp.map(r => r.puntajes?.nasa).filter(v => v != null).sort((a, b) => a - b);
-    const med = nasaVals.length ? (nasaVals.length % 2 ? nasaVals[(nasaVals.length - 1) / 2] : (nasaVals[nasaVals.length / 2 - 1] + nasaVals[nasaVals.length / 2]) / 2) : null;
-    const prev12 = comp.length ? comp.filter(r => r.puntajes?.sintomas12m).length / comp.length * 100 : null;
-    const regPrev = REGIONS.map(rg => ({ t: rg.t, n: comp.filter(r => (r.puntajes?.regiones12m || []).includes(rg.id)).length })).map(x => ({ ...x, p: comp.length ? x.n / comp.length * 100 : 0 })).sort((a, b) => b.p - a.p);
     const cnt = {}; comp.forEach(r => cnt[r.codigo] = (cnt[r.codigo] || 0) + 1);
     const dups = Object.values(cnt).filter(n => n > 1).length;
+    const pct = (n, m) => m ? Math.min(100, n / m * 100) : 0;
+    const fmt = n => n.toFixed(1).replace(".", ",");
+    // filtros: afectan gráficos, registros y fotos (no las metas)
+    const q = (F.q || "").trim().toUpperCase();
+    const byFilt = (r, skip) => (skip === "estrato" || !F.estrato || r.estrato === F.estrato) && (skip === "estado" || !F.estado || r.estado === F.estado) && (!q || (r.codigo || "").toUpperCase().includes(q) || (r.establecimiento || "").toUpperCase().includes(q)) && (!F.desde || (r.fecha || "") >= F.desde) && (!F.hasta || (r.fecha || "") <= F.hasta);
+    const rowsF = rows.filter(r => byFilt(r)), compF = rowsF.filter(r => r.estado === "completa");
+    const nEstr = e => rows.filter(r => byFilt(r, "estrato") && (!e || r.estrato === e)).length;
+    const nEst = e => rows.filter(r => byFilt(r, "estado") && (!e || r.estado === e)).length;
+    const active = !!(F.estrato || F.estado || q || F.desde || F.hasta);
+    // indicadores
+    const lv = [0, 0, 0, 0, 0]; compF.forEach(r => { const l = rebaLevel(r.puntajes?.rebaFinal); if (l) lv[l.n - 1]++; });
+    const lvTot = lv.reduce((a, b) => a + b, 0), maxLv = Math.max(1, ...lv);
+    const nasaVals = compF.map(r => r.puntajes?.nasa).filter(v => v != null).sort((a, b) => a - b);
+    const med = nasaVals.length ? (nasaVals.length % 2 ? nasaVals[(nasaVals.length - 1) / 2] : (nasaVals[nasaVals.length / 2 - 1] + nasaVals[nasaVals.length / 2]) / 2) : null;
+    const prev12 = compF.length ? compF.filter(r => r.puntajes?.sintomas12m).length / compF.length * 100 : null;
+    const regPrev = REGIONS.map(rg => ({ t: rg.t, n: compF.filter(r => (r.puntajes?.regiones12m || []).includes(rg.id)).length })).map(x => ({ ...x, p: compF.length ? x.n / compF.length * 100 : 0 })).sort((a, b) => b.p - a.p);
+    const byDay = {}; compF.forEach(r => { if (r.fecha) byDay[r.fecha] = (byDay[r.fecha] || 0) + 1; });
+    const days = Object.keys(byDay).sort().slice(-31), maxDay = Math.max(1, ...days.map(d => byDay[d]));
+    const fotos = compF.reduce((a, r) => a + (r.fotos || []).length, 0);
     const LV = ["Inapreciable", "Bajo", "Medio", "Alto", "Muy alto"];
     const lvCols = ["var(--seq2)", "var(--seq3)", "var(--seq4)", "var(--seq5)", "var(--bad)"];
-    const fmt = n => n.toFixed(1).replace(".", ",");
+    const p0 = pct(comp.length, CFG.meta.total), C = 2 * Math.PI * 64;
+    const bar = (n, m, col) => `<div class="bar"><i style="width:${pct(n, m).toFixed(1)}%;background:${col}"></i></div>`;
+    const cnum = (n, dec) => `<span data-count="${n}"${dec ? ' data-dec="1"' : ""}>${first ? 0 : (dec ? fmt(n) : n)}</span>`;
+    const ddmm = d => d ? d.slice(8, 10) + "/" + d.slice(5, 7) : "";
     body.innerHTML = `
-      <div class="kpis">
-        <div class="card kpi"><span class="eyebrow">Encuestas completas</span><b class="mono">${comp.length}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${pctBar(comp.length, CFG.meta.total, "var(--primary)")}<span class="sub"><span>${fmt(pct(comp.length, CFG.meta.total))} % de la meta</span></span>${dups ? `<span class="warn-line">${dups} código(s) duplicado(s)</span>` : ""}</div>
-        <div class="card kpi"><span class="eyebrow">Egresados</span><b class="mono">${eg}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${pctBar(eg, CFG.meta.egresado, "var(--s1)")}<span class="sub"><span>Faltan ${Math.max(0, CFG.meta.egresado - eg)}</span></span></div>
-        <div class="card kpi"><span class="eyebrow">Internos</span><b class="mono">${it}<span class="muted" style="font-size:1rem"> / ${CFG.meta.interno}</span></b>${pctBar(it, CFG.meta.interno, "var(--s2)")}<span class="sub"><span>Faltan ${Math.max(0, CFG.meta.interno - it)}</span></span></div>
-        <div class="card kpi"><span class="eyebrow">Rechazos y no elegibles</span><b class="mono">${rech + noel}</b><span class="sub"><span>${rech} rechazo(s) · ${noel} no elegible(s)</span></span><span class="muted" style="font-size:.8rem">Se reemplazan dentro del estrato</span></div>
-      </div>
+      <section class="adm-hero anim grow">
+        <div class="ring" data-tip="${comp.length} de ${CFG.meta.total} encuestas completas">
+          <svg viewBox="0 0 150 150" aria-hidden="true"><defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3FD0DC"/><stop offset="1" stop-color="#0B8191"/></linearGradient></defs><circle class="trk" cx="75" cy="75" r="64"/><circle class="val" cx="75" cy="75" r="64" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${first ? C.toFixed(1) : (C * (1 - p0 / 100)).toFixed(1)}" data-off="${(C * (1 - p0 / 100)).toFixed(1)}"/></svg>
+          <div class="lbl"><b class="mono">${cnum(p0, true)}<small style="font-size:1rem">%</small></b><span>de la meta</span></div>
+        </div>
+        <div class="kpis">
+          <div class="card kpi anim" style="--i:1"><span class="ico" style="background:var(--primary-soft);color:var(--primary)">${IC.check}</span><span class="eyebrow">Encuestas completas</span><b class="mono">${cnum(comp.length)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${bar(comp.length, CFG.meta.total, "linear-gradient(90deg,#14A3B5,#0B8191)")}${dups ? `<span class="warn-line">${dups} duplicado(s)</span>` : `<span class="sub">Faltan ${Math.max(0, CFG.meta.total - comp.length)}</span>`}</div>
+          <div class="card kpi anim" style="--i:2"><span class="ico" style="background:#DDF6F9;color:var(--s1)">${IC.cap}</span><span class="eyebrow">Egresados</span><b class="mono">${cnum(eg)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${bar(eg, CFG.meta.egresado, "var(--s1)")}<span class="sub">Faltan ${Math.max(0, CFG.meta.egresado - eg)}</span></div>
+          <div class="card kpi anim" style="--i:3"><span class="ico" style="background:var(--accent-soft);color:var(--s2)">${IC.user}</span><span class="eyebrow">Internos</span><b class="mono">${cnum(it)}<span class="muted" style="font-size:1rem"> / ${CFG.meta.interno}</span></b>${bar(it, CFG.meta.interno, "var(--s2)")}<span class="sub">Faltan ${Math.max(0, CFG.meta.interno - it)}</span></div>
+          <div class="card kpi anim" style="--i:4"><span class="ico" style="background:var(--bad-soft);color:var(--bad)">${IC.swap}</span><span class="eyebrow">Rechazos y no elegibles</span><b class="mono">${cnum(rech + noel)}</b><span class="sub">${rech} rechazo(s) · ${noel} no elegible(s)</span><span class="sub">Se reemplazan en el estrato</span></div>
+        </div>
+      </section>
       ${rows.length ? `
-      <div class="admin-grid">
-        <div class="card panel"><h3>Síntomas en los últimos 12 meses por región</h3><p class="note">Al menos una región: <b class="mono">${prev12 == null ? "—" : fmt(prev12) + " %"}</b> de ${comp.length} participantes</p>
-          <div class="hbars">${regPrev.map(x => `<div class="hbar" title="${esc(x.t)}: ${x.n} de ${comp.length} (${fmt(x.p)} %)"><span>${esc(x.t)}</span><div class="track"><div class="fill" style="width:${x.p.toFixed(1)}%;background:var(--seq4)"></div></div><span class="v mono">${x.p.toFixed(0)} %</span></div>`).join("")}</div></div>
-        <div class="card panel"><h3>Nivel de riesgo REBA (puntaje final)</h3><p class="note">Mediana NASA-TLX: <b class="mono">${med == null ? "—" : fmt(med)}</b> (punto de corte carga alta/baja)</p>
-          <div class="hbars">${lv.map((n, i) => `<div class="hbar" title="${LV[i]}: ${n} de ${lvTot}"><span class="lvl-key"><i style="background:${lvCols[i]}"></i>${LV[i]}</span><div class="track"><div class="fill" style="width:${(n / maxLv * 100).toFixed(1)}%;background:${lvCols[i]}"></div></div><span class="v mono">${n}</span></div>`).join("")}</div>
-          <p class="note" style="margin-top:10px">${lvTot} observaciones con puntaje · barras proporcionales al nivel más frecuente</p></div>
+      <div class="card fbar anim" style="--i:2" role="search">
+        <div class="seg" aria-label="Estrato">${[["", "Todos"], ["Egresado", "Egresados"], ["Interno", "Internos"]].map(([v, t]) => `<button data-f="estrato" data-v="${v}" aria-pressed="${F.estrato === v}">${t} <span class="n">${nEstr(v)}</span></button>`).join("")}</div>
+        <div class="seg" aria-label="Estado">${[["", "Todos"], ["completa", "Completas"], ["rechazó", "Rechazos"], ["no elegible", "No elegibles"]].map(([v, t]) => `<button data-f="estado" data-v="${v}" aria-pressed="${F.estado === v}">${t} <span class="n">${nEst(v)}</span></button>`).join("")}</div>
+        <label class="search">${IC.search}<input class="input" id="f-q" type="search" placeholder="Buscar código o establecimiento" value="${esc(F.q || "")}" aria-label="Buscar"></label>
+        <span class="dates">Desde <input class="input" type="date" id="f-desde" value="${esc(F.desde || "")}" aria-label="Desde"> hasta <input class="input" type="date" id="f-hasta" value="${esc(F.hasta || "")}" aria-label="Hasta"></span>
+        ${active ? `<button class="clear" id="f-clear">Limpiar filtros ×</button>` : ""}
+        <p class="fnote">${active ? `Mostrando <b>${rowsF.length}</b> de ${rows.length} registros. Los filtros se aplican a gráficos, registros y fotos; las metas muestran el total.` : `Los filtros se aplican a gráficos, registros y fotos.`}</p>
       </div>
-      <div class="card panel" style="margin-top:14px"><div class="admin-head reg-head" style="margin:0"><div><h3>Registros</h3><p class="note">${rows.length} registros · toque una fila para ver el detalle y las fotos</p></div>
-        <div class="toolbar"><select class="input" id="f-estrato" aria-label="Filtrar por estrato" style="min-height:40px;width:auto"><option value="">Estrato: todos</option><option>Egresado</option><option>Interno</option></select><select class="input" id="f-estado" aria-label="Filtrar por estado" style="min-height:40px;width:auto"><option value="">Estado: todos</option><option value="completa">Completa</option><option value="rechazó">Rechazó</option><option value="no elegible">No elegible</option></select></div></div>
+      ${compF.length ? `
+      <div class="admin-grid">
+        <div class="card panel anim grow" style="--i:3"><h3><span class="dot" style="background:var(--seq4)"></span>Síntomas en los últimos 12 meses</h3><p class="note">Al menos una región: <b class="mono">${prev12 == null ? "—" : fmt(prev12) + " %"}</b> de ${compF.length} participantes</p>
+          <div class="hbars">${regPrev.map((x, i) => `<div class="hbar" style="--d:${i}" data-tip="${esc(x.t)}: ${x.n} de ${compF.length} (${fmt(x.p)} %)"><span>${esc(x.t)}</span><div class="track"><div class="fill" style="width:${x.p.toFixed(1)}%;background:linear-gradient(90deg,var(--seq3),var(--seq5))"></div></div><span class="v mono">${x.p.toFixed(0)} %</span></div>`).join("")}</div></div>
+        <div class="card panel anim grow" style="--i:4"><h3><span class="dot" style="background:var(--accent)"></span>Nivel de riesgo REBA</h3><p class="note">Mediana NASA-TLX: <b class="mono">${med == null ? "—" : fmt(med)}</b> (punto de corte carga alta/baja)</p>
+          <div class="hbars">${lv.map((n, i) => `<div class="hbar" style="--d:${i}" data-tip="${LV[i]}: ${n} de ${lvTot} (${fmt(pct(n, lvTot))} %)"><span class="lvl-key"><i style="background:${lvCols[i]}"></i>${LV[i]}</span><div class="track"><div class="fill" style="width:${(n / maxLv * 100).toFixed(1)}%;background:${lvCols[i]}"></div></div><span class="v mono">${n}</span></div>`).join("")}</div>
+          <p class="note" style="margin-top:10px">${lvTot} participantes con puntaje final</p></div>
+      </div>
+      <div class="card panel anim grow" style="--i:5;margin-top:14px"><h3><span class="dot" style="background:var(--s1)"></span>Encuestas completas por día</h3><p class="note">${days.length} día(s) con trabajo de campo · máximo ${maxDay} en un día${days.length ? ` · último: ${ddmm(days[days.length - 1])}` : ""}</p>
+        <div class="days">${days.map((d, i) => `<div class="day" style="--d:${i}" data-tip="${ddmm(d)}: ${byDay[d]} encuesta(s)"><div class="col" style="height:${(byDay[d] / maxDay * 100).toFixed(1)}%"></div></div>`).join("")}</div>
+        <div class="days-x"><span>${ddmm(days[0])}</span>${days.length > 2 ? `<span>${ddmm(days[Math.floor(days.length / 2)])}</span>` : ""}<span>${days.length > 1 ? ddmm(days[days.length - 1]) : ""}</span></div></div>` : `<div class="card empty-filter anim" style="margin-top:14px">No hay encuestas completas con estos filtros.</div>`}
+      <div class="card panel anim" style="--i:6;margin-top:14px"><div class="admin-head reg-head" style="margin:0"><div><h3>Registros</h3><p class="note">${rowsF.length} registro(s) · toque una fila para ver el detalle y las fotos</p></div></div>
         <div class="table-wrap"><table><thead><tr><th>Código</th><th>Fecha</th><th>Estrato</th><th>Estado</th><th>Encuestador</th><th>NASA</th><th>REBA</th><th>Síntomas 12 m</th><th>Fotos</th></tr></thead><tbody id="tb"></tbody></table></div>
         <div class="more" id="more"></div></div>
-      <div class="card panel" style="margin-top:14px"><div class="admin-head reg-head" style="margin:0"><div><h3>Fotografías de campo</h3><p class="note">${fotos} foto(s) en encuestas completas</p></div><button class="btn btn-ghost" id="load-gal">Cargar galería</button></div><div class="gallery" id="gal"></div></div>`
-      : `<div class="card empty" style="margin-top:14px">${emptyIco()}<b>Aún no hay encuestas registradas</b><span>Cuando los encuestadores envíen la primera encuesta desde la pestaña «Encuesta», aparecerán aquí el avance por estrato, los síntomas por región, los niveles REBA y las fotografías.</span></div>`}`;
+      <div class="card panel anim" style="--i:7;margin-top:14px"><div class="admin-head reg-head" style="margin:0"><div><h3>Fotografías de campo</h3><p class="note">${fotos} foto(s) en las encuestas completas filtradas</p></div><button class="btn btn-ghost" id="load-gal">${IC.img} Cargar galería</button></div><div class="gallery" id="gal"></div></div>`
+      : `<div class="card empty anim" style="margin-top:14px">${emptyIco()}<b>Aún no hay encuestas registradas</b><span>Cuando los encuestadores envíen la primera encuesta desde la pestaña «Encuesta», aparecerán aquí el avance por estrato, los síntomas por región, los niveles REBA y las fotografías.</span></div>`}`;
+    // animaciones de entrada: anillo y contadores (solo la primera vez)
+    if (first) {
+      requestAnimationFrame(() => requestAnimationFrame(() => { const v = $(".ring .val", body); if (v) v.setAttribute("stroke-dashoffset", v.dataset.off); }));
+      $$("[data-count]", body).forEach(el => countUp(el, +el.dataset.count, !!el.dataset.dec, fmt));
+    }
+    // filtros
+    $$("[data-f]", body).forEach(b => b.onclick = () => { F[b.dataset.f] = b.dataset.v; this.limit = 0; this.render(); });
+    const qi = $("#f-q", body);
+    if (qi) {
+      qi.oninput = () => { clearTimeout(this.qt); this.qt = setTimeout(() => { F.q = qi.value; this.limit = 0; this.render(); const n = $("#f-q"); if (n) { n.focus(); n.setSelectionRange(n.value.length, n.value.length); } }, 250); };
+      $("#f-desde", body).onchange = e => { F.desde = e.target.value; this.render(); };
+      $("#f-hasta", body).onchange = e => { F.hasta = e.target.value; this.render(); };
+      const cl = $("#f-clear", body); if (cl) cl.onclick = () => { this.filt = { estrato: "", estado: "", q: "", desde: "", hasta: "" }; this.limit = 0; this.render(); };
+    }
     const tb = $("#tb");
     if (tb) {
-      $("#f-estrato").value = this.filt.estrato; $("#f-estado").value = this.filt.estado;
       const PAGE = 20;
       const draw = () => {
-        const fe = this.filt.estrato = $("#f-estrato").value, fs = this.filt.estado = $("#f-estado").value;
-        const list = rows.filter(r => (!fe || r.estrato === fe) && (!fs || r.estado === fs));
-        const shown = list.slice(0, this.limit || PAGE);
-        tb.innerHTML = shown.map(r => { const l = rebaLevel(r.puntajes?.rebaFinal); return `<tr data-id="${esc(r.id)}" tabindex="0"><td class="num first" data-l="Código"><b>${esc(r.codigo)}</b>${r.estado === "completa" && cnt[r.codigo] > 1 ? ` <span class="chip b" title="Hay más de una encuesta completa con este código">Duplicado</span>` : ""}</td><td class="num" data-l="Fecha">${esc(r.fecha)}</td><td class="c-est" data-l="Estrato"><span class="chip" style="background:color-mix(in srgb,var(--${r.estrato === "Egresado" ? "s1" : "s2"}) 18%,transparent)">${esc(r.estrato)}</span></td><td class="c-st" data-l="Estado"><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(estadoTxt(r.estado))}</span></td><td class="who" data-l="Encuestador" title="${esc(this.names[r.encuestador] || "")}">${esc(this.names[r.encuestador] || "…")}</td><td class="num" data-l="NASA">${r.puntajes?.nasa ?? "—"}</td><td data-l="REBA">${l ? `<span class="lvl lvl-${l.n}" style="padding:2px 8px;font-size:.78rem;white-space:nowrap">${r.puntajes.rebaFinal} · ${l.t}</span>` : "—"}</td><td data-l="Síntomas 12 m">${r.estado === "completa" ? (r.puntajes?.sintomas12m ? "Sí" : "No") : "—"}</td><td class="num${(r.fotos || []).length ? "" : " zero"}" data-l="Fotos">${(r.fotos || []).length}</td></tr>`; }).join("") || `<tr class="empty-row"><td colspan="9" class="muted">Sin registros con estos filtros.</td></tr>`;
+        const shown = rowsF.slice(0, this.limit || PAGE);
+        tb.innerHTML = shown.map((r, i) => { const l = rebaLevel(r.puntajes?.rebaFinal); return `<tr data-id="${esc(r.id)}" tabindex="0" class="anim" style="--i:${Math.min(i, 12) * .4}"><td class="num first" data-l="Código"><b>${esc(r.codigo)}</b>${r.estado === "completa" && cnt[r.codigo] > 1 ? ` <span class="chip b" title="Hay más de una encuesta completa con este código">Duplicado</span>` : ""}</td><td class="num" data-l="Fecha">${esc(r.fecha)}</td><td class="c-est" data-l="Estrato"><span class="chip" style="background:color-mix(in srgb,var(--${r.estrato === "Egresado" ? "s1" : "s2"}) 18%,transparent)">${esc(r.estrato)}</span></td><td class="c-st" data-l="Estado"><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(estadoTxt(r.estado))}</span></td><td class="who" data-l="Encuestador" title="${esc(this.names[r.encuestador] || "")}">${esc(this.names[r.encuestador] || "…")}</td><td class="num" data-l="NASA">${r.puntajes?.nasa ?? "—"}</td><td data-l="REBA">${l ? `<span class="lvl lvl-${l.n}" style="padding:2px 8px;font-size:.78rem;white-space:nowrap">${r.puntajes.rebaFinal} · ${l.t}</span>` : "—"}</td><td data-l="Síntomas 12 m">${r.estado === "completa" ? (r.puntajes?.sintomas12m ? "Sí" : "No") : "—"}</td><td class="num${(r.fotos || []).length ? "" : " zero"}" data-l="Fotos">${(r.fotos || []).length}</td></tr>`; }).join("") || `<tr class="empty-row"><td colspan="9" class="muted">Sin registros con estos filtros.</td></tr>`;
         $$("tr[data-id]", tb).forEach(tr => { const open = () => this.detail(rows.find(r => r.id === tr.dataset.id)); tr.onclick = open; tr.onkeydown = e => { if (e.key === "Enter") open(); }; });
         const more = $("#more");
-        more.innerHTML = list.length > shown.length ? `<button class="btn btn-ghost" id="more-btn">Mostrar más (${shown.length} de ${list.length})</button>` : "";
-        if (list.length > shown.length) $("#more-btn").onclick = () => { this.limit = (this.limit || PAGE) + PAGE; draw(); };
+        more.innerHTML = rowsF.length > shown.length ? `<button class="btn btn-ghost" id="more-btn">Mostrar más (${shown.length} de ${rowsF.length})</button>` : "";
+        if (rowsF.length > shown.length) $("#more-btn").onclick = () => { this.limit = (this.limit || PAGE) + PAGE; draw(); };
       };
-      $("#f-estrato").onchange = $("#f-estado").onchange = () => { this.limit = PAGE; draw(); }; draw();
-      $("#load-gal").onclick = () => this.gallery(comp);
+      draw();
+      $("#load-gal").onclick = () => this.gallery(compF);
     }
     const pb = $("#pw-btn"); if (pb) pb.onclick = () => Gate.change();
     const lo = $("#logout"); if (lo) lo.onclick = () => Gate.logout();
-    $("#exp-csv").onclick = () => this.export("csv", rows);
-    $("#exp-json").onclick = () => this.export("json", rows);
+    $("#exp-csv").onclick = () => this.export("csv", rowsF);
+    $("#exp-json").onclick = () => this.export("json", rowsF);
   },
   async photoSrc(r, f) {
     if (f.asset) return "/_blob/" + f.asset;
@@ -1380,6 +1482,31 @@ const Admin = {
     try { await P.downloads.save({ filename, data }); toast("Archivo listo"); } catch { toast("Descarga cancelada"); }
   }
 };
+const IC = {
+  dl: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>`,
+  key: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>`,
+  cap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>`,
+  user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>`,
+  swap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>`,
+  search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>`,
+  img: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg>`
+};
+function countUp(el, to, dec, fmt) {
+  if (reduceMotion || !to) { el.textContent = dec ? fmt(to) : to; return; }
+  const t0 = performance.now(), dur = 1100;
+  const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3), v = to * e; el.textContent = dec ? fmt(v) : Math.round(v); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+// tooltip único para cualquier elemento con data-tip (ratón y toque)
+(function () {
+  const tip = document.createElement("div"); tip.className = "tip"; tip.setAttribute("role", "tooltip"); document.body.appendChild(tip);
+  let hideT;
+  const show = (el, x, y) => { tip.textContent = el.dataset.tip; tip.style.left = Math.max(70, Math.min(window.innerWidth - 70, x)) + "px"; tip.style.top = y + "px"; tip.classList.add("show"); };
+  document.addEventListener("pointermove", e => { const el = e.target.closest && e.target.closest("[data-tip]"); if (el && e.pointerType === "mouse") show(el, e.clientX, e.clientY); else if (e.pointerType === "mouse") tip.classList.remove("show"); });
+  document.addEventListener("pointerdown", e => { const el = e.target.closest && e.target.closest("[data-tip]"); if (el && e.pointerType !== "mouse") { const r = el.getBoundingClientRect(); show(el, r.left + r.width / 2, r.top); clearTimeout(hideT); hideT = setTimeout(() => tip.classList.remove("show"), 1800); } });
+  window.addEventListener("scroll", () => tip.classList.remove("show"), { passive: true });
+})();
 function estadoTxt(e) { return e ? e[0].toUpperCase() + e.slice(1) : ""; }
 function emptyIco() { return `<svg viewBox="0 0 64 64" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round"><rect x="10" y="8" width="44" height="50" rx="6"/><path d="M22 8v6h20V8M20 28h24M20 38h24M20 48h14"/></svg>`; }
 function lightbox(src) { const lb = document.createElement("div"); lb.className = "lightbox"; lb.innerHTML = `<img src="${src}" alt="Fotografía ampliada">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); }
