@@ -51,7 +51,7 @@ h2{font-size:clamp(1.3rem,3vw,1.7rem);font-weight:700;letter-spacing:-.01em}
 h3{font-size:1.08rem;font-weight:700}
 p{margin:0}
 .mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
-.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.eyebrow{font-size:.8rem;letter-spacing:.01em;color:var(--muted);font-weight:700}
 .muted{color:var(--muted)}
 a{color:var(--primary)}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -265,7 +265,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .table-wrap{overflow-x:auto;margin-top:12px}
 table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:760px}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
-th{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+th{font-size:.8rem;font-weight:700;color:var(--muted);white-space:nowrap}
 td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 tbody tr{cursor:pointer;transition:background .15s}
 tbody tr:hover{background:var(--surface-2)}
@@ -285,8 +285,56 @@ tbody tr:hover{background:var(--surface-2)}
 .kv span:nth-child(even){font-family:var(--f-mono);text-align:right}
 .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:60;display:grid;place-items:center;padding:16px}
 .lightbox img{max-height:88vh;border-radius:10px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(120%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;z-index:70;transition:transform .3s;max-width:calc(100% - 32px)}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(calc(100% + 40px));visibility:hidden;background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;z-index:70;transition:transform .3s,visibility 0s .3s;max-width:calc(100% - 32px)}
+.toast.show{transform:translateX(-50%) translateY(0);visibility:visible;transition:transform .3s}
+
+/* ---------- panel: ajustes de presentación ---------- */
+.kpi .eyebrow{line-height:1.3}
+.kpi .sub{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;color:var(--muted);margin-top:2px}
+.kpi .warn-line{font-size:.8rem;font-weight:700;color:var(--bad)}
+.panel .note{font-size:.86rem;color:var(--muted);margin-top:2px}
+.panel .note b{color:var(--ink)}
+.hbar>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar .v{white-space:nowrap}
+.hbar .fill{border-radius:0 4px 4px 0;min-width:2px}
+.lvl-key{display:inline-flex;align-items:center;gap:6px}
+.lvl-key i{width:10px;height:10px;border-radius:3px;flex:none}
+td.who{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.more{display:flex;justify-content:center;margin-top:12px}
+.adm-actions .btn{min-height:40px;padding:8px 16px;font-size:.9rem}
+@media (max-width: 700px){
+  .adm-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+  .adm-actions .btn{width:100%}
+  .reg-head{flex-direction:column;align-items:stretch}
+  .reg-head .toolbar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .reg-head .toolbar .input{width:100%!important}
+  /* tabla como tarjetas */
+  .table-wrap{overflow:visible}
+  .table-wrap table{min-width:0}
+  .table-wrap thead{display:none}
+  .table-wrap tbody,.table-wrap tr,.table-wrap td{display:block}
+  .table-wrap tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;padding:12px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;align-items:start}
+  .table-wrap td{border:0;padding:0;min-width:0;font-size:.86rem}
+  .table-wrap td::before{content:attr(data-l);display:block;font-family:var(--f-body);font-size:.74rem;color:var(--muted);font-weight:700}
+  .table-wrap td.first{grid-row:1;grid-column:1;display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:1rem}
+  .table-wrap td.c-est{grid-row:1;grid-column:2}
+  .table-wrap td.c-st{grid-row:1;grid-column:3;justify-self:end}
+  .table-wrap td.c-est::before,.table-wrap td.c-st::before{display:none}
+  .table-wrap td.first::before{display:none}
+  .table-wrap td.who{max-width:none;grid-column:span 2}
+  .table-wrap td.zero{display:none}
+  .table-wrap tr.empty-row{display:block}
+}
+@media (max-width: 560px){
+  .kpis{gap:10px}
+  .kpi{padding:12px}
+  .kpi b{font-size:1.6rem}
+  .hbar{grid-template-columns:minmax(0,1fr) 44px;grid-template-areas:"l v" "t t";gap:3px 8px}
+  .hbar>span:first-child{grid-area:l}
+  .hbar .track{grid-area:t;height:12px}
+  .hbar .v{grid-area:v}
+  .admin-head h1{font-size:1.6rem}
+}
 
 /* ---------- inicio ---------- */
 .home{display:grid;gap:22px}
@@ -334,7 +382,6 @@ tbody tr:hover{background:var(--surface-2)}
   .likert7{grid-template-columns:repeat(7,minmax(0,1fr))}
   .likert7 .pill span{font-size:0;min-height:44px}
   .likert7 .pill b{font-size:.95rem}
-  .hbar{grid-template-columns:92px minmax(0,1fr) 46px}
   .navbar .btn{flex:1}
   .tabs{margin-left:0;width:100%}
   .tabs a{flex:1;text-align:center}
@@ -779,7 +826,7 @@ function stepPres(host) {
   <ol class="flow">
     <li>Consentimiento informado</li><li>Ficha sociodemográfica y ocupacional</li><li>NASA-TLX: carga de trabajo percibida</li><li>SUSESO/ISTAS21: factores psicosociales</li><li>Escala de satisfacción laboral</li><li>Cuestionario Nórdico de síntomas</li><li class="enc">Observación REBA (encuestador)</li><li class="enc">Revisión y envío</li>
   </ol>
-  <div class="section-title"><span class="tag">ENC</span><h3>Datos de registro (encuestador)</h3></div>
+  <div class="section-title"><span class="tag">Enc.</span><h3>Datos de registro (encuestador)</h3></div>
   <div class="grid3">
     <div class="field"><label for="m-estrato">Estrato</label><select class="input" id="m-estrato"><option value="">Seleccione…</option><option ${S.meta.estrato === "Egresado" ? "selected" : ""}>Egresado</option><option ${S.meta.estrato === "Interno" ? "selected" : ""}>Interno</option></select><small>Meta: 68 egresados · 53 internos</small></div>
     <div class="field"><label for="m-codigo">Código del participante</label><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="E-001 o I-001" autocomplete="off"><small>Según la lista aleatoria del estrato</small></div>
@@ -818,7 +865,7 @@ function stepCons(host) {
     <div><h3>8. Confidencialidad</h3><p>Sus datos se identificarán con un código, se almacenarán con acceso restringido y se usarán solo con fines académicos. Las fotografías se eliminarán al terminar la puntuación REBA. Los resultados se publicarán de forma agrupada (Ley N.° 29733).</p></div>
     <div><h3>9 y 10. Contactos</h3><p>Investigador: ${esc(CFG.contactoInv)}<br>${esc(CFG.contactoComite)}</p></div>
   </div>
-  <div class="section-title"><span class="tag">DEC</span><h3>Declaración de consentimiento</h3></div>
+  <div class="section-title"><span class="tag">Dec.</span><h3>Declaración de consentimiento</h3></div>
   <label class="check" id="q-leido"><input type="checkbox" id="c-leido" ${c.leido ? "checked" : ""}><span>Declaro que he leído (o se me ha leído) la información anterior, que he podido hacer preguntas y que estas han sido respondidas.</span></label>
   <div class="q" id="q-acepta" style="margin-top:10px"><span class="q-label">¿Acepta participar de manera voluntaria en este estudio?</span>${pills("acepta", ["Sí, acepto", "No acepto"], c.acepta)}</div>
   <div id="cons-yes" ${c.acepta === "Sí, acepto" ? "" : "hidden"}>
@@ -1213,7 +1260,7 @@ const Admin = {
   all() { return [...this.data.values()].flat().sort((a, b) => (b.enviado || "").localeCompare(a.enviado || "")); },
   shell() {
     return `<div class="admin-head"><div><p class="eyebrow">Panel de seguimiento</p><h1>Avance del trabajo de campo</h1><p class="lead" style="margin-top:6px">Muestra estratificada: 121 participantes (68 egresados y 53 internos).</p></div>
-      <div class="toolbar"><button class="btn btn-ghost" id="exp-csv">Exportar CSV</button><button class="btn btn-ghost" id="exp-json">Exportar JSON</button>${P.db && P.canAdmin ? `<button class="btn btn-ghost" id="pw-btn">Cambiar contraseña</button>` : ""}${P.db ? `<button class="btn btn-ghost" id="logout">${LOCK.replace("<svg", '<svg width="16" height="16"')} Cerrar sesión</button>` : ""}</div></div>
+      <div class="toolbar adm-actions"><button class="btn btn-ghost" id="exp-csv">Exportar CSV</button><button class="btn btn-ghost" id="exp-json">Exportar JSON</button>${P.db && P.canAdmin ? `<button class="btn btn-ghost" id="pw-btn">Cambiar contraseña</button>` : ""}${P.db ? `<button class="btn btn-ghost" id="logout">${LOCK.replace("<svg", '<svg width="16" height="16"')} Cerrar sesión</button>` : ""}</div></div>
       <div id="pw-change" class="card" style="padding:14px;margin-bottom:14px" hidden></div>
       <div id="adm-body"></div>`;
   },
@@ -1226,46 +1273,55 @@ const Admin = {
     const eg = comp.filter(r => r.estrato === "Egresado").length, it = comp.filter(r => r.estrato === "Interno").length;
     const rech = rows.filter(r => r.estado === "rechazó").length, noel = rows.filter(r => r.estado === "no elegible").length;
     const fotos = comp.reduce((a, r) => a + (r.fotos || []).length, 0);
-    const pctBar = (n, m, col) => `<div class="bar"><i style="width:${Math.min(100, n / m * 100).toFixed(1)}%;background:${col}"></i></div>`;
+    const pct = (n, m) => m ? Math.min(100, n / m * 100) : 0;
+    const pctBar = (n, m, col) => `<div class="bar" role="img" aria-label="${n} de ${m}"><i style="width:${pct(n, m).toFixed(1)}%;background:${col}"></i></div>`;
     const lv = [0, 0, 0, 0, 0]; comp.forEach(r => { const l = rebaLevel(r.puntajes?.rebaFinal); if (l) lv[l.n - 1]++; });
-    const maxLv = Math.max(1, ...lv);
+    const lvTot = lv.reduce((a, b) => a + b, 0), maxLv = Math.max(1, ...lv);
     const nasaVals = comp.map(r => r.puntajes?.nasa).filter(v => v != null).sort((a, b) => a - b);
     const med = nasaVals.length ? (nasaVals.length % 2 ? nasaVals[(nasaVals.length - 1) / 2] : (nasaVals[nasaVals.length / 2 - 1] + nasaVals[nasaVals.length / 2]) / 2) : null;
     const prev12 = comp.length ? comp.filter(r => r.puntajes?.sintomas12m).length / comp.length * 100 : null;
     const regPrev = REGIONS.map(rg => ({ t: rg.t, n: comp.filter(r => (r.puntajes?.regiones12m || []).includes(rg.id)).length })).map(x => ({ ...x, p: comp.length ? x.n / comp.length * 100 : 0 })).sort((a, b) => b.p - a.p);
-    const dups = Object.values(comp.reduce((a, r) => (a[r.codigo] = (a[r.codigo] || 0) + 1, a), {})).filter(n => n > 1).length;
-    const seqCols = ["var(--seq2)", "var(--seq3)", "var(--seq4)", "var(--seq5)", "var(--bad)"];
+    const cnt = {}; comp.forEach(r => cnt[r.codigo] = (cnt[r.codigo] || 0) + 1);
+    const dups = Object.values(cnt).filter(n => n > 1).length;
+    const LV = ["Inapreciable", "Bajo", "Medio", "Alto", "Muy alto"];
+    const lvCols = ["var(--seq2)", "var(--seq3)", "var(--seq4)", "var(--seq5)", "var(--bad)"];
+    const fmt = n => n.toFixed(1).replace(".", ",");
     body.innerHTML = `
       <div class="kpis">
-        <div class="card kpi"><span class="eyebrow">Encuestas completas${dups ? ` · <span style="color:var(--bad)">${dups} duplicado(s)</span>` : ""}</span><b class="mono">${comp.length}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${pctBar(comp.length, CFG.meta.total, "var(--primary)")}</div>
-        <div class="card kpi"><span class="eyebrow">Egresados</span><b class="mono">${eg}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${pctBar(eg, CFG.meta.egresado, "var(--s1)")}</div>
-        <div class="card kpi"><span class="eyebrow">Internos</span><b class="mono">${it}<span class="muted" style="font-size:1rem"> / ${CFG.meta.interno}</span></b>${pctBar(it, CFG.meta.interno, "var(--s2)")}</div>
-        <div class="card kpi"><span class="eyebrow">Rechazos · no elegibles</span><b class="mono">${rech} · ${noel}</b><span class="muted" style="font-size:.82rem">Se reemplazan dentro del estrato</span></div>
+        <div class="card kpi"><span class="eyebrow">Encuestas completas</span><b class="mono">${comp.length}<span class="muted" style="font-size:1rem"> / ${CFG.meta.total}</span></b>${pctBar(comp.length, CFG.meta.total, "var(--primary)")}<span class="sub"><span>${fmt(pct(comp.length, CFG.meta.total))} % de la meta</span></span>${dups ? `<span class="warn-line">${dups} código(s) duplicado(s)</span>` : ""}</div>
+        <div class="card kpi"><span class="eyebrow">Egresados</span><b class="mono">${eg}<span class="muted" style="font-size:1rem"> / ${CFG.meta.egresado}</span></b>${pctBar(eg, CFG.meta.egresado, "var(--s1)")}<span class="sub"><span>Faltan ${Math.max(0, CFG.meta.egresado - eg)}</span></span></div>
+        <div class="card kpi"><span class="eyebrow">Internos</span><b class="mono">${it}<span class="muted" style="font-size:1rem"> / ${CFG.meta.interno}</span></b>${pctBar(it, CFG.meta.interno, "var(--s2)")}<span class="sub"><span>Faltan ${Math.max(0, CFG.meta.interno - it)}</span></span></div>
+        <div class="card kpi"><span class="eyebrow">Rechazos y no elegibles</span><b class="mono">${rech + noel}</b><span class="sub"><span>${rech} rechazo(s) · ${noel} no elegible(s)</span></span><span class="muted" style="font-size:.8rem">Se reemplazan dentro del estrato</span></div>
       </div>
       ${rows.length ? `
       <div class="admin-grid">
-        <div class="card panel"><h3>Prevalencia de síntomas en 12 meses por región</h3><p class="muted" style="font-size:.85rem">Global: <b class="mono">${prev12 == null ? "—" : prev12.toFixed(1) + " %"}</b> de ${comp.length} participantes</p>
-          <div class="hbars">${regPrev.map(x => `<div class="hbar" title="${esc(x.t)}: ${x.n} de ${comp.length} (${x.p.toFixed(1)} %)"><span>${esc(x.t)}</span><div class="track"><div class="fill" style="width:${x.p.toFixed(1)}%;background:var(--seq4)"></div></div><span class="v">${x.p.toFixed(0)} %</span></div>`).join("")}</div></div>
-        <div class="card panel"><h3>Nivel de riesgo REBA (puntaje final)</h3><p class="muted" style="font-size:.85rem">NASA-TLX mediana: <b class="mono">${med == null ? "—" : med.toFixed(1)}</b> (punto de corte carga alta/baja)</p>
-          <div class="vbars">${lv.map((n, i) => `<div class="vbar" title="${["Inapreciable", "Bajo", "Medio", "Alto", "Muy alto"][i]}: ${n}"><span class="n">${n}</span><div class="col" style="height:${(n / maxLv * 100).toFixed(1)}%;background:${seqCols[i]}"></div></div>`).join("")}</div>
-          <div class="vlabels">${["Inapreciable", "Bajo", "Medio", "Alto", "Muy alto"].map(t => `<span>${t}</span>`).join("")}</div></div>
+        <div class="card panel"><h3>Síntomas en los últimos 12 meses por región</h3><p class="note">Al menos una región: <b class="mono">${prev12 == null ? "—" : fmt(prev12) + " %"}</b> de ${comp.length} participantes</p>
+          <div class="hbars">${regPrev.map(x => `<div class="hbar" title="${esc(x.t)}: ${x.n} de ${comp.length} (${fmt(x.p)} %)"><span>${esc(x.t)}</span><div class="track"><div class="fill" style="width:${x.p.toFixed(1)}%;background:var(--seq4)"></div></div><span class="v mono">${x.p.toFixed(0)} %</span></div>`).join("")}</div></div>
+        <div class="card panel"><h3>Nivel de riesgo REBA (puntaje final)</h3><p class="note">Mediana NASA-TLX: <b class="mono">${med == null ? "—" : fmt(med)}</b> (punto de corte carga alta/baja)</p>
+          <div class="hbars">${lv.map((n, i) => `<div class="hbar" title="${LV[i]}: ${n} de ${lvTot}"><span class="lvl-key"><i style="background:${lvCols[i]}"></i>${LV[i]}</span><div class="track"><div class="fill" style="width:${(n / maxLv * 100).toFixed(1)}%;background:${lvCols[i]}"></div></div><span class="v mono">${n}</span></div>`).join("")}</div>
+          <p class="note" style="margin-top:10px">${lvTot} observaciones con puntaje · barras proporcionales al nivel más frecuente</p></div>
       </div>
-      <div class="card panel" style="margin-top:14px"><div class="admin-head" style="margin:0"><div><h3>Registros</h3><p class="muted" style="font-size:.85rem">${rows.length} registros · toque una fila para ver el detalle y las fotos</p></div>
-        <div class="toolbar"><select class="input" id="f-estrato" style="min-height:38px;width:auto"><option value="">Todos los estratos</option><option>Egresado</option><option>Interno</option></select><select class="input" id="f-estado" style="min-height:38px;width:auto"><option value="">Todos los estados</option><option>completa</option><option>rechazó</option><option>no elegible</option></select></div></div>
-        <div class="table-wrap"><table><thead><tr><th>Código</th><th>Fecha</th><th>Estrato</th><th>Estado</th><th>Encuestador</th><th>NASA</th><th>REBA</th><th>Síntomas 12 m</th><th>Fotos</th></tr></thead><tbody id="tb"></tbody></table></div></div>
-      <div class="card panel" style="margin-top:14px"><div class="admin-head" style="margin:0"><div><h3>Fotografías de campo</h3><p class="muted" style="font-size:.85rem">${fotos} foto(s) en encuestas completas</p></div><button class="btn btn-ghost" id="load-gal">Cargar galería</button></div><div class="gallery" id="gal"></div></div>`
-      : `<div class="card empty" style="margin-top:14px">${emptyIco()}<b>Aún no hay encuestas registradas</b><span>Cuando los encuestadores envíen la primera encuesta desde la pestaña «Encuesta», aparecerán aquí el avance por estrato, la prevalencia de síntomas, los niveles REBA y las fotografías.</span></div>`}`;
+      <div class="card panel" style="margin-top:14px"><div class="admin-head reg-head" style="margin:0"><div><h3>Registros</h3><p class="note">${rows.length} registros · toque una fila para ver el detalle y las fotos</p></div>
+        <div class="toolbar"><select class="input" id="f-estrato" aria-label="Filtrar por estrato" style="min-height:40px;width:auto"><option value="">Estrato: todos</option><option>Egresado</option><option>Interno</option></select><select class="input" id="f-estado" aria-label="Filtrar por estado" style="min-height:40px;width:auto"><option value="">Estado: todos</option><option value="completa">Completa</option><option value="rechazó">Rechazó</option><option value="no elegible">No elegible</option></select></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Código</th><th>Fecha</th><th>Estrato</th><th>Estado</th><th>Encuestador</th><th>NASA</th><th>REBA</th><th>Síntomas 12 m</th><th>Fotos</th></tr></thead><tbody id="tb"></tbody></table></div>
+        <div class="more" id="more"></div></div>
+      <div class="card panel" style="margin-top:14px"><div class="admin-head reg-head" style="margin:0"><div><h3>Fotografías de campo</h3><p class="note">${fotos} foto(s) en encuestas completas</p></div><button class="btn btn-ghost" id="load-gal">Cargar galería</button></div><div class="gallery" id="gal"></div></div>`
+      : `<div class="card empty" style="margin-top:14px">${emptyIco()}<b>Aún no hay encuestas registradas</b><span>Cuando los encuestadores envíen la primera encuesta desde la pestaña «Encuesta», aparecerán aquí el avance por estrato, los síntomas por región, los niveles REBA y las fotografías.</span></div>`}`;
     const tb = $("#tb");
     if (tb) {
       $("#f-estrato").value = this.filt.estrato; $("#f-estado").value = this.filt.estado;
-      const cnt = {}; comp.forEach(r => cnt[r.codigo] = (cnt[r.codigo] || 0) + 1);
+      const PAGE = 20;
       const draw = () => {
         const fe = this.filt.estrato = $("#f-estrato").value, fs = this.filt.estado = $("#f-estado").value;
         const list = rows.filter(r => (!fe || r.estrato === fe) && (!fs || r.estado === fs));
-        tb.innerHTML = list.map(r => { const l = rebaLevel(r.puntajes?.rebaFinal); return `<tr data-id="${esc(r.id)}" data-u="${esc(r.encuestador)}"><td class="num"><b>${esc(r.codigo)}</b>${r.estado === "completa" && cnt[r.codigo] > 1 ? ` <span class="chip b" title="Hay más de una encuesta completa con este código">duplicado</span>` : ""}</td><td class="num">${esc(r.fecha)}</td><td><span class="chip" style="background:color-mix(in srgb,var(--${r.estrato === "Egresado" ? "s1" : "s2"}) 18%,transparent)">${esc(r.estrato)}</span></td><td><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(r.estado)}</span></td><td>${esc(this.names[r.encuestador] || "…")}</td><td class="num">${r.puntajes?.nasa ?? "—"}</td><td>${l ? `<span class="lvl lvl-${l.n}" style="padding:2px 8px;font-size:.78rem">${r.puntajes.rebaFinal} · ${l.t}</span>` : "—"}</td><td>${r.estado === "completa" ? (r.puntajes?.sintomas12m ? "Sí" : "No") : "—"}</td><td class="num">${(r.fotos || []).length}</td></tr>`; }).join("") || `<tr><td colspan="9" class="muted">Sin registros con estos filtros.</td></tr>`;
-        $$("tr[data-id]", tb).forEach(tr => tr.onclick = () => this.detail(rows.find(r => r.id === tr.dataset.id)));
+        const shown = list.slice(0, this.limit || PAGE);
+        tb.innerHTML = shown.map(r => { const l = rebaLevel(r.puntajes?.rebaFinal); return `<tr data-id="${esc(r.id)}" tabindex="0"><td class="num first" data-l="Código"><b>${esc(r.codigo)}</b>${r.estado === "completa" && cnt[r.codigo] > 1 ? ` <span class="chip b" title="Hay más de una encuesta completa con este código">Duplicado</span>` : ""}</td><td class="num" data-l="Fecha">${esc(r.fecha)}</td><td class="c-est" data-l="Estrato"><span class="chip" style="background:color-mix(in srgb,var(--${r.estrato === "Egresado" ? "s1" : "s2"}) 18%,transparent)">${esc(r.estrato)}</span></td><td class="c-st" data-l="Estado"><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(estadoTxt(r.estado))}</span></td><td class="who" data-l="Encuestador" title="${esc(this.names[r.encuestador] || "")}">${esc(this.names[r.encuestador] || "…")}</td><td class="num" data-l="NASA">${r.puntajes?.nasa ?? "—"}</td><td data-l="REBA">${l ? `<span class="lvl lvl-${l.n}" style="padding:2px 8px;font-size:.78rem;white-space:nowrap">${r.puntajes.rebaFinal} · ${l.t}</span>` : "—"}</td><td data-l="Síntomas 12 m">${r.estado === "completa" ? (r.puntajes?.sintomas12m ? "Sí" : "No") : "—"}</td><td class="num${(r.fotos || []).length ? "" : " zero"}" data-l="Fotos">${(r.fotos || []).length}</td></tr>`; }).join("") || `<tr class="empty-row"><td colspan="9" class="muted">Sin registros con estos filtros.</td></tr>`;
+        $$("tr[data-id]", tb).forEach(tr => { const open = () => this.detail(rows.find(r => r.id === tr.dataset.id)); tr.onclick = open; tr.onkeydown = e => { if (e.key === "Enter") open(); }; });
+        const more = $("#more");
+        more.innerHTML = list.length > shown.length ? `<button class="btn btn-ghost" id="more-btn">Mostrar más (${shown.length} de ${list.length})</button>` : "";
+        if (list.length > shown.length) $("#more-btn").onclick = () => { this.limit = (this.limit || PAGE) + PAGE; draw(); };
       };
-      $("#f-estrato").onchange = draw; $("#f-estado").onchange = draw; draw();
+      $("#f-estrato").onchange = $("#f-estado").onchange = () => { this.limit = PAGE; draw(); }; draw();
       $("#load-gal").onclick = () => this.gallery(comp);
     }
     const pb = $("#pw-btn"); if (pb) pb.onclick = () => Gate.change();
@@ -1290,14 +1346,14 @@ const Admin = {
     const p = r.puntajes || {}; const l = rebaLevel(p.rebaFinal);
     const sus = p.suseso ? SUSESO.map(s => `<span>${s.dim}</span><span>${p.suseso[s.key]}</span>`).join("") : "";
     d.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><p class="eyebrow">Detalle de encuesta</p><h2 class="mono">${esc(r.codigo)}</h2></div><button class="btn btn-ghost" id="close-d" aria-label="Cerrar">Cerrar</button></div>
-      <div class="meta" style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0"><span class="chip">${esc(r.estrato)}</span><span class="chip ${r.estado === "completa" ? "g" : "w"}">${esc(r.estado)}</span><span class="chip">${esc(r.fecha)}</span><span class="chip">${esc(r.establecimiento || "—")}</span></div>
+      <div class="meta" style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0"><span class="chip">${esc(r.estrato)}</span><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(estadoTxt(r.estado))}</span><span class="chip">${esc(r.fecha)}</span><span class="chip">${esc(r.establecimiento || "—")}</span></div>
       ${r.estado !== "completa" ? `<p class="muted">${(r.motivos || []).map(esc).join("; ") || "Sin datos adicionales."}</p>` : `
       <h3 style="margin-top:14px">Puntajes</h3><div class="kv" style="margin-top:6px"><span>NASA-TLX (Raw)</span><span>${p.nasa ?? "—"}</span><span>Satisfacción laboral (15–105)</span><span>${p.warr ?? "—"}</span><span>REBA (obs. 1 · 2 · 3)</span><span>${(p.reba || []).join(" · ")}</span><span>REBA final</span><span>${p.rebaFinal ?? "—"} ${l ? "· " + l.t : ""}</span><span>IMC</span><span>${p.imc ?? "—"}</span>${sus}</div>
       <h3 style="margin-top:14px">Síntomas (Nórdico, 12 meses)</h3><p style="margin-top:4px">${(p.regiones12m || []).map(id => REGIONS.find(x => x.id === id).t).join(", ") || "Sin síntomas"}</p>
-      <h3 style="margin-top:14px">Ficha</h3><div class="kv" style="margin-top:6px">${Object.entries(r.ficha || {}).map(([k, v]) => `<span>${esc((FICHA.find(q => q.id === k) || {}).t || k)}</span><span>${esc(v)}</span>`).join("")}</div>
-      <h3 style="margin-top:14px">Observación REBA</h3><p>${esc(r.reba?.tarea || "")} · lado ${esc(r.reba?.lado || "")}</p>
+      <h3 style="margin-top:14px">Ficha</h3><div class="kv" style="margin-top:6px">${Object.keys(r.ficha || {}).length ? "" : `<span>Sin datos</span><span></span>`}${Object.entries(r.ficha || {}).map(([k, v]) => `<span>${esc((FICHA.find(q => q.id === k) || {}).t || k)}</span><span>${esc(v)}</span>`).join("")}</div>
+      <h3 style="margin-top:14px">Observación REBA</h3><p>${esc(r.reba?.tarea || "Tarea no registrada")}${r.reba?.lado ? " · lado " + esc(r.reba.lado.toLowerCase()) : ""}</p>
       <h3 style="margin-top:14px">Fotografías</h3><div class="gallery" id="d-gal"><p class="muted">Cargando…</p></div>
-      <h3 style="margin-top:14px">Consentimiento</h3><p class="muted" style="font-size:.88rem">${esc(r.consentimiento?.acepta || "")} · Fotos: ${esc(r.consentimiento?.foto || "")} · registro anónimo</p>`}`;
+      <h3 style="margin-top:14px">Consentimiento</h3><p class="muted" style="font-size:.88rem">${esc(r.consentimiento?.acepta || "—")} · Fotos: ${esc(r.consentimiento?.foto || "—")} · Registro anónimo</p>`}`;
     bg.classList.add("open"); d.classList.add("open");
     const close = () => { bg.classList.remove("open"); d.classList.remove("open"); };
     $("#close-d").onclick = close; bg.onclick = close;
@@ -1324,6 +1380,7 @@ const Admin = {
     try { await P.downloads.save({ filename, data }); toast("Archivo listo"); } catch { toast("Descarga cancelada"); }
   }
 };
+function estadoTxt(e) { return e ? e[0].toUpperCase() + e.slice(1) : ""; }
 function emptyIco() { return `<svg viewBox="0 0 64 64" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round"><rect x="10" y="8" width="44" height="50" rx="6"/><path d="M22 8v6h20V8M20 28h24M20 38h24M20 48h14"/></svg>`; }
 function lightbox(src) { const lb = document.createElement("div"); lb.className = "lightbox"; lb.innerHTML = `<img src="${src}" alt="Fotografía ampliada">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); }
 
