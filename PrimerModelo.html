@@ -787,6 +787,14 @@ function persist() { clearTimeout(saveTimer); saveTimer = setTimeout(() => { if 
 // tras enviar o registrar: vaciar el estado para que la misma encuesta no pueda enviarse dos veces
 function clearDraft() { clearTimeout(saveTimer); store.del(DRAFT_KEY); S = blank(); }
 const MAX_FOTOS_OBS = 3;
+const USED_KEY = "tme_codigos_usados";
+function randomCode(estrato) {
+  const used = new Set(store.get(USED_KEY) || []);
+  const a = new Uint32Array(1); let c;
+  do { crypto.getRandomValues(a); c = `${estrato[0]}-${1000 + a[0] % 9000}`; } while (used.has(c));
+  return c;
+}
+function markUsed(code) { if (!code) return; const u = store.get(USED_KEY) || []; if (!u.includes(code)) { u.push(code); store.set(USED_KEY, u); } }
 
 /* ---------- puntajes ---------- */
 function scores(st = S) {
@@ -888,21 +896,23 @@ function stepPres(host) {
   <div class="section-title"><span class="tag">Enc.</span><h3>Datos de registro (encuestador)</h3></div>
   <div class="grid3">
     <div class="field"><label for="m-estrato">Estrato</label><select class="input" id="m-estrato"><option value="">Seleccione…</option><option ${S.meta.estrato === "Egresado" ? "selected" : ""}>Egresado</option><option ${S.meta.estrato === "Interno" ? "selected" : ""}>Interno</option></select><small>Meta: 68 egresados · 53 internos</small></div>
-    <div class="field"><label for="m-codigo">Código del participante</label><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="E-001 o I-001" autocomplete="off"><small>Según la lista aleatoria del estrato</small></div>
+    <div class="field"><label for="m-codigo">Código del participante</label><div style="display:flex;gap:6px"><input class="input mono" id="m-codigo" value="${esc(S.meta.codigo)}" placeholder="Elija el estrato" readonly aria-readonly="true" style="background:var(--surface-2)"><button type="button" class="btn btn-ghost" id="m-regen" style="min-height:44px;padding:8px 12px" title="Generar otro código" aria-label="Generar otro código" ${S.meta.estrato ? "" : "disabled"}>↻</button></div><small>Se asigna al azar al elegir el estrato</small></div>
     <div class="field"><label for="m-fecha">Fecha</label><input class="input" type="date" id="m-fecha" value="${esc(S.meta.fecha)}"></div>
   </div>
   <div class="field" style="margin-top:14px"><label for="m-est">Establecimiento o sede</label><input class="input" id="m-est" value="${esc(S.meta.establecimiento)}" placeholder="Nombre del establecimiento donde se realiza la observación"></div>
   <p class="muted" style="margin-top:14px;font-size:.88rem">${esc(CFG.institucion)} · Investigador: ${esc(CFG.investigador)} · Asesora: ${esc(CFG.asesora)}</p>`;
   playLottie($("#lot-rings", host), lottieRings(cssVar("--primary")), true);
   const est = $("#m-estrato", host), cod = $("#m-codigo", host);
-  est.onchange = () => { S.meta.estrato = est.value; if (!S.meta.codigo || /^[EI]-$/.test(S.meta.codigo)) { cod.value = est.value ? (est.value[0] + "-") : ""; S.meta.codigo = cod.value; } persist(); };
-  cod.oninput = () => { S.meta.codigo = cod.value.trim().toUpperCase(); persist(); };
+  const regen = $("#m-regen", host);
+  const assign = () => { S.meta.codigo = S.meta.estrato ? randomCode(S.meta.estrato) : ""; cod.value = S.meta.codigo; cod.classList.remove("invalid"); regen.disabled = !S.meta.estrato; persist(); };
+  est.onchange = () => { S.meta.estrato = est.value; est.classList.remove("invalid"); if (!S.meta.codigo || S.meta.codigo[0] !== (est.value || " ")[0]) assign(); else persist(); };
+  regen.onclick = () => { assign(); cod.animate && !reduceMotion && cod.animate([{ transform: "scale(.96)", opacity: .5 }, { transform: "none", opacity: 1 }], { duration: 300, easing: "ease-out" }); };
   $("#m-fecha", host).onchange = e => { S.meta.fecha = e.target.value; persist(); };
   $("#m-est", host).oninput = e => { S.meta.establecimiento = e.target.value; persist(); };
   nav(host, { back: false, nextLabel: "Comenzar", onNext: () => {
     $$(".invalid", host).forEach(x => x.classList.remove("invalid"));
     if (!S.meta.estrato) { est.classList.add("invalid"); return "Seleccione el estrato del participante."; }
-    if (!/^[EI]-\d{1,4}$/.test(S.meta.codigo)) { cod.classList.add("invalid"); return "Escriba un código con el formato E-001 o I-001."; }
+    if (!/^[EI]-\d{1,4}$/.test(S.meta.codigo)) assign();
     if (S.meta.codigo[0] !== S.meta.estrato[0]) { cod.classList.add("invalid"); return "El código no coincide con el estrato (E = egresado, I = interno)."; }
     return null; } });
 }
@@ -1256,6 +1266,7 @@ async function submit(host, estado = "completa") {
     };
     await base.set({ encuestador: P.uid, actualizado: rec.enviado });
     await base.collection("encuestas").doc(id).set(rec);
+    markUsed(rec.codigo);
     clearDraft();
     showDone(host, rec);
   } catch (e) {
@@ -1274,6 +1285,7 @@ async function finishRefusal(estado) {
     await base.set({ encuestador: P.uid, actualizado: rec.enviado });
     await base.collection("encuestas").doc(id).set(rec);
     const estrato = S.meta.estrato;
+    markUsed(S.meta.codigo);
     clearDraft();
     host.innerHTML = `<div class="done-screen"><h2>Registrado como «${esc(estado)}»</h2><p class="lead">Seleccione al siguiente participante del mismo estrato (${esc(estrato)}) en la lista aleatoria.</p><button class="btn btn-primary" id="again">Nueva encuesta</button></div>`;
     $("#again").onclick = () => { renderSurvey(); window.scrollTo({ top: 0 }); };
