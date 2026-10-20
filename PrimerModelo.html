@@ -658,21 +658,13 @@ td{padding:12px;font-size:.92rem}
 }
 
 /* ---------- criterios de inclusión y exclusión ---------- */
-.crit-box{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
-.crit-box .cb{border-radius:14px;padding:12px 14px;border:1.5px solid}
-.crit-box .cb.inc{background:linear-gradient(145deg,#ECFDF9,#D9FBF4);border-color:rgba(13,148,136,.3)}
-.crit-box .cb.exc{background:linear-gradient(145deg,#FFF0F3,#FFE1E8);border-color:rgba(225,29,72,.25)}
-.crit-box h3{display:flex;align-items:center;gap:6px;font-size:.98rem}
-.crit-box .inc h3{color:#0F766E}.crit-box .exc h3{color:#BE123C}
-.crit-box ul{margin:6px 0 0;padding-left:18px;font-size:.88rem;line-height:1.45;color:var(--ink-2)}
 .crit{display:flex;gap:8px;align-items:flex-start;margin:6px 0 8px;padding:8px 12px;border-radius:12px;font-size:.88rem;line-height:1.4}
 .crit .ms{font-size:20px;margin-top:-1px}
 .crit.inc{background:#E6FBF6;color:#0F5F58}.crit.inc .ms{color:#0D9488}
 .crit.exc{background:#FFEDF1;color:#9F1239}.crit.exc .ms{color:#E11D48}
 .q.crit-inc{border-left:4px solid #2DD4BF}.q.crit-exc{border-left:4px solid #FB7185}
 .banner ul{margin:4px 0 0;padding-left:18px}
-@media (max-width:640px){ .crit-box{grid-template-columns:1fr} }
-
+@media (max-width:640px){ 
 /* ---------- modo audio: escuchar y responder con la voz ---------- */
 .audio-fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 104px);z-index:40;display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:10px 18px;border-radius:999px;border:0;font-weight:800;font-size:.95rem;color:#fff;background:linear-gradient(135deg,#2DD4BF,#0D9488);box-shadow:0 10px 24px rgba(13,148,136,.36);cursor:pointer;transition:transform .2s,box-shadow .2s}
 .audio-fab:hover{transform:translateY(-2px)}
@@ -1356,21 +1348,16 @@ function scores(st = S) {
 }
 // criterios de selección del estudio, ligados a las preguntas de la ficha
 const CRIT = {
-  moviliza: ["inc", "Se incluye si responde «Sí» (realiza movilización o transferencia de pacientes).", "Realiza movilización o transferencia de pacientes."],
-  meses: ["inc", "Se incluye con 3 meses o más de actividad asistencial.", "Tiene 3 meses o más de actividad asistencial."],
-  anosEgreso: ["inc", "Egresados: se incluye con 6 años o menos desde el egreso.", "Egresados: 6 años o menos desde el egreso."],
-  reuma: ["exc", "Se excluye si responde «Sí» (enfermedad reumatológica sistémica).", "Diagnóstico de enfermedad reumatológica sistémica (artritis reumatoide, lupus u otra)."],
-  embarazo: ["exc", "Se excluye si responde «Sí» (embarazo en curso).", "Embarazo en curso."],
-  licencia: ["exc", "Se excluye si responde «Sí» (descanso médico o licencia).", "Descanso médico o licencia al momento de la encuesta."]
+  moviliza: ["inc", "Se incluye si responde «Sí» (realiza movilización o transferencia de pacientes)."],
+  meses: ["inc", "Se incluye con 3 meses o más de actividad asistencial."],
+  anosEgreso: ["inc", "Egresados: se incluye con 6 años o menos desde el egreso."],
+  reuma: ["exc", "Se excluye si responde «Sí» (enfermedad reumatológica sistémica)."],
+  embarazo: ["exc", "Se excluye si responde «Sí» (embarazo en curso)."],
+  licencia: ["exc", "Se excluye si responde «Sí» (descanso médico o licencia)."]
 };
 function critTag(id) {
   const c = CRIT[id]; if (!c) return "";
   return `<p class="crit ${c[0]}">${ms(c[0] === "inc" ? "check_circle" : "block")}<span><b>Criterio de ${c[0] === "inc" ? "inclusión" : "exclusión"}.</b> ${c[1]}</span></p>`;
-}
-function critBox() {
-  const li = t => FICHA.filter(q => CRIT[q.id] && CRIT[q.id][0] === t).map(q => `<li>${esc(CRIT[q.id][2])}</li>`).join("");
-  return `<div class="crit-box"><div class="cb inc"><h3>${ms("check_circle")} Criterios de inclusión</h3><ul><li>Fisioterapeuta egresado o interno de la UCSS en actividad asistencial.</li>${li("inc")}</ul></div>
-    <div class="cb exc"><h3>${ms("block")} Criterios de exclusión</h3><ul>${li("exc")}</ul></div></div>`;
 }
 function eligibility(st = S) {
   const f = st.ficha, out = [];
@@ -1555,7 +1542,7 @@ function fichaError(f = S.ficha) {
 }
 function stepFicha(host) {
   const f = S.ficha;
-  let html = head(2, "Datos generales, condición laboral, jornada, pausas activas y antecedentes. Son confidenciales.", `<span class="chip p">Anexo 3</span><span class="chip a">23 ítems</span>`) + critBox();
+  let html = head(2, "Datos generales, condición laboral, jornada, pausas activas y antecedentes. Son confidenciales.", `<span class="chip p">Anexo 3</span><span class="chip a">23 ítems</span>`);
   let n = 0;
   FICHA.forEach(q => {
     if (q.sec) { html += `<div class="section-title"><span class="tag">${q.sec[0]}</span><h3>${esc(q.sec.slice(3))}</h3></div>`; return; }
