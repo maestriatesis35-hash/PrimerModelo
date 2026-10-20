@@ -2,6 +2,12 @@
 
 Aplicación de campo del anteproyecto **«Factores ocupacionales asociados a síntomas musculoesqueléticos en fisioterapeutas egresados e internos en actividad asistencial de la Universidad Católica Sedes Sapientiae, 2026»** (Maestría en Salud Pública, Escuela de Posgrado – Universidad Nacional de Piura).
 
+## Enlace de la encuesta
+
+**https://maestriatesis35-hash.github.io/PrimerModelo/**
+
+Se abre en cualquier celular, tableta o computadora, sin instalar nada. La página se publica con GitHub Pages desde la rama `main`, y cada cambio que se sube aparece ahí en uno o dos minutos.
+
 ## Contenido
 
 `PrimerModelo.html` es una página única con:
