@@ -2455,8 +2455,10 @@ const Voz = {
       const qh = u.querySelector(":scope > .q-head"), ql = u.querySelector(":scope > .q-label, :scope > .nasa-top");
       if (qh) qh.appendChild(bar); else if (ql) ql.after(bar); else u.prepend(bar);
     });
+    // «Escuchar instrucciones» solo en el consentimiento; desde la ficha el audio va en cada pregunta
     const sh = step.querySelector(".step-head .sh-txt");
-    if (sh && this.tts && !sh.querySelector(".aud")) {
+    if (sh && !cons) $$(".aud", sh).forEach(a => a.remove());
+    if (sh && cons && this.tts && !sh.querySelector(".aud")) {
       const bar = document.createElement("div"); bar.className = "aud";
       bar.innerHTML = `<button type="button" class="a-say" aria-label="Escuchar las instrucciones de este paso">${ms("volume_up")}<span class="t">Escuchar instrucciones</span></button>`;
       const b = bar.firstChild; b.onclick = () => { if (b.classList.contains("on")) { this.stop(); return; } this.readHead(b); };
