@@ -668,7 +668,8 @@ td{padding:12px;font-size:.92rem}
 .gen-fotos{margin:14px 0 4px;padding:12px;border:1.5px dashed var(--line);border-radius:14px}
 .gen-fotos > p{display:flex;align-items:center;gap:6px;font-size:.88rem;margin-bottom:8px}
 .nav-cam.off{opacity:.45;filter:grayscale(.6);box-shadow:none;cursor:not-allowed}
-@media (max-width:640px){ .navbar .nav-cam{flex:0 0 60px;width:60px;min-width:60px;padding:0} .nav-cam .bl{display:none} }
+.navbar .nav-cam{flex:0 0 64px;width:64px;min-width:64px;padding:0}
+@media (max-width:640px){ .navbar .nav-cam{flex:0 0 60px;width:60px;min-width:60px} }
 
 /* ---------- criterios de inclusión y exclusión ---------- */
 .crit{display:flex;gap:8px;align-items:flex-start;margin:6px 0 8px;padding:8px 12px;border-radius:12px;font-size:.88rem;line-height:1.4}
@@ -1449,7 +1450,7 @@ function navCam(host) {
   cam.className = "btn btn-accent nav-cam" + (ok ? "" : " off");
   const fotos = () => S.reba.fotos.filter(f => f.obs === -1 && f.paso === id);
   const badge = () => { const n = fotos().length; return n ? `<span class="cam-n" aria-label="${n} foto(s)">${n}</span>` : ""; };
-  const paint = () => { cam.innerHTML = `${ICONS.cam}<span class="bl">Tomar foto</span>${badge()}${ok ? `<input type="file" accept="image/*" capture="environment" hidden>` : ""}`; if (ok) $("input", cam).onchange = add; strip(); };
+  const paint = () => { cam.innerHTML = `${ICONS.cam}${badge()}${ok ? `<input type="file" accept="image/*" capture="environment" hidden>` : ""}`; if (ok) $("input", cam).onchange = add; strip(); };
   const strip = () => {
     let st = $(".gen-fotos", host); const list = fotos();
     if (!list.length) { if (st) st.remove(); return; }
@@ -1854,12 +1855,12 @@ function stepReba(host) {
   cam.className = "btn btn-accent nav-cam" + (fotosOK ? "" : " off");
   if (fotosOK) {
     cam.setAttribute("aria-label", "Tomar foto de la observación abierta"); cam.dataset.tip = "Tomar foto de la observación abierta";
-    cam.innerHTML = `${ICONS.cam}<span class="bl">Tomar foto</span><input type="file" accept="image/*" capture="environment" hidden>`;
+    cam.innerHTML = `${ICONS.cam}<input type="file" accept="image/*" capture="environment" hidden>`;
     const inp = $("input", cam);
     inp.onchange = async () => { const f = inp.files[0]; inp.value = ""; await addPhoto(f, S.active); const t = $("#thumbs", host); if (t) t.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); };
   } else {
     cam.setAttribute("aria-disabled", "true"); cam.dataset.tip = "El participante no autorizó fotografías";
-    cam.innerHTML = `${ICONS.cam}<span class="bl">Tomar foto</span>`;
+    cam.innerHTML = `${ICONS.cam}`;
     cam.onclick = () => toast("El participante no autorizó fotografías (paso de consentimiento).");
   }
   nb.insertBefore(cam, $("#next", nb));
