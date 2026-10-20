@@ -56,6 +56,8 @@ function nuevoCodigoAcceso() { Logger.log("NUEVO CÓDIGO DE ACCESO AL PANEL: " +
    Puntos de entrada
    --------------------------------------------------------------------------- */
 function doGet() {
+  // si no se pegó la página en «Index», el enlace solo sirve para recibir datos (GS_URL en el HTML)
+  try { HtmlService.createHtmlOutputFromFile("Index"); } catch (e) { return ContentService.createTextOutput("Servidor del Estudio TME activo. Abra la encuesta desde PrimerModelo.html."); }
   return HtmlService.createHtmlOutputFromFile("Index")
     .setTitle("Estudio TME · UCSS 2026")
     .addMetaTag("viewport", "width=device-width, initial-scale=1, viewport-fit=cover")
