@@ -658,6 +658,14 @@ td{padding:12px;font-size:.92rem}
 }
 
 .consent-doc .cd-title{font-family:var(--f-display);font-weight:800;font-size:1.05rem;line-height:1.35;color:var(--ink)}
+/* ---------- botón de cámara en la barra inferior (REBA) ---------- */
+.navbar:has(.nav-cam){flex-wrap:nowrap;align-items:stretch}
+.navbar:has(.nav-cam) > .btn:not(.nav-cam){flex:1 1 0;min-width:0;padding-inline:12px}
+.nav-cam{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.nav-cam .ms{font-size:24px}
+.nav-cam.off{opacity:.45;filter:grayscale(.6);box-shadow:none;cursor:not-allowed}
+@media (max-width:640px){ .nav-cam{width:56px;padding:0} .nav-cam .bl{display:none} }
+
 /* ---------- criterios de inclusión y exclusión ---------- */
 .crit{display:flex;gap:8px;align-items:flex-start;margin:6px 0 8px;padding:8px 12px;border-radius:12px;font-size:.88rem;line-height:1.4}
 .crit .ms{font-size:20px;margin-top:-1px}
@@ -1729,7 +1737,7 @@ function stepReba(host) {
     upd();
   };
   const drawThumbs = () => { const t = $("#thumbs", host); if (!t) return; const list = R.fotos.filter(f => f.obs === S.active); t.innerHTML = list.map(f => `<figure><img src="${f.data}" alt="Foto observación ${f.obs + 1}"><button aria-label="Eliminar foto" data-del="${f.k}">×</button></figure>`).join(""); $$("[data-del]", t).forEach(b => b.onclick = () => { R.fotos = R.fotos.filter(f => f.k !== b.dataset.del); persist(); drawThumbs(); }); };
-  const addPhoto = async (file, i) => { if (!file) return; $("#foto-in", host).value = "";
+  const addPhoto = async (file, i) => { if (!file) return; const fi = $("#foto-in", host); if (fi) fi.value = "";
     if (R.fotos.filter(f => f.obs === i).length >= MAX_FOTOS_OBS) { toast(`Máximo ${MAX_FOTOS_OBS} fotos por observación.`); return; }
     try { const data = await compressImage(file); R.fotos.push({ k: "f" + Date.now(), obs: i, data, ts: new Date().toISOString() }); persist(); drawThumbs(); toast("Foto agregada"); } catch { toast("No se pudo procesar la imagen. Intente con otra foto."); } };
   const upd = () => {
@@ -1751,6 +1759,21 @@ function stepReba(host) {
     const miss = [0, 1, 2].find(i => !rebaCalc(R.obs[i]));
     if (miss != null) { S.active = miss; renderObs(); $$("[data-obs]", host).forEach(x => x.setAttribute("aria-selected", +x.dataset.obs === miss)); return `Complete la observación ${miss + 1}.`; }
     return null; } });
+  // botón de cámara entre «Anterior» y «Siguiente»: la foto va a la observación abierta
+  const nb = $(".navwrap .navbar", host);
+  const cam = document.createElement("label");
+  cam.className = "btn btn-accent nav-cam" + (fotosOK ? "" : " off");
+  if (fotosOK) {
+    cam.setAttribute("aria-label", "Tomar foto de la observación abierta"); cam.dataset.tip = "Tomar foto de la observación abierta";
+    cam.innerHTML = `${ICONS.cam}<span class="bl">Tomar foto</span><input type="file" accept="image/*" capture="environment" hidden>`;
+    const inp = $("input", cam);
+    inp.onchange = async () => { const f = inp.files[0]; inp.value = ""; await addPhoto(f, S.active); const t = $("#thumbs", host); if (t) t.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); };
+  } else {
+    cam.setAttribute("aria-disabled", "true"); cam.dataset.tip = "El participante no autorizó fotografías";
+    cam.innerHTML = `${ICONS.cam}<span class="bl">Tomar foto</span>`;
+    cam.onclick = () => toast("El participante no autorizó fotografías (paso de consentimiento).");
+  }
+  nb.insertBefore(cam, $("#next", nb));
 }
 function dataUrlToBlob(u) { const [h, b] = u.split(","); const bin = atob(b); const arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i); return new Blob([arr], { type: (h.match(/data:([^;]+)/) || [])[1] || "image/jpeg" }); }
 function compressImage(file, maxSide = 960, maxChars = 230000) {
