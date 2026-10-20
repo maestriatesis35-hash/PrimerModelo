@@ -33,7 +33,7 @@ Las dos tablas se relacionan por la columna **id_encuesta**. Las pestañas «Enc
 1. Inicie sesión con **maestriatesis35@gmail.com** y abra la hoja de cálculo. Entre a **Extensiones → Apps Script** y póngale de nombre «Estudio TME» al proyecto.
 2. En **Código.gs**, borre todo y pegue el contenido de `apps-script/Code.gs`. En GitHub, abra el archivo y use el botón «Copy raw file». Guarde con Ctrl+S.
 3. En la lista de funciones, elija **configurar** y pulse **Ejecutar**. Acepte los permisos: **Revisar permisos** → su cuenta → **Configuración avanzada** → **Ir a Estudio TME** → **Permitir**.
-   - En la pestaña **Encuestas** se crean las 200 columnas de todas las respuestas. Cada encabezado tiene una nota con la pregunta: pase el ratón por encima para leerla.
+   - En la pestaña **Encuestas** se crean las 200 columnas de todas las respuestas, con el nombre completo de cada dato. La nota de cada encabezado indica la escala o los valores posibles.
    - En la pestaña **Multimedia** se crean las 13 columnas de las fotos.
 4. En el **Registro de ejecución**, anote el **CÓDIGO DE ACCESO AL PANEL** (TME-XXXX-XXXX).
 5. Pulse **Implementar → Nueva implementación → ⚙️ Aplicación web** y configure:
@@ -44,17 +44,18 @@ Las dos tablas se relacionan por la columna **id_encuesta**. Las pestañas «Enc
 
 ## Columnas de «Encuestas»
 
-Hay una fila por participante y una columna por respuesta:
+Hay una fila por participante. Cada encabezado es el **nombre completo** del dato, tal como se pregunta. Por ejemplo:
 
-- **Registro:** código, estrato, fecha, establecimiento y consentimiento.
-- **Ficha:** las 25 preguntas, más el IMC.
-- **NASA-TLX:** las 6 dimensiones y el puntaje Raw.
-- **SUSESO/ISTAS21:** los 20 ítems y los 5 puntajes por dimensión.
-- **Warr-Cook-Wall:** los 15 ítems y el total.
-- **Nórdico:** 9 regiones, con 12 meses, 7 días, lado e impedimento.
-- **REBA:** tarea, lado, y por cada observación todas las posturas y ajustes, los puntajes A, B y C, la actividad y el total; además, el REBA final y su nivel.
-- **Fotos:** número de fotos, ids y enlaces de Drive.
-- **datos_json:** el registro completo. No lo edite: lo usa el panel.
+- `Código del participante`, `Fecha de aplicación`, `Consentimiento informado`
+- `Ficha: Edad (años)`, `Ficha: ¿Cuántas horas trabaja durante el día?`
+- `NASA-TLX: Exigencia mental (0–100)`
+- `SUSESO P3. En general, ¿considera usted que su trabajo le provoca desgaste emocional?`
+- `Warr P7. Satisfacción con: Tu salario (1–7)`
+- `Nórdico – Cuello: ¿Molestias en los últimos 12 meses?`
+- `REBA Obs. 1 – Tronco (puntaje 1–4)`, `REBA: Nivel de riesgo`
+- `Enlaces de las fotos en Drive`
+
+La última columna, `Datos completos (JSON, no editar)`, la usa el panel: no la edite.
 
 ## Cuando cambie Code.gs
 

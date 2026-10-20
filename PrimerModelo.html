@@ -1733,38 +1733,41 @@ function flatKeys() {
   const ficha = FICHA.filter(q => q.id).flatMap(q => q.follow ? [q.id, q.follow.id] : [q.id]);
   return ["id_encuesta", "codigo", "estrato", "estado", "motivos", "fecha", "establecimiento", "dispositivo", "enviado", "cons_acepta", "cons_foto", ...ficha.map(k => "ficha_" + k), "imc", ...NASA.map(x => "nasa_" + x.id), "nasa_raw", ...Array.from({ length: 20 }, (_, i) => "suseso_" + (i + 1)), ...SUSESO.map(s => "suseso_" + s.key), ...WARR.map((_, i) => "warr_" + (i + 1)), "warr_total", ...REGIONS.flatMap(r => ["nord_" + r.id + "_12m", ...(r.side ? ["nord_" + r.id + "_12m_lado"] : []), "nord_" + r.id + "_7d", ...(r.side ? ["nord_" + r.id + "_7d_lado"] : []), "nord_" + r.id + "_imp"]), "sintomas_12m", "reba_tarea", "reba_lado", ...[1, 2, 3].flatMap(k => [...REBA_COLS.map(c => `reba_o${k}_${c}`), "reba_obs" + k]), "reba_final", "reba_nivel", "n_fotos", "fotos_ids_drive", "fotos_urls"];
 }
-// nombres de columna legibles para Google Sheets, CSV, SPSS y R (sin tildes ni espacios)
-const COL_NOMBRE = {
-  codigo: "codigo_participante", estado: "estado_encuesta", motivos: "motivos_no_elegible", fecha: "fecha_aplicacion", enviado: "fecha_hora_envio",
-  cons_acepta: "consentimiento_acepta", cons_foto: "consentimiento_fotos",
-  ficha_edad: "ficha_edad_anios", ficha_peso: "ficha_peso_kg", ficha_talla: "ficha_talla_m", ficha_mano: "ficha_mano_dominante",
-  ficha_meses: "ficha_tiempo_asistencial_meses", ficha_pacientes: "ficha_pacientes_por_dia", ficha_moviliza: "ficha_moviliza_pacientes",
-  ficha_otroEmpleo: "ficha_otro_empleo", ficha_anosEgreso: "ficha_anios_desde_egreso", ficha_vinculo: "ficha_vinculo_laboral",
-  ficha_centros: "ficha_numero_centros", ficha_sede: "ficha_sede_internado", ficha_mesInternado: "ficha_mes_internado",
-  ficha_horas: "ficha_horas_trabajo_dia", ficha_pausas: "ficha_pausas_activas_turno", ficha_minPausa: "ficha_minutos_pausa_activa",
-  ficha_deporte: "ficha_actividad_fisica", ficha_deporteCual: "ficha_actividad_fisica_cual", ficha_lesionPrevia: "ficha_lesion_previa",
-  ficha_lesionCual: "ficha_lesion_previa_cual", ficha_reuma: "ficha_enfermedad_reumatologica", ficha_licencia: "ficha_descanso_medico",
-  imc: "ficha_imc_kg_m2",
-  nasa_mental: "nasa_exigencia_mental", nasa_fisica: "nasa_exigencia_fisica", nasa_temporal: "nasa_exigencia_temporal", nasa_raw: "nasa_tlx_puntaje_raw",
-  suseso_ex: "suseso_dim_exigencias_psicologicas", suseso_ta: "suseso_dim_trabajo_activo", suseso_as: "suseso_dim_apoyo_social_liderazgo",
-  suseso_co: "suseso_dim_compensaciones", suseso_dp: "suseso_dim_doble_presencia",
-  warr_total: "warr_satisfaccion_total", sintomas_12m: "nordico_sintomas_alguna_region_12m",
-  reba_lado: "reba_lado_evaluado", reba_final: "reba_puntaje_final", reba_nivel: "reba_nivel_riesgo",
-  n_fotos: "fotos_cantidad", fotos_urls: "fotos_enlaces_drive"
+// encabezados de columna: el nombre completo de cada dato, tal como se pregunta
+const COL_TXT = {
+  id_encuesta: "ID de la encuesta", codigo: "Código del participante", estrato: "Estrato", estado: "Estado de la encuesta",
+  motivos: "Motivos de no elegibilidad", fecha: "Fecha de aplicación", establecimiento: "Establecimiento o sede", dispositivo: "Dispositivo",
+  enviado: "Fecha y hora de envío", cons_acepta: "Consentimiento informado", cons_foto: "Autoriza fotografías",
+  imc: "Ficha: Índice de masa corporal (kg/m²)", nasa_raw: "NASA-TLX: Puntaje global Raw (0–100)",
+  warr_total: "Warr: Satisfacción laboral total (15–105)", sintomas_12m: "Nórdico: Síntomas en alguna región en los últimos 12 meses (1 = sí)",
+  reba_tarea: "REBA: Tarea observada", reba_lado: "REBA: Lado evaluado", reba_final: "REBA: Puntaje final (máximo de las 3 observaciones)",
+  reba_nivel: "REBA: Nivel de riesgo", n_fotos: "Número de fotos", fotos_ids_drive: "IDs de las fotos en Drive", fotos_urls: "Enlaces de las fotos en Drive"
 };
-const SUSESO_CORTO = ["tranquilidad_al_dia", "decisiones_dificiles", "desgaste_emocional", "guardar_emociones", "atencion_constante", "influencia_cantidad_trabajo", "pausa_para_conversar", "aprende_cosas_nuevas", "tareas_importantes", "importancia_institucion", "sabe_sus_tareas", "tareas_de_otra_manera", "apoyo_del_jefe", "ayuda_entre_companeros", "jefes_resuelven_conflictos", "preocupa_despido", "preocupa_cambio_tareas", "reconocimiento_superiores", "tareas_domesticas_sin_hacer", "piensa_en_lo_domestico"];
-const WARR_CORTO = ["condiciones_fisicas", "libertad_metodo", "companeros", "reconocimiento", "superior_inmediato", "responsabilidad", "salario", "uso_capacidades", "relacion_direccion_trabajadores", "posibilidad_promocion", "gestion_institucion", "atencion_sugerencias", "horario", "variedad_tareas", "estabilidad_empleo"];
-const REGION_CORTO = { munecas: "munecas_manos", dorsal: "columna_dorsal", lumbar: "columna_lumbar", caderas: "caderas_muslos", tobillos: "tobillos_pies" };
-const NORD_CAMPO = { "12m": "molestia_12m", "12m_lado": "lado_12m", "7d": "molestia_7d", "7d_lado": "lado_7d", imp: "impidio_trabajar_12m" };
-const REBA_NOMBRE = { neck: "cuello", neckAdj: "cuello_torsion_inclinacion", trunk: "tronco", trunkAdj: "tronco_torsion_inclinacion", legs: "piernas", knee: "rodillas_flexion", load: "carga_fuerza", shock: "fuerza_brusca", upper: "brazo", abd: "brazo_abducido_rotado", raised: "hombro_elevado", supported: "brazo_apoyado", lower: "antebrazo", wrist: "muneca", wristAdj: "muneca_desviacion_torsion", coupling: "agarre", act1: "actividad_postura_estatica", act2: "actividad_repetitiva", act3: "actividad_cambios_bruscos", puntaje_a: "puntaje_a", puntaje_b: "puntaje_b", puntaje_c: "puntaje_c", actividad: "puntaje_actividad" };
+const REBA_TXT = {
+  neck: "Cuello (puntaje 1–2)", neckAdj: "Cuello con torsión o inclinación lateral (1 = sí)", trunk: "Tronco (puntaje 1–4)",
+  trunkAdj: "Tronco con torsión o inclinación lateral (1 = sí)", legs: "Piernas (puntaje 1–2)", knee: "Flexión de rodillas (puntaje 0–2)",
+  load: "Carga o fuerza (puntaje 0–2)", shock: "Fuerza aplicada bruscamente (1 = sí)", upper: "Brazo (puntaje 1–4)",
+  abd: "Brazo abducido o rotado (1 = sí)", raised: "Hombro elevado (1 = sí)", supported: "Brazo apoyado o a favor de la gravedad (1 = sí)",
+  lower: "Antebrazo (puntaje 1–2)", wrist: "Muñeca (puntaje 1–2)", wristAdj: "Muñeca con desviación o torsión (1 = sí)", coupling: "Agarre (puntaje 0–3)",
+  act1: "Partes del cuerpo estáticas más de 1 minuto (1 = sí)", act2: "Movimientos repetitivos más de 4 veces por minuto (1 = sí)",
+  act3: "Cambios posturales importantes o base inestable (1 = sí)", puntaje_a: "Puntaje A (tabla A + carga)", puntaje_b: "Puntaje B (tabla B + agarre)",
+  puntaje_c: "Puntaje C (tabla C)", actividad: "Puntaje de actividad", total: "Puntaje total"
+};
+const NORD_TXT = { "12m": "¿Molestias en los últimos 12 meses?", "12m_lado": "Lado de las molestias (12 meses)", "7d": "¿Molestias en los últimos 7 días?", "7d_lado": "Lado de las molestias (7 días)", imp: "¿Le impidió trabajar en los últimos 12 meses?" };
 function colName(k) {
-  if (COL_NOMBRE[k]) return COL_NOMBRE[k];
+  if (COL_TXT[k]) return COL_TXT[k];
   let m;
-  if ((m = k.match(/^suseso_(\d+)$/))) return `suseso_p${m[1].padStart(2, "0")}_${SUSESO_CORTO[m[1] - 1]}`;
-  if ((m = k.match(/^warr_(\d+)$/))) return `warr_p${m[1].padStart(2, "0")}_${WARR_CORTO[m[1] - 1]}`;
-  if ((m = k.match(/^nord_([a-z]+)_(12m_lado|7d_lado|12m|7d|imp)$/))) return `nordico_${REGION_CORTO[m[1]] || m[1]}_${NORD_CAMPO[m[2]]}`;
-  if ((m = k.match(/^reba_o(\d)_(\w+)$/))) return `reba_obs${m[1]}_${REBA_NOMBRE[m[2]]}`;
-  if ((m = k.match(/^reba_obs(\d)$/))) return `reba_obs${m[1]}_puntaje_total`;
+  if ((m = k.match(/^ficha_(\w+)$/))) {
+    const q = FICHA.find(x => x.id === m[1]); if (q) return `Ficha: ${q.t}${q.unit && !q.t.toLowerCase().includes(q.unit) ? ` (${q.unit})` : ""}`;
+    const pq = FICHA.find(x => x.follow && x.follow.id === m[1]); if (pq) return `Ficha: ${pq.t} – ${pq.follow.t}`;
+  }
+  if ((m = k.match(/^nasa_(\w+)$/))) { const x = NASA.find(n => n.id === m[1]); if (x) return `NASA-TLX: ${x.t} (0–100)`; }
+  if ((m = k.match(/^suseso_(\d+)$/))) { const it = SUSESO.flatMap(d => d.items).find(x => x[0] === +m[1]); return `SUSESO P${m[1]}. ${it[1]}`; }
+  if ((m = k.match(/^suseso_([a-z]{2})$/))) return `SUSESO: Puntaje de ${SUSESO.find(d => d.key === m[1]).dim.toLowerCase()}`;
+  if ((m = k.match(/^warr_(\d+)$/))) return `Warr P${m[1]}. Satisfacción con: ${WARR[m[1] - 1]} (1–7)`;
+  if ((m = k.match(/^nord_([a-z]+)_(12m_lado|7d_lado|12m|7d|imp)$/))) return `Nórdico – ${REGIONS.find(r => r.id === m[1]).t}: ${NORD_TXT[m[2]]}`;
+  if ((m = k.match(/^reba_o(\d)_(\w+)$/))) return `REBA Obs. ${m[1]} – ${REBA_TXT[m[2]]}`;
+  if ((m = k.match(/^reba_obs(\d)$/))) return `REBA Obs. ${m[1]} – ${REBA_TXT.total}`;
   return k;
 }
 // respuestas de cada observación REBA y puntajes intermedios (tablas A, B y C)
@@ -2141,7 +2144,7 @@ const Admin = {
     else {
       const cols = flatCols();
       const line = r => { const o = flatObj(r); return cols.map(c => { const v = o[c] ?? ""; const s = String(v); return /[",;\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(","); };
-      data = "\ufeff" + [cols.join(","), ...rows.map(line)].join("\n"); filename = "estudio_tme_registros.csv";
+      data = "\ufeff" + [cols.map(c => `"${c.replace(/"/g, '""')}"`).join(","), ...rows.map(line)].join("\n"); filename = "estudio_tme_registros.csv";
     }
     try { await saveFile(filename, data); toast("Archivo listo"); } catch { toast("Descarga cancelada"); }
   }
