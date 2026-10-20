@@ -9,7 +9,9 @@
  * Instalación: ver apps-script/LEEME.md. Primero ejecute configurar() una vez.
  */
 const NOMBRE_CARPETA = "Estudio TME – UCSS 2026";
-const ID_CARPETA = ""; // opcional: id de una carpeta de Drive ya creada (lo que sigue a /folders/ en su enlace)
+// carpeta y hoja del estudio en el Drive de maestriatesis35@gmail.com
+const ID_CARPETA = "104ioQqrelRRKzH_nqlgFNW9ogwc6LVlh"; // lo que sigue a /folders/ en el enlace de la carpeta
+const ID_HOJA = "1pnERp1QQR7jOMNxwrgq1H6Jwo9YwOt4kAfD9YtRBpe0"; // lo que sigue a /d/ en el enlace de la hoja
 const HOJA_ENC = "Encuestas";
 const HOJA_MM = "Multimedia";
 const MM_COLS = ["id_archivo", "id_encuesta", "codigo", "estrato", "fecha", "observacion", "tipo", "nombre_archivo", "tamano_kb", "id_drive", "url_drive", "capturada", "registrada"];
@@ -26,8 +28,8 @@ function configurar() {
   else if (PROPS.getProperty("CARPETA")) { try { carpeta = DriveApp.getFolderById(PROPS.getProperty("CARPETA")); } catch (e) { carpeta = null; } }
   if (!carpeta) carpeta = DriveApp.createFolder(NOMBRE_CARPETA);
 
-  let ss = null;
-  if (PROPS.getProperty("HOJA")) { try { ss = SpreadsheetApp.openById(PROPS.getProperty("HOJA")); } catch (e) { ss = null; } }
+  let ss = ID_HOJA ? SpreadsheetApp.openById(ID_HOJA) : null;
+  if (!ss && PROPS.getProperty("HOJA")) { try { ss = SpreadsheetApp.openById(PROPS.getProperty("HOJA")); } catch (e) { ss = null; } }
   if (!ss) { ss = SpreadsheetApp.create("TME – Base de datos"); DriveApp.getFileById(ss.getId()).moveTo(carpeta); }
 
   const enc = ss.getSheetByName(HOJA_ENC) || ss.insertSheet(HOJA_ENC);

@@ -2,24 +2,29 @@
 
 Todo se instala con la cuenta **maestriatesis35@gmail.com**. La carpeta, la hoja de cálculo y las fotos quedan en el Drive de esa cuenta, y solo esa cuenta las puede abrir (salvo que usted comparta la carpeta).
 
-## Qué se crea
+## Dónde quedan los datos
+
+Ya están configuradas en `Code.gs` la carpeta y la hoja de cálculo del estudio:
+
+- Carpeta de Drive: <https://drive.google.com/drive/folders/104ioQqrelRRKzH_nqlgFNW9ogwc6LVlh>
+- Hoja de cálculo: <https://docs.google.com/spreadsheets/d/1pnERp1QQR7jOMNxwrgq1H6Jwo9YwOt4kAfD9YtRBpe0>
 
 ```
-Mi unidad / Estudio TME – UCSS 2026/
-├── TME – Base de datos            (hoja de cálculo de Google)
-│   ├── Encuestas    una fila por participante: ficha, NASA-TLX, SUSESO/ISTAS21,
-│   │                Warr-Cook-Wall, Nórdico, REBA, puntajes y textos (cuantitativos y cualitativos)
-│   └── Multimedia   una fila por foto: id_encuesta, código, estrato, observación, enlace de Drive
-└── Multimedia/
-    ├── Egresado/    fotos REBA (E-0042_obs1_….jpg)
-    └── Interno/
+Hoja de cálculo
+├── Encuestas    una fila por participante: ficha, NASA-TLX, SUSESO/ISTAS21,
+│                Warr-Cook-Wall, Nórdico, REBA, puntajes y textos (cuantitativos y cualitativos)
+└── Multimedia   una fila por foto: id_encuesta, código, estrato, observación, enlace de Drive
+
+Carpeta de Drive / Multimedia/
+├── Egresado/    fotos REBA (E-0042_obs1_….jpg)
+└── Interno/
 ```
 
-Las dos tablas se relacionan por la columna **id_encuesta**.
+Las dos tablas se relacionan por la columna **id_encuesta**. Las pestañas «Encuestas» y «Multimedia» se crean solas al ejecutar `configurar`. Si la hoja tiene una pestaña vacía (por ejemplo «Hoja 1»), se elimina; si tiene datos, no se toca.
 
 ## Pasos (una sola vez, unos 10 minutos)
 
-1. Inicie sesión en Google con **maestriatesis35@gmail.com** y abra <https://script.google.com>. Elija **Nuevo proyecto** y póngale de nombre «Estudio TME».
+1. Inicie sesión con **maestriatesis35@gmail.com** y abra la hoja de cálculo. En el menú, entre a **Extensiones → Apps Script**. Póngale de nombre «Estudio TME» al proyecto.
 2. En **Código.gs**, borre lo que haya y pegue todo el contenido de `apps-script/Code.gs`.
 3. Junto a **Archivos**, pulse **+** y elija **HTML**. Llame al archivo exactamente `Index`. Borre su contenido y pegue todo el contenido de `PrimerModelo.html`. Guarde (Ctrl+S).
 4. En la lista de funciones de arriba, elija **configurar** y pulse **Ejecutar**. Acepte los permisos:
