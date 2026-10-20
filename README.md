@@ -8,16 +8,20 @@ Aplicación de campo del anteproyecto **«Factores ocupacionales asociados a sí
 
 - **Inicio**: elección entre aplicar la encuesta o entrar al panel.
 - **Encuesta paso a paso**: presentación, consentimiento informado anónimo (sin nombre, DNI ni firma), ficha sociodemográfica y ocupacional, NASA-TLX (versión Raw), SUSESO/ISTAS21 (versión breve), Escala General de Satisfacción Laboral de Warr, Cook y Wall, Cuestionario Nórdico con mapa corporal y observación REBA con diagramas de postura y cálculo automático (tablas A, B y C).
-- **Panel de administración** protegido con contraseña: avance por estrato (meta 121: 68 egresados y 53 internos), prevalencia de síntomas por región, niveles REBA, fotografías y exportación CSV/JSON.
+- **Panel de administración** protegido con código de acceso: avance por estrato (meta 121: 68 egresados y 53 internos), prevalencia de síntomas por región, niveles REBA, fotografías y exportación CSV/JSON y enlaces a la hoja de cálculo y a la carpeta de Drive.
 
-## Modo de funcionamiento
+## Base de datos (Google Sheets y Drive)
 
-- **Publicado como Artifact de Claude** (con base de datos y almacenamiento): guarda las encuestas, las fotos y la contraseña del panel.
-- **Abierto como archivo local** (`PrimerModelo.html`): funciona en **modo de práctica**. Permite recorrer y ensayar todos los instrumentos, pero **no envía ni guarda respuestas** en un servidor (el borrador solo se conserva en el navegador). Para el trabajo de campo real use la versión publicada como Artifact.
+Los datos se guardan en la cuenta **maestriatesis35@gmail.com**, en dos tablas de la hoja de cálculo «TME – Base de datos»:
 
-## Uso local
+- **Encuestas**: una fila por participante, con los valores cuantitativos y cualitativos.
+- **Multimedia**: una fila por foto. El archivo se guarda en la carpeta de Drive del estudio.
 
-Abra `PrimerModelo.html` con un navegador (doble clic). Funciona sin instalación, también en el celular si se copia el archivo al dispositivo.
+El servidor es `apps-script/Code.gs`. Para la instalación paso a paso, vea [`apps-script/LEEME.md`](apps-script/LEEME.md).
+
+## Modo de práctica
+
+Si abre `PrimerModelo.html` como archivo local, sin `GS_URL`, la página funciona en **modo de práctica**: permite recorrer los instrumentos, pero no envía respuestas. Para el trabajo de campo, use la URL de la aplicación web de Apps Script.
 
 ## Privacidad
 

@@ -10,21 +10,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block">
-<meta name="theme-color" content="#0B8191">
+<meta name="theme-color" content="#D63A55">
 </head>
 <body>
 <style>
 /* Layout: cuaderno de campo clínico — barra superior con dos vistas; encuesta en pasos con riel de progreso; panel en rejilla de tarjetas */
 :root{
-  --bg:#F5F9FC; --surface:#FFFFFF; --surface-2:#EEF4F8; --ink:#1B3440; --ink-2:#47606B; --muted:#6B8290;
-  --line:#DCE8EE; --primary:#0B8191; --primary-ink:#FFFFFF; --primary-soft:#DDF4F6;
-  --accent:#D9661F; --accent-soft:#FFEBDD;
-  --good:#23845A; --good-soft:#DDF5E8; --warn:#A06A00; --warn-soft:#FFF1CC; --bad:#C2413A; --bad-soft:#FDE3E1;
-  --s1:#14A3B5; --s2:#F2913D;
-  --seq1:#D4F0F3; --seq2:#9EDCE4; --seq3:#52BCCB; --seq4:#1A9DAE; --seq5:#0B7F8E;
-  --grad:linear-gradient(135deg,#E2F6F8 0%,#EEF1FF 55%,#FFF0E3 100%);
-  --shadow:0 1px 2px rgba(27,52,64,.05),0 8px 24px rgba(27,52,64,.06);
-  --shadow-lg:0 2px 4px rgba(27,52,64,.05),0 18px 40px rgba(11,129,145,.14);
+  --bg:#FAF5F0; --surface:#FFFFFF; --surface-2:#FBF2F0; --ink:#292524; --ink-2:#57534E; --muted:#78716C;
+  --line:#F0E7DE; --primary:#D63A55; --primary-ink:#FFFFFF; --primary-soft:#FFE8EC;
+  --accent:#006A61; --accent-soft:#CCFBF1;
+  --good:#16A34A; --good-soft:#DDF5E8; --warn:#855300; --warn-soft:#FFDDB8; --bad:#DC2626; --bad-soft:#FDE3E1;
+  --s1:#FF5D73; --s2:#14A394;
+  --seq1:#FFE8EC; --seq2:#FFC2CC; --seq3:#FF8B9C; --seq4:#E0485E; --seq5:#B42440;
+  --grad:linear-gradient(135deg,#FFE8EC 0%,#FBF2F0 55%,#FFF3E4 100%);
+  --shadow:0 1px 2px rgba(41,37,36,.05),0 8px 24px rgba(41,37,36,.06);
+  --shadow-lg:0 2px 4px rgba(41,37,36,.05),0 18px 40px rgba(214,58,85,.14);
   --f-display:"Manrope","Segoe UI",system-ui,sans-serif;
   --f-body:"Manrope","Segoe UI",system-ui,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
@@ -65,11 +65,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 /* ---------- botones ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 20px;font-weight:700;cursor:pointer;transition:transform .15s ease,box-shadow .2s,background .2s;min-height:44px}
 .btn:active{transform:scale(.97)}
-.btn-primary{background:linear-gradient(135deg,#14A3B5,#0B8191);color:var(--primary-ink);box-shadow:0 6px 16px color-mix(in srgb,var(--primary) 35%,transparent)}
+.btn-primary{background:linear-gradient(135deg,#FF5D73,#D63A55);color:var(--primary-ink);box-shadow:0 6px 16px color-mix(in srgb,var(--primary) 35%,transparent)}
 .btn-primary:hover{box-shadow:0 8px 22px color-mix(in srgb,var(--primary) 45%,transparent)}
 .btn-ghost{background:var(--surface);color:var(--ink-2);border:1.5px solid var(--line)}
 .btn-ghost:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft);transform:translateY(-1px)}
-.btn-accent{background:linear-gradient(135deg,#F2913D,#D9661F);color:#fff}
+.btn-accent{background:linear-gradient(135deg,#14A394,#006A61);color:#fff}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .btn svg{width:18px;height:18px}
 
@@ -264,7 +264,7 @@ tbody tr:hover{background:var(--surface-2)}
 .gallery figcaption{font-size:.76rem;padding:6px 8px;color:var(--ink-2)}
 .empty{padding:28px 16px;text-align:center;color:var(--muted);display:grid;gap:8px;justify-items:center}
 .empty svg{width:64px;height:64px;opacity:.7}
-.drawer-bg{position:fixed;inset:0;background:rgba(6,20,26,.45);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-bg{position:fixed;inset:0;background:rgba(28,25,23,.45);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
 .drawer-bg.open{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,100%);background:var(--surface);z-index:51;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);overflow-y:auto;padding:18px;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));border-left:1px solid var(--line)}
 .drawer.open{transform:none}
@@ -334,7 +334,7 @@ td.who{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
 .grow .fill,.grow .bar i{animation:growX .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0) * 40ms + 150ms)}
 .grow .col{animation:growY .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0) * 25ms + 150ms)}
 .adm-hero{background:var(--grad);border:1px solid var(--line);border-radius:22px;padding:20px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:center;position:relative;overflow:hidden}
-.adm-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(20,163,181,.18),transparent 70%);pointer-events:none}
+.adm-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,93,115,.18),transparent 70%);pointer-events:none}
 .ring{position:relative;width:150px;height:150px;justify-self:center}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .ring circle{fill:none;stroke-width:12}
@@ -352,7 +352,7 @@ td.who{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
 .seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
 .seg button{border:0;background:transparent;padding:7px 13px;border-radius:999px;font-weight:700;font-size:.86rem;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .2s,color .2s,box-shadow .2s;min-height:36px}
 .seg button:hover{color:var(--primary)}
-.seg button[aria-pressed="true"]{background:var(--surface);color:var(--primary);box-shadow:0 2px 8px rgba(11,129,145,.18)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--primary);box-shadow:0 2px 8px rgba(214,58,85,.18)}
 .seg .n{font-family:var(--f-mono);font-size:.72rem;background:var(--primary-soft);color:var(--primary);border-radius:999px;padding:1px 7px}
 .search{position:relative;flex:1 1 180px;min-width:160px}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
@@ -623,9 +623,9 @@ td{padding:12px;font-size:.92rem}
 .cc-txt b{font-size:1.08rem}
 .cc-txt small{font-size:.88rem;color:var(--muted)}
 .cchoice input:focus-visible + .cc-box{outline:3px solid var(--accent);outline-offset:3px}
-.cchoice.yes input:checked + .cc-box{border-color:var(--good);background:linear-gradient(135deg,#E6F8EE,#D3F2E2);box-shadow:0 10px 26px rgba(35,132,90,.22)}
+.cchoice.yes input:checked + .cc-box{border-color:var(--good);background:linear-gradient(135deg,#E6F8EE,#D3F2E2);box-shadow:0 10px 26px rgba(22,163,74,.22)}
 .cchoice.yes input:checked + .cc-box .cc-ico{background:var(--good);color:#fff}
-.cchoice.no input:checked + .cc-box{border-color:var(--bad);background:linear-gradient(135deg,#FFF0EE,#FDE3E1);box-shadow:0 10px 26px rgba(194,65,58,.16)}
+.cchoice.no input:checked + .cc-box{border-color:var(--bad);background:linear-gradient(135deg,#FFF0EE,#FDE3E1);box-shadow:0 10px 26px rgba(220,38,38,.16)}
 .cchoice.no input:checked + .cc-box .cc-ico{background:var(--bad);color:#fff}
 .cchoice input:checked + .cc-box .cc-txt small{color:var(--ink-2)}
 .cchoice.fx .cc-box{animation:ccPop .5s cubic-bezier(.2,.8,.2,1)}
@@ -637,7 +637,7 @@ td{padding:12px;font-size:.92rem}
 .burst{position:absolute;inset:0;pointer-events:none}
 .burst i{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;opacity:0}
 .cchoice.yes .burst i:nth-child(odd){background:#3CC27E}
-.cchoice.yes .burst i:nth-child(even){background:#F2B13D}
+.cchoice.yes .burst i:nth-child(even){background:#86F2E4}
 .cchoice.yes.fx .burst i{animation:ccBurst .7s ease-out both}
 .burst i:nth-child(1){--a:0deg}.burst i:nth-child(2){--a:45deg}.burst i:nth-child(3){--a:90deg}.burst i:nth-child(4){--a:135deg}
 .burst i:nth-child(5){--a:180deg}.burst i:nth-child(6){--a:225deg}.burst i:nth-child(7){--a:270deg}.burst i:nth-child(8){--a:315deg}
@@ -658,21 +658,20 @@ td{padding:12px;font-size:.92rem}
 }
 
 /* ---------- identidad visual TME ----------
-   Azul clínico (fisioterapia y salud ocupacional) con naranja «movimiento» como acento,
-   fondo frío claro, Manrope, iconos Material Symbols en cuadros de color y un motivo de
-   vértebras. Las ideas de organización (pasos numerados, botones fijos abajo, cuadros de
-   icono) siguen buenas prácticas generales; la paleta y la gráfica son propias del estudio. */
+   Paleta tomada de Ejemplo.html: coral como color principal, verde azulado como acento,
+   ámbar para avisos, fondo crema y tinta color piedra. Se mantienen Manrope, los iconos
+   Material Symbols y el motivo de vértebras. */
 :root{
-  --bg:#F5F9FC; --surface:#FFFFFF; --surface-2:#EEF4F8; --ink:#1B3440; --ink-2:#47606B; --muted:#6B8290;
-  --line:#DCE8EE; --primary:#0B8191; --primary-ink:#FFFFFF; --primary-soft:#DDF4F6;
-  --accent:#D9661F; --accent-soft:#FFEBDD; --amber:#A06A00; --amber-soft:#FFF1CC;
-  --violet:#5B5BD6; --violet-soft:#ECECFE; --green:#23845A; --green-soft:#DDF5E8;
-  --good:#23845A; --good-soft:#DDF5E8; --warn:#A06A00; --warn-soft:#FFF1CC; --bad:#C2413A; --bad-soft:#FDE3E1;
-  --s1:#14A3B5; --s2:#F2913D;
-  --seq1:#D4F0F3; --seq2:#9EDCE4; --seq3:#52BCCB; --seq4:#1A9DAE; --seq5:#0B7F8E;
-  --grad:linear-gradient(135deg,#E2F6F8 0%,#EEF1FF 55%,#FFF0E3 100%);
-  --shadow:0 1px 2px rgba(27,52,64,.05),0 8px 24px rgba(27,52,64,.06);
-  --shadow-lg:0 2px 4px rgba(27,52,64,.05),0 18px 40px rgba(11,129,145,.14);
+  --bg:#FAF5F0; --surface:#FFFFFF; --surface-2:#FBF2F0; --ink:#292524; --ink-2:#57534E; --muted:#78716C;
+  --line:#F0E7DE; --primary:#D63A55; --primary-ink:#FFFFFF; --primary-soft:#FFE8EC;
+  --accent:#006A61; --accent-soft:#CCFBF1; --amber:#855300; --amber-soft:#FFDDB8;
+  --violet:#5B5BD6; --violet-soft:#ECECFE; --green:#16A34A; --green-soft:#DDF5E8;
+  --good:#16A34A; --good-soft:#DDF5E8; --warn:#855300; --warn-soft:#FFDDB8; --bad:#DC2626; --bad-soft:#FDE3E1;
+  --s1:#FF5D73; --s2:#14A394;
+  --seq1:#FFE8EC; --seq2:#FFC2CC; --seq3:#FF8B9C; --seq4:#E0485E; --seq5:#B42440;
+  --grad:linear-gradient(135deg,#FFE8EC 0%,#FBF2F0 55%,#FFF3E4 100%);
+  --shadow:0 1px 2px rgba(41,37,36,.05),0 8px 24px rgba(41,37,36,.06);
+  --shadow-lg:0 2px 4px rgba(41,37,36,.05),0 18px 40px rgba(214,58,85,.14);
   --r:20px; --r-sm:12px;
 }
 body{background:var(--bg)}
@@ -684,24 +683,24 @@ h1{letter-spacing:-.025em}
 .btn .ms{font-size:20px}
 /* barra superior con línea de color */
 .topbar{background:rgba(255,255,255,.92);border-bottom:1px solid var(--line)}
-.topbar::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#0B8191,#14A3B5 55%,#D9661F)}
-.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(150deg,#14A3B5,#0B8191);box-shadow:0 6px 16px rgba(11,129,145,.28)}
+.topbar::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#D63A55,#FF5D73 55%,#006A61)}
+.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(150deg,#FF5D73,#D63A55);box-shadow:0 6px 16px rgba(214,58,85,.28)}
 .brand-mark .ms{color:#fff;font-size:26px}
 .brand b{font-size:1.1rem;letter-spacing:-.01em}
 .tabs{background:var(--surface-2);border:1px solid var(--line)}
 .tabs a .ms{font-size:19px}
-.tabs a[aria-current="page"]{background:var(--surface);color:var(--primary);box-shadow:0 4px 14px rgba(11,129,145,.14)}
+.tabs a[aria-current="page"]{background:var(--surface);color:var(--primary);box-shadow:0 4px 14px rgba(214,58,85,.14)}
 .card{border-radius:var(--r);border-color:var(--line)}
 .btn{border-radius:14px}
-.btn-primary{background:linear-gradient(150deg,#14A3B5,#0B8191);box-shadow:0 8px 20px rgba(11,129,145,.24)}
-.btn-primary:hover{box-shadow:0 10px 26px rgba(11,129,145,.32)}
-.btn-accent{background:linear-gradient(150deg,#F2913D,#D9661F);box-shadow:0 8px 20px rgba(217,102,31,.25)}
+.btn-primary{background:linear-gradient(150deg,#FF5D73,#D63A55);box-shadow:0 8px 20px rgba(214,58,85,.24)}
+.btn-primary:hover{box-shadow:0 10px 26px rgba(214,58,85,.32)}
+.btn-accent{background:linear-gradient(150deg,#14A394,#006A61);box-shadow:0 8px 20px rgba(0,106,97,.25)}
 .btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
 .btn-ghost:hover{background:var(--primary-soft);border-color:var(--seq2);color:var(--primary)}
 .input,select.input,textarea.input{border-radius:12px;border-color:var(--line);background:#fff}
 .input:focus{border-color:var(--seq4);box-shadow:0 0 0 4px var(--primary-soft)}
 .pill span{background:#fff;border-color:var(--line);border-radius:12px}
-.pill input:checked + span{background:var(--primary);border-color:var(--primary);box-shadow:0 6px 14px rgba(11,129,145,.22)}
+.pill input:checked + span{background:var(--primary);border-color:var(--primary);box-shadow:0 6px 14px rgba(214,58,85,.22)}
 .likert7 .pill span{border-radius:12px}
 .q{background:#fff;border-color:var(--line);border-radius:16px;border-left:4px solid var(--seq1)}
 .q.invalid{border-left-color:var(--bad)}
@@ -724,17 +723,17 @@ h1{letter-spacing:-.025em}
 .kicker{display:inline-flex;align-items:center;gap:8px;color:var(--primary);font-weight:800;font-size:.92rem}
 .kicker .ms{font-size:20px;background:var(--primary-soft);border-radius:8px;padding:3px;width:auto}
 .home-intro h1{font-size:clamp(1.7rem,4.4vw,2.7rem);line-height:1.14}
-.home-intro h1 mark{background:linear-gradient(transparent 62%,rgba(217,102,31,.32) 62%,rgba(217,102,31,.32) 92%,transparent 92%);color:inherit;padding:0 2px}
+.home-intro h1 mark{background:linear-gradient(transparent 62%,rgba(0,106,97,.32) 62%,rgba(0,106,97,.32) 92%,transparent 92%);color:inherit;padding:0 2px}
 .ctas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .cta{display:grid;grid-template-rows:auto 1fr;border-radius:22px;overflow:hidden;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
 .cta:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
 .cta-top{position:relative;height:116px;overflow:hidden}
-.cta-enc .cta-top{background:linear-gradient(150deg,#14A3B5,#0B8191)}
-.cta-adm .cta-top{background:linear-gradient(150deg,#2E6170,#1B3440)}
+.cta-enc .cta-top{background:linear-gradient(150deg,#FF5D73,#D63A55)}
+.cta-adm .cta-top{background:linear-gradient(150deg,#57534E,#292524)}
 .vert{position:absolute;left:22px;top:14px;bottom:14px;display:flex;flex-direction:column;justify-content:space-between}
 .vert i{display:block;width:30px;height:7px;border-radius:4px;background:rgba(255,255,255,.28)}
 .vert i:nth-child(n+4){width:34px}.vert i:nth-child(n+7){width:38px;background:rgba(255,255,255,.36)}
-.cta-adm .vert i:nth-child(n+7){background:rgba(217,102,31,.75)}
+.cta-adm .vert i:nth-child(n+7){background:rgba(0,106,97,.75)}
 .cta-anim{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:120px;height:120px;pointer-events:none}
 .cta-anim .lottie{position:absolute;inset:0;opacity:.7}
 .cta-anim .ms{position:absolute;inset:0;margin:auto;width:1em;height:1em;font-size:46px;color:#fff;font-variation-settings:"FILL" 1,"wght" 500,"GRAD" 0,"opsz" 48}
@@ -762,12 +761,12 @@ h1{letter-spacing:-.025em}
 .rl-txt span{font-size:.9rem;color:var(--muted)}
 /* encuesta */
 .step-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:start}
-.step-ico{width:50px;height:50px;border-radius:15px;background:linear-gradient(150deg,#14A3B5,#0B8191);color:#fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(11,129,145,.22)}
+.step-ico{width:50px;height:50px;border-radius:15px;background:linear-gradient(150deg,#FF5D73,#D63A55);color:#fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(214,58,85,.22)}
 .step-ico .ms{font-size:27px}
 .rail li.done .dot{background:var(--primary);border-color:var(--primary)}
 .rail .dot .ms{font-size:16px}
 .rail li button[aria-current="step"]{background:var(--accent-soft)}
-.rail li button[aria-current="step"] .dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(217,102,31,.18)}
+.rail li button[aria-current="step"] .dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(0,106,97,.18)}
 .stepper{list-style:none;margin:0;padding:4px 2px;display:flex;align-items:center}
 .stepper li{display:flex}
 .stepper .ln{flex:1;height:3px;background:var(--line);min-width:4px;margin:0 2px;border-radius:2px}
@@ -776,7 +775,7 @@ h1{letter-spacing:-.025em}
 .stepper .sd:disabled{cursor:default}
 .stepper .sd.done{background:var(--primary);color:#fff;box-shadow:none}
 .stepper .sd.done .ms{font-size:16px}
-.stepper .sd.cur{background:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(217,102,31,.2);transform:scale(1.08)}
+.stepper .sd.cur{background:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(0,106,97,.2);transform:scale(1.08)}
 .mp-cap{font-size:.9rem;color:var(--muted);margin-top:8px}
 .mp-cap b{color:var(--ink)}
 .mobile-progress{background:linear-gradient(var(--bg) 80%,transparent)}
@@ -823,11 +822,11 @@ h1{letter-spacing:-.025em}
 .spin-ic{animation:spinIc .8s linear}
 .pc-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 .pc-head h1{font-size:clamp(1.7rem,4vw,2.4rem)}
-.pc-head h1 mark,.login h1 mark{background:linear-gradient(transparent 62%,rgba(217,102,31,.3) 62%,rgba(217,102,31,.3) 92%,transparent 92%);color:inherit;padding:0 2px}
+.pc-head h1 mark,.login h1 mark{background:linear-gradient(transparent 62%,rgba(0,106,97,.3) 62%,rgba(0,106,97,.3) 92%,transparent 92%);color:inherit;padding:0 2px}
 .ptabs{display:flex;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:5px;margin-bottom:14px}
 .ptab{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border:0;border-radius:999px;background:transparent;font-weight:800;font-size:.95rem;color:var(--ink-2);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
 .ptab:hover{color:var(--primary)}
-.ptab.on{background:linear-gradient(135deg,#14A3B5,#0B8191);color:#fff;box-shadow:0 6px 16px rgba(11,129,145,.28)}
+.ptab.on{background:linear-gradient(135deg,#FF5D73,#D63A55);color:#fff;box-shadow:0 6px 16px rgba(214,58,85,.28)}
 .ptab .n{font-family:var(--f-mono);font-size:.78rem;background:var(--primary-soft);color:var(--primary);border-radius:999px;padding:2px 8px}
 .ptab.on .n{background:rgba(255,255,255,.25);color:#fff}
 .k4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}
@@ -865,7 +864,7 @@ h1{letter-spacing:-.025em}
 .fsel p{flex:1;min-width:160px;color:var(--ink-2)}
 .zipbar{padding:12px 16px;margin-bottom:14px;display:grid;gap:8px}
 .zipbar .bar{height:10px;border-radius:6px;background:var(--surface-2);overflow:hidden}
-.zipbar .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#3FD0DC,#0B8191);transition:width .3s}
+.zipbar .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#FF8B9C,#D63A55);transition:width .3s}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .fcard{background:#fff;border:2px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,box-shadow .2s,transform .2s}
 .fcard:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
@@ -885,7 +884,7 @@ h1{letter-spacing:-.025em}
 .code-wrap:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
 .code-pre{padding:0 4px 0 16px;font-size:1.2rem;font-weight:600;color:var(--primary);letter-spacing:.1em}
 .code-in{border:0!important;box-shadow:none!important;letter-spacing:.12em;font-size:1.2rem;text-transform:uppercase;padding-left:4px}
-.overlay{position:fixed;inset:0;z-index:75;background:rgba(15,32,40,.5);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;animation:rise .3s both}
+.overlay{position:fixed;inset:0;z-index:75;background:rgba(41,37,36,.5);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;animation:rise .3s both}
 .ov-card{max-width:440px;width:100%;padding:24px;display:grid;gap:14px;text-align:center;justify-items:center}
 .ov-card .btn{width:100%}
 .ov-card .toolbar .btn{width:auto}
@@ -1208,7 +1207,7 @@ function lottieRings(color) {
   layers.push(layer(9, [dot], { s: { a: 1, k: [kf(0, [96, 96, 100]), kf(45, [104, 104, 100]), kf(90, [96, 96, 100]), kf(135, [104, 104, 100]), kf(180, [96, 96, 100], false)] } }, 0, 180));
   return { v: "5.7.4", fr: 30, ip: 0, op: 180, w: 200, h: 200, nm: "rings", ddd: 0, assets: [], layers };
 }
-function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#0B5E70"; }
+function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#8E1C33"; }
 function playLottie(el, data, loop) {
   if (!window.lottie || !el) return null;
   try {
@@ -1219,21 +1218,41 @@ function playLottie(el, data, loop) {
 }
 
 /* =====================================================================
-   PLATAFORMA (db, assets, user, downloads)
+   BASE DE DATOS: GOOGLE SHEETS (Apps Script)
+   Tabla «Encuestas»: una fila por participante con los valores cuantitativos y cualitativos.
+   Tabla «Multimedia»: una fila por foto; el archivo queda en la carpeta Drive del estudio.
    ===================================================================== */
-const P = { db: null, assets: null, user: null, downloads: null, uid: null, ready: false, canAdmin: false };
+// URL de la aplicación web de Apps Script (termina en /exec). Solo hace falta si la página se abre
+// fuera de Apps Script (archivo local o GitHub Pages); desde Apps Script se usa google.script.run.
+const GS_URL = "";
+const DEV_KEY = "tme_dispositivo";
+const P = { api: null, downloads: null, dev: "", ready: false };
 async function initPlatform() {
-  if (!window.claude || !window.claude.use) { P.ready = true; renderConn(); if (route() === "admin") Admin.start(); return; }
-  const [db, user, assets, downloads] = await Promise.all(["db", "user", "assets", "downloads"].map(n => window.claude.use(n).catch(() => null)));
-  Object.assign(P, { db, user, assets, downloads, ready: true });
-  if (user) { try { P.uid = await user.id(); } catch {} try { P.canAdmin = !!(user.canEdit && await user.canEdit()) || !!(user.isOwner && await user.isOwner()); } catch {} }
-  renderConn();
+  const gs = window.google && google.script && google.script.run;
+  if (gs) P.api = req => new Promise((res, rej) => google.script.run.withSuccessHandler(res).withFailureHandler(rej).api(req));
+  else if (GS_URL) P.api = async req => { const r = await fetch(GS_URL, { method: "POST", body: JSON.stringify(req) }); if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); };
+  if (window.claude && window.claude.use) window.claude.use("downloads").then(d => { P.downloads = d; }).catch(() => {});
+  P.dev = store.get(DEV_KEY);
+  if (!P.dev) { const a = new Uint32Array(4); crypto.getRandomValues(a); P.dev = "D-" + [...a].map(n => CODE_ALPHA[n % CODE_ALPHA.length]).join(""); store.set(DEV_KEY, P.dev); }
+  P.ready = true; renderConn();
   if (route() === "admin") Admin.start();
+}
+async function call(action, data = {}) {
+  if (!P.api) throw Object.assign(new Error("Sin conexión con la base de datos"), { code: "offline" });
+  const r = await P.api(Object.assign({ action }, data));
+  if (!r || !r.ok) throw Object.assign(new Error((r && r.error) || "Error del servidor"), { code: r && r.code });
+  return r;
+}
+// guarda un archivo generado: con el permiso de descargas si existe; si no, con un enlace normal
+async function saveFile(filename, data) {
+  if (P.downloads) return P.downloads.save({ filename, data });
+  const blob = data instanceof Blob ? data : new Blob([data], { type: filename.endsWith(".csv") ? "text/csv;charset=utf-8" : "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
 function renderConn() {
   const b = $("#conn-banner");
-  if (!P.db) b.innerHTML = `<div class="banner warn"><div><b>Modo de práctica.</b> Esta vista no está conectada al almacenamiento del estudio: puede recorrer los instrumentos, pero las respuestas no se enviarán. Abra la página publicada con su cuenta para registrar encuestas.</div></div>`;
-  else if (!P.uid) b.innerHTML = `<div class="banner warn">Inicie sesión con la cuenta del equipo de investigación para enviar encuestas.</div>`;
+  if (!P.api) b.innerHTML = `<div class="banner warn"><div><b>Modo de práctica.</b> Esta vista no está conectada a la base de datos del estudio (Google Sheets): puede recorrer los instrumentos, pero las respuestas no se enviarán. Abra el enlace de la aplicación del estudio para registrar encuestas.</div></div>`;
   else b.innerHTML = "";
 }
 
@@ -1704,6 +1723,23 @@ function compressImage(file, maxSide = 960, maxChars = 230000) {
 
 /* ---------- 9. Revisión y envío ---------- */
 // solo se envían fotos si el participante las autorizó (pudo cambiar su respuesta después de tomarlas)
+function flatCols() {
+  const ficha = FICHA.filter(q => q.id).flatMap(q => q.follow ? [q.id, q.follow.id] : [q.id]);
+  return ["id_encuesta", "codigo", "estrato", "estado", "motivos", "fecha", "establecimiento", "dispositivo", "enviado", "cons_acepta", "cons_foto", ...ficha.map(k => "ficha_" + k), "imc", ...NASA.map(x => "nasa_" + x.id), "nasa_raw", ...Array.from({ length: 20 }, (_, i) => "suseso_" + (i + 1)), ...SUSESO.map(s => "suseso_" + s.key), ...WARR.map((_, i) => "warr_" + (i + 1)), "warr_total", ...REGIONS.flatMap(r => ["nord_" + r.id + "_12m", ...(r.side ? ["nord_" + r.id + "_12m_lado"] : []), "nord_" + r.id + "_7d", ...(r.side ? ["nord_" + r.id + "_7d_lado"] : []), "nord_" + r.id + "_imp"]), "sintomas_12m", "reba_tarea", "reba_lado", "reba_obs1", "reba_obs2", "reba_obs3", "reba_final", "reba_nivel", "n_fotos"];
+}
+function flatObj(r) {
+  const p = r.puntajes || {};
+  const o = { id_encuesta: r.id, codigo: r.codigo, estrato: r.estrato, estado: r.estado, motivos: (r.motivos || []).join("; "), fecha: r.fecha, establecimiento: r.establecimiento, dispositivo: r.dispositivo || r.encuestador, enviado: r.enviado, cons_acepta: r.consentimiento?.acepta, cons_foto: r.consentimiento?.foto, imc: p.imc, nasa_raw: p.nasa, warr_total: p.warr, sintomas_12m: p.sintomas12m == null ? "" : p.sintomas12m ? 1 : 0, reba_tarea: r.reba?.tarea, reba_lado: r.reba?.lado, reba_final: p.rebaFinal, reba_nivel: p.rebaNivel, n_fotos: (r.fotos || []).length };
+  FICHA.filter(q => q.id).flatMap(q => q.follow ? [q.id, q.follow.id] : [q.id]).forEach(k => o["ficha_" + k] = r.ficha?.[k]);
+  NASA.forEach(x => o["nasa_" + x.id] = r.nasa?.[x.id]);
+  for (let i = 1; i <= 20; i++) o["suseso_" + i] = r.suseso?.["s" + i];
+  SUSESO.forEach(s => o["suseso_" + s.key] = p.suseso?.[s.key]);
+  WARR.forEach((_, i) => o["warr_" + (i + 1)] = r.warr?.["w" + (i + 1)]);
+  REGIONS.forEach(rg => { const d = r.nordico?.[rg.id] || {}; o["nord_" + rg.id + "_12m"] = d.m12; o["nord_" + rg.id + "_12m_lado"] = d.m12Lado; o["nord_" + rg.id + "_7d"] = d.d7; o["nord_" + rg.id + "_7d_lado"] = d.d7Lado; o["nord_" + rg.id + "_imp"] = d.imp; });
+  (p.reba || []).forEach((v, i) => o["reba_obs" + (i + 1)] = v);
+  return o;
+}
+function flatRow(r) { const cols = flatCols(), o = flatObj(r); return { cols, vals: cols.map(c => o[c] ?? "") }; }
 function fotosEnvio() { return S.cons.foto === "Sí" ? S.reba.fotos : []; }
 // descarta respuestas de la otra condición (p. ej., si se cambió de Egresado a Interno)
 function fichaVisible(f = S.ficha) {
@@ -1741,48 +1777,53 @@ function stepSend(host) {
 }
 async function submit(host, estado = "completa") {
   const zone = $("#send-zone", host) || host;
-  if (!P.db || !P.uid) { zone.innerHTML = `<div class="banner warn"><div><b>No se envió.</b> Esta vista no está conectada al registro del estudio (modo de práctica). Las respuestas siguen guardadas en este dispositivo.</div></div>`; return; }
-  zone.innerHTML = `<div class="saving" style="padding:20px"><span class="spin"></span><b>Guardando en el registro del estudio…</b></div>`;
+  if (!P.api) { zone.innerHTML = `<div class="banner warn"><div><b>No se envió.</b> Esta vista no está conectada a la base de datos del estudio (modo de práctica). Las respuestas siguen guardadas en este dispositivo.</div></div>`; return; }
+  const msgZ = t => { zone.innerHTML = `<div class="saving" style="padding:20px"><span class="spin"></span><b>${t}</b></div>`; };
+  msgZ("Guardando en Google Sheets…");
   try {
     const s = scores();
-    const id = `${S.meta.codigo}_${Date.now()}`;
-    const base = P.db.doc(`respuestas/${P.uid}`);
-    const fotosRefs = [];
-    for (const f of fotosEnvio()) {
-      let ref = null;
-      if (P.assets) { try { const blob = dataUrlToBlob(f.data); const up = await P.assets.upload(blob, { type: "image/jpeg" }); ref = { asset: up.id }; } catch { ref = null; } }
-      if (!ref) { const fd = base.collection("fotos").doc(); await fd.set({ encuesta: id, codigo: S.meta.codigo, obs: f.obs + 1, data: f.data, ts: f.ts }); ref = { doc: fd.id }; }
+    // el identificador se conserva entre reintentos para no duplicar filas ni fotos
+    if (!S.envio) S.envio = { id: `${S.meta.codigo}_${Date.now()}`, fotos: {} };
+    store.set(DRAFT_KEY, S);
+    const id = S.envio.id, fotos = fotosEnvio(), fotosRefs = [];
+    for (let k = 0; k < fotos.length; k++) {
+      const f = fotos[k];
+      let ref = S.envio.fotos[f.k];
+      if (!ref) {
+        msgZ(`Subiendo foto ${k + 1} de ${fotos.length} a Drive…`);
+        const r = await call("subirFoto", { foto: { id: `${id}_${f.k}`, encuesta: id, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, obs: f.obs + 1, ts: f.ts, data: f.data } });
+        ref = { id: r.id, archivo: r.archivo, url: r.url }; S.envio.fotos[f.k] = ref; store.set(DRAFT_KEY, S);
+      }
       fotosRefs.push(Object.assign({ obs: f.obs + 1, ts: f.ts }, ref));
     }
+    msgZ("Guardando respuestas en la tabla «Encuestas»…");
     const rec = {
       id, estado, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, establecimiento: S.meta.establecimiento,
-      encuestador: P.uid, enviado: new Date().toISOString(),
+      dispositivo: P.dev, enviado: new Date().toISOString(),
       consentimiento: { acepta: S.cons.acepta, foto: S.cons.foto },
       ficha: fichaVisible(), nasa: S.nasa, suseso: S.suseso, warr: S.warr, nordico: S.nordic,
       reba: { tarea: S.reba.tarea, lado: S.reba.lado, obs: S.reba.obs },
       puntajes: { nasa: s.nasa, suseso: s.sus, warr: s.warr, regiones12m: s.regs, sintomas12m: s.sintomas12, reba: s.reba.map(r => r ? r.total : null), rebaFinal: s.rebaFinal, rebaNivel: s.rebaLevel ? s.rebaLevel.t : null, imc: s.imc },
       fotos: fotosRefs
     };
-    await base.set({ encuestador: P.uid, actualizado: rec.enviado });
-    await base.collection("encuestas").doc(id).set(rec);
+    await call("guardarEncuesta", { rec, fila: flatRow(rec) });
     markUsed(rec.codigo);
     clearDraft();
     showDone(host, rec);
   } catch (e) {
-    const msg = e && e.code === "quota_exceeded" ? "El almacenamiento del estudio está lleno. Avise al administrador." : "No se pudo guardar. Revise la conexión e intente de nuevo; las respuestas siguen en este dispositivo.";
+    const msg = e && e.code === "offline" ? "Esta vista no está conectada a la base de datos." : "No se pudo guardar en Google Sheets. Revise la conexión e intente de nuevo; las respuestas siguen en este dispositivo.";
     zone.innerHTML = `<div class="banner bad"><div><b>Error al enviar.</b> ${msg}</div></div><div class="navbar"><span></span><button class="btn btn-primary" id="retry">${ICONS.send} Reintentar</button></div>`;
     $("#retry", zone).onclick = () => submit(host, estado);
   }
 }
 async function finishRefusal(estado) {
   const host = $("#step");
-  if (!P.db || !P.uid) { host.innerHTML = `<div class="done-screen"><h2>Registro de práctica</h2><p class="lead">El participante quedó como «${estado}». En modo de práctica no se guarda.</p><button class="btn btn-primary" id="again">Nueva encuesta</button></div>`; $("#again").onclick = () => { clearDraft(); renderSurvey(); }; return; }
-  host.innerHTML = `<div class="saving" style="padding:30px"><span class="spin"></span><b>Registrando…</b></div>`;
+  if (!P.api) { host.innerHTML = `<div class="done-screen"><h2>Registro de práctica</h2><p class="lead">El participante quedó como «${estado}». En modo de práctica no se guarda.</p><button class="btn btn-primary" id="again">Nueva encuesta</button></div>`; $("#again").onclick = () => { clearDraft(); renderSurvey(); }; return; }
+  host.innerHTML = `<div class="saving" style="padding:30px"><span class="spin"></span><b>Registrando en Google Sheets…</b></div>`;
   try {
-    const id = `${S.meta.codigo}_${Date.now()}`; const base = P.db.doc(`respuestas/${P.uid}`);
-    const rec = { id, estado, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, establecimiento: S.meta.establecimiento, encuestador: P.uid, enviado: new Date().toISOString(), motivos: estado === "no elegible" ? eligibility() : [], puntajes: {}, fotos: [] };
-    await base.set({ encuestador: P.uid, actualizado: rec.enviado });
-    await base.collection("encuestas").doc(id).set(rec);
+    if (!S.envio) { S.envio = { id: `${S.meta.codigo}_${Date.now()}`, fotos: {} }; store.set(DRAFT_KEY, S); }
+    const rec = { id: S.envio.id, estado, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, establecimiento: S.meta.establecimiento, dispositivo: P.dev, enviado: new Date().toISOString(), motivos: estado === "no elegible" ? eligibility() : [], puntajes: {}, fotos: [] };
+    await call("guardarEncuesta", { rec, fila: flatRow(rec) });
     const estrato = S.meta.estrato;
     markUsed(S.meta.codigo);
     clearDraft();
@@ -1800,38 +1841,28 @@ function showDone(host, rec) {
    PANEL ADMIN
    ===================================================================== */
 const Admin = {
-  started: false, subs: [], data: new Map(), names: {}, filt: { estrato: "", estado: "", q: "", desde: "", hasta: "" },
+  started: false, rows: null, err: null, links: {}, filt: { estrato: "", estado: "", q: "", desde: "", hasta: "" },
   unlocked: false,
   start() {
     const v = $("#view-adm");
     if (!P.ready) { v.innerHTML = `<div class="card login"><div class="saving"><span class="spin"></span>Conectando…</div></div>`; return; }
-    if (!P.db) { v.innerHTML = this.shell(); this.render(); return; }
+    if (!P.api) { v.innerHTML = this.shell(); this.render(); return; }
     if (!this.unlocked) { Gate.show(); return; }
     if (this.started) { if (!$("#adm-body")) v.innerHTML = this.shell(); this.render(); return; }
-    this.started = true; v.innerHTML = this.shell(); this.render();
-    if (!P.canAdmin) return;
-    this.subs.push(P.db.collection("respuestas").onSnapshot(snap => {
-      snap.docChanges().forEach(ch => {
-        const uid = ch.doc.id;
-        if (ch.type === "added" && !this.data.has(uid)) {
-          this.data.set(uid, []);
-          this.subs.push(P.db.collection(`respuestas/${uid}/encuestas`).onSnapshot(s2 => { this.data.set(uid, s2.docs.map(d => d.data())); this.loadNames(); this.render(); }, () => {}));
-        }
-      });
-      this.render();
-    }, () => { this.render(); }));
+    this.started = true; v.innerHTML = this.shell(); this.render(); this.load();
   },
-  async loadNames() {
-    if (!P.user || !P.user.profiles) { [...this.data.keys()].forEach(id => { if (!(id in this.names)) this.names[id] = "Encuestador"; }); return; }
-    const ids = [...this.data.keys()].filter(id => !(id in this.names));
-    if (!ids.length) return;
-    try { const ps = await P.user.profiles(ids); ids.forEach(id => this.names[id] = (ps[id] && ps[id].name) || "Encuestador"); this.render(); } catch {}
+  // lee la tabla «Encuestas» completa; las fotos se piden aparte cuando se muestran
+  async load() {
+    this.loading = true;
+    try { const r = await call("listar", { token: ses.get() }); this.rows = r.encuestas || []; this.links = { hoja: r.hoja, carpeta: r.carpeta }; this.err = null; this.at = new Date(); }
+    catch (e) { if (e.code === "auth") { Gate.logout(true); return; } this.err = e.message || "Error"; }
+    this.loading = false; this.render();
   },
-  all() { return [...this.data.values()].flat().sort((a, b) => (b.enviado || "").localeCompare(a.enviado || "")); },
+  all() { return (this.rows || []).slice().sort((a, b) => (b.enviado || "").localeCompare(a.enviado || "")); },
   tab: "avance", ff: { q: "", estrato: "", obs: "", ord: "rec" }, sel: new Set(), srcs: new Map(),
   shell() {
     return `<div class="pc-head"><div><p class="eyebrow">Equipo de investigación</p><h1>Panel de <mark>campo</mark></h1><p class="note" id="upd">Cargando…</p></div>
-      <div class="toolbar adm-actions pc-actions"><button class="btn btn-ghost ic-sm" id="refresh" aria-label="Actualizar" data-tip="Actualizar">${ms("refresh")}<span class="bl">Actualizar</span></button><button class="btn btn-primary" id="exp-csv">${IC.dl} CSV</button><button class="btn btn-ghost" id="exp-json">${IC.dl} JSON</button>${P.db && P.canAdmin ? `<button class="btn btn-ghost ic-sm" id="pw-btn" aria-label="Nuevo código de acceso" data-tip="Nuevo código de acceso">${IC.key}<span class="bl">Nuevo código</span></button>` : ""}${P.db ? `<button class="btn btn-ghost ic-sm" id="logout" aria-label="Salir del panel" data-tip="Salir del panel">${ms("logout")}<span class="bl">Salir</span></button>` : ""}</div></div>
+      <div class="toolbar adm-actions pc-actions"><button class="btn btn-ghost ic-sm" id="refresh" aria-label="Actualizar" data-tip="Actualizar">${ms("refresh")}<span class="bl">Actualizar</span></button><button class="btn btn-primary" id="exp-csv">${IC.dl} CSV</button><button class="btn btn-ghost" id="exp-json">${IC.dl} JSON</button><span id="pc-links" style="display:contents"></span>${P.api ? `<button class="btn btn-ghost ic-sm" id="pw-btn" aria-label="Nuevo código de acceso" data-tip="Nuevo código de acceso">${IC.key}<span class="bl">Nuevo código</span></button>` : ""}${P.api ? `<button class="btn btn-ghost ic-sm" id="logout" aria-label="Salir del panel" data-tip="Salir del panel">${ms("logout")}<span class="bl">Salir</span></button>` : ""}</div></div>
       <div class="ptabs" role="tablist" id="ptabs"></div>
       <div id="adm-body"></div>`;
   },
@@ -1840,12 +1871,17 @@ const Admin = {
     const bindHead = rows => {
       const pb = $("#pw-btn"); if (pb) pb.onclick = () => Gate.change();
       const lo = $("#logout"); if (lo) lo.onclick = () => Gate.logout();
-      const rf = $("#refresh"); if (rf) rf.onclick = () => { const i = $(".ms", rf); i.classList.add("spin-ic"); setTimeout(() => i.classList.remove("spin-ic"), 800); this.animNext = true; this.render(); toast("Datos actualizados"); };
+      const rf = $("#refresh"); if (rf) rf.onclick = async () => { if (this.loading || !P.api) return; const i = $(".ms", rf); i.classList.add("spin-ic"); this.animNext = true; await this.load(); i.classList.remove("spin-ic"); if (!this.err) toast("Datos actualizados desde Google Sheets"); };
+      const pl = $("#pc-links"); if (pl && this.links.hoja) pl.innerHTML = `<a class="btn btn-ghost ic-sm" href="${esc(this.links.hoja)}" target="_blank" rel="noopener" aria-label="Abrir la hoja de cálculo" data-tip="Abrir Google Sheets">${ms("table_view")}<span class="bl">Hoja</span></a><a class="btn btn-ghost ic-sm" href="${esc(this.links.carpeta)}" target="_blank" rel="noopener" aria-label="Abrir la carpeta de Drive" data-tip="Abrir carpeta de Drive">${ms("folder_open")}<span class="bl">Drive</span></a>`;
       $("#exp-csv").onclick = () => this.export("csv", rows);
       $("#exp-json").onclick = () => this.export("json", rows);
     };
-    if (!P.db) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Panel sin conexión</b><span>Abra la página publicada con su cuenta de administrador para ver el avance, las fotos y exportar los datos.</span></div>`; bindHead([]); return; }
-    if (!P.canAdmin) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Acceso restringido</b><span>Solo el investigador y los editores del estudio pueden ver el panel. Los encuestadores usan la pestaña «Encuesta».</span></div>`; bindHead([]); return; }
+    if (!P.api) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>Panel sin conexión</b><span>Abra el enlace de la aplicación del estudio (Google Apps Script) para ver el avance, las fotos y exportar los datos.</span></div>`; bindHead([]); return; }
+    if (this.rows == null) {
+      if (this.err) { body.innerHTML = `<div class="card empty">${emptyIco()}<b>No se pudo leer Google Sheets</b><span>${esc(this.err)}</span><button class="btn btn-primary" id="adm-retry">${ms("refresh")} Reintentar</button></div>`; $("#adm-retry").onclick = () => { this.err = null; this.render(); this.load(); }; }
+      else body.innerHTML = `<div class="card empty"><div class="saving"><span class="spin"></span><b>Leyendo la base de datos en Google Sheets…</b></div></div>`;
+      $("#upd").textContent = "Cargando…"; bindHead([]); return;
+    }
     const first = !this.shown; this.shown = true;
     body.classList.toggle("noanim", !(first || this.animNext)); this.animNext = false;
     const F = this.filt, T = this.tab;
@@ -1864,8 +1900,8 @@ const Admin = {
     const nEst = e => rows.filter(r => byFilt(r, "estado") && (!e || r.estado === e)).length;
     const active = !!(F.estrato || F.estado || q || F.desde || F.hasta);
     const fotosAll = comp.flatMap(r => (r.fotos || []).map((f, i) => ({ key: `${r.id}#${i}`, r, f, i })));
-    const hhmm = new Date().toTimeString().slice(0, 5);
-    $("#upd").textContent = `Actualizado a las ${hhmm} · ${rows.length} registro(s)`;
+    const hhmm = (this.at || new Date()).toTimeString().slice(0, 5);
+    $("#upd").textContent = this.err ? `Sin actualizar (${this.err}) · ${rows.length} registro(s)` : `Google Sheets · actualizado a las ${hhmm} · ${rows.length} registro(s)`;
     $("#ptabs").innerHTML = [["avance", "monitoring", "Avance"], ["registros", "table_rows", "Registros", rowsF.length], ["fotos", "photo_library", "Fotos", fotosAll.length]]
       .map(([k, ic, t, n]) => `<button role="tab" class="ptab${T === k ? " on" : ""}" aria-selected="${T === k}" data-tab="${k}">${ms(ic)}<span>${t}</span>${n != null ? `<span class="n">${n}</span>` : ""}</button>`).join("");
     $$("[data-tab]").forEach(b => b.onclick = () => { this.tab = b.dataset.tab; this.animNext = true; this.render(); });
@@ -1893,7 +1929,7 @@ const Admin = {
       const end = new Date(); const days14 = [...Array(14)].map((_, k) => { const d = new Date(end); d.setDate(end.getDate() - 13 + k); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; });
       const byDay = {}; rowsF.forEach(r => { if (r.fecha) byDay[r.fecha] = (byDay[r.fecha] || 0) + 1; });
       const max14 = Math.max(1, ...days14.map(d => byDay[d] || 0)), tot14 = days14.reduce((a, d) => a + (byDay[d] || 0), 0);
-      const byEnc = {}; rowsF.forEach(r => { const n = this.names[r.encuestador] || "Encuestador"; byEnc[n] = (byEnc[n] || 0) + 1; });
+      const byEnc = {}; rowsF.forEach(r => { const n = r.dispositivo || "Sin dato"; byEnc[n] = (byEnc[n] || 0) + 1; });
       const encs = Object.entries(byEnc).sort((a, b) => b[1] - a[1]), maxEnc = Math.max(1, ...encs.map(x => x[1]));
       const fotosSi = comp.filter(r => r.consentimiento?.foto === "Sí").length;
       const acept = comp.length + rech ? comp.length / (comp.length + rech) * 100 : 0;
@@ -1904,7 +1940,7 @@ const Admin = {
       const donut = (v, col, big, lab, sub) => `<div class="dn" data-tip="${lab}: ${sub}"><div class="donut" style="--v:${v.toFixed(1)};--c:${col}"><span>${Math.round(v)} %</span></div><div><b>${lab}</b><span>${sub}</span></div></div>`;
       body.innerHTML = `${fbar}
       <div class="kpis k4">
-        ${kcard(1, "task_alt", "Encuestas completas", comp.length, CFG.meta.total, "linear-gradient(90deg,#3FD0DC,#0B8191)", dups ? `<b class="warn-line">${dups} duplicado(s)</b>` : `Faltan ${Math.max(0, CFG.meta.total - comp.length)}`)}
+        ${kcard(1, "task_alt", "Encuestas completas", comp.length, CFG.meta.total, "linear-gradient(90deg,#FF8B9C,#D63A55)", dups ? `<b class="warn-line">${dups} duplicado(s)</b>` : `Faltan ${Math.max(0, CFG.meta.total - comp.length)}`)}
         ${kcard(2, "school", "Egresados", eg, CFG.meta.egresado, "var(--s1)", `Faltan ${Math.max(0, CFG.meta.egresado - eg)}`)}
         ${kcard(3, "person", "Internos", it, CFG.meta.interno, "var(--s2)", `Faltan ${Math.max(0, CFG.meta.interno - it)}`)}
         ${kcard(4, "sync_alt", "Reemplazos", rech + noel, 0, "", `${rech} rechazo(s) · ${noel} no elegible(s)`)}
@@ -1920,7 +1956,7 @@ const Admin = {
         <div class="card panel anim grow" style="--i:7">${panelH("calendar_month", "t-primary", "Registros por día", `Últimos 14 días · ${tot14} registro(s)`)}
           <div class="d14">${days14.map((d, k) => `<div class="c" style="--d:${k}" data-tip="${d.slice(8, 10)}/${d.slice(5, 7)}: ${byDay[d] || 0} registro(s)"><b>${byDay[d] || ""}</b><i class="col" style="height:${((byDay[d] || 0) / max14 * 100).toFixed(1)}%"></i></div>`).join("")}</div>
           <div class="d14x">${days14.map(d => `<span>${d.slice(8, 10)}</span>`).join("")}</div></div>
-        <div class="card panel anim grow" style="--i:8">${panelH("groups", "t-violet", "Registros por encuestador", `${encs.length} encuestador(es)`)}
+        <div class="card panel anim grow" style="--i:8">${panelH("groups", "t-violet", "Registros por dispositivo", `${encs.length} dispositivo(s)`)}
           <div class="hbars">${encs.map(([n, c], i) => `<div class="hbar" style="--d:${i}" data-tip="${esc(n)}: ${c} registro(s)"><span>${esc(n)}</span><div class="track"><div class="fill" style="width:${(c / maxEnc * 100).toFixed(1)}%;background:var(--violet)"></div></div><span class="v mono">${c}</span></div>`).join("")}</div></div>
       </div>
       ${compF.length ? `<div class="admin-grid">
@@ -1932,12 +1968,12 @@ const Admin = {
     } else if (T === "registros") {
       body.innerHTML = `${fbar}
       <div class="card panel anim" style="--i:2;margin-top:14px">${panelH("table_rows", "t-primary", "Registros", `${rowsF.length} registro(s) · toque una fila para ver el detalle y las fotos`)}
-        <div class="table-wrap"><table><thead><tr><th>Código</th><th>Fecha</th><th>Estrato</th><th>Estado</th><th>Encuestador</th><th>NASA</th><th>REBA</th><th>Síntomas 12 m</th><th>Fotos</th></tr></thead><tbody id="tb"></tbody></table></div>
+        <div class="table-wrap"><table><thead><tr><th>Código</th><th>Fecha</th><th>Estrato</th><th>Estado</th><th>Dispositivo</th><th>NASA</th><th>REBA</th><th>Síntomas 12 m</th><th>Fotos</th></tr></thead><tbody id="tb"></tbody></table></div>
         <div class="more" id="more"></div></div>`;
       const tb = $("#tb"), PAGE = 20;
       const draw = () => {
         const shown = rowsF.slice(0, this.limit || PAGE);
-        tb.innerHTML = shown.map((r, i) => { const l = rebaLevel(r.puntajes?.rebaFinal); return `<tr data-id="${esc(r.id)}" tabindex="0" class="anim" style="--i:${Math.min(i, 12) * .4}"><td class="num first" data-l="Código"><b>${esc(r.codigo)}</b>${r.estado === "completa" && cnt[r.codigo] > 1 ? ` <span class="chip b" title="Hay más de una encuesta completa con este código">Duplicado</span>` : ""}</td><td class="num" data-l="Fecha">${esc(r.fecha)}</td><td class="c-est" data-l="Estrato"><span class="chip" style="background:color-mix(in srgb,var(--${r.estrato === "Egresado" ? "s1" : "s2"}) 18%,transparent)">${esc(r.estrato)}</span></td><td class="c-st" data-l="Estado"><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(estadoTxt(r.estado))}</span></td><td class="who" data-l="Encuestador" title="${esc(this.names[r.encuestador] || "")}">${esc(this.names[r.encuestador] || "…")}</td><td class="num" data-l="NASA">${r.puntajes?.nasa ?? "—"}</td><td data-l="REBA">${l ? `<span class="lvl lvl-${l.n}" style="padding:3px 10px;font-size:.86rem;white-space:nowrap">${r.puntajes.rebaFinal} · ${l.t}</span>` : "—"}</td><td data-l="Síntomas 12 m">${r.estado === "completa" ? (r.puntajes?.sintomas12m ? "Sí" : "No") : "—"}</td><td class="num${(r.fotos || []).length ? "" : " zero"}" data-l="Fotos">${(r.fotos || []).length}</td></tr>`; }).join("") || `<tr class="empty-row"><td colspan="9" class="muted">Sin registros con estos filtros.</td></tr>`;
+        tb.innerHTML = shown.map((r, i) => { const l = rebaLevel(r.puntajes?.rebaFinal); return `<tr data-id="${esc(r.id)}" tabindex="0" class="anim" style="--i:${Math.min(i, 12) * .4}"><td class="num first" data-l="Código"><b>${esc(r.codigo)}</b>${r.estado === "completa" && cnt[r.codigo] > 1 ? ` <span class="chip b" title="Hay más de una encuesta completa con este código">Duplicado</span>` : ""}</td><td class="num" data-l="Fecha">${esc(r.fecha)}</td><td class="c-est" data-l="Estrato"><span class="chip" style="background:color-mix(in srgb,var(--${r.estrato === "Egresado" ? "s1" : "s2"}) 18%,transparent)">${esc(r.estrato)}</span></td><td class="c-st" data-l="Estado"><span class="chip ${r.estado === "completa" ? "g" : r.estado === "rechazó" ? "b" : "w"}">${esc(estadoTxt(r.estado))}</span></td><td class="who mono" data-l="Dispositivo">${esc(r.dispositivo || "—")}</td><td class="num" data-l="NASA">${r.puntajes?.nasa ?? "—"}</td><td data-l="REBA">${l ? `<span class="lvl lvl-${l.n}" style="padding:3px 10px;font-size:.86rem;white-space:nowrap">${r.puntajes.rebaFinal} · ${l.t}</span>` : "—"}</td><td data-l="Síntomas 12 m">${r.estado === "completa" ? (r.puntajes?.sintomas12m ? "Sí" : "No") : "—"}</td><td class="num${(r.fotos || []).length ? "" : " zero"}" data-l="Fotos">${(r.fotos || []).length}</td></tr>`; }).join("") || `<tr class="empty-row"><td colspan="9" class="muted">Sin registros con estos filtros.</td></tr>`;
         $$("tr[data-id]", tb).forEach(tr => { const open = () => this.detail(rows.find(r => r.id === tr.dataset.id)); tr.onclick = open; tr.onkeydown = e => { if (e.key === "Enter") open(); }; });
         const more = $("#more");
         more.innerHTML = rowsF.length > shown.length ? `<button class="btn btn-ghost" id="more-btn">Mostrar más (${shown.length} de ${rowsF.length})</button>` : "";
@@ -1992,6 +2028,7 @@ const Admin = {
     list.forEach(async x => {
       const th = $(`.thumb[data-k="${CSS.escape(x.key)}"]`, body); if (!th) return;
       let src = this.srcs.get(x.key); if (!src) { src = await this.photoSrc(x.r, x.f); if (src) this.srcs.set(x.key, src); }
+      if (!th.isConnected) return;
       th.classList.remove("skel");
       th.innerHTML = src ? `<img src="${src}" alt="Foto ${esc(x.r.codigo)}, observación ${x.f.obs}" loading="lazy">` : `<span class="ms" aria-hidden="true">broken_image</span>`;
       if (src) { const open = () => lightbox(src); th.onclick = open; th.onkeydown = e => { if (e.key === "Enter") open(); }; }
@@ -1999,7 +2036,6 @@ const Admin = {
   },
   async zip(items) {
     if (!items.length) return;
-    if (!P.downloads) { toast("La descarga no está disponible en esta vista"); return; }
     const bar = $("#zipbar"), t = $("#zipbar-t"), b = $("#zipbar-b"), btn = $("#btn-zip");
     bar.hidden = false; btn.disabled = true; t.textContent = "Preparando…"; b.style.width = "0";
     try {
@@ -2014,16 +2050,21 @@ const Admin = {
       }
       const out = await zip.generateAsync({ type: "blob" }, m => { t.textContent = `Comprimiendo… ${Math.round(m.percent)} %`; b.style.width = (70 + m.percent * .3).toFixed(1) + "%"; });
       b.style.width = "100%"; t.textContent = "Listo. Confirme la descarga.";
-      await P.downloads.save({ filename: `fotos_estudio_tme_${hoy()}.zip`, data: out });
+      await saveFile(`fotos_estudio_tme_${hoy()}.zip`, out);
       toast("Archivo .zip listo");
     } catch (e) { toast(e && e.code === "declined" ? "Descarga cancelada" : "No se pudo crear el .zip"); }
     finally { btn.disabled = !this.sel.size; setTimeout(() => { bar.hidden = true; }, 1500); }
   },
-  async photoSrc(r, f) {
-    if (f.asset) return "/_blob/" + f.asset;
-    if (f.doc) { try { const d = await P.db.doc(`respuestas/${r.encuestador}/fotos/${f.doc}`).get(); return d.exists ? d.data().data : null; } catch { return null; } }
-    return null;
+  // la foto se lee desde Drive a través de Apps Script (máximo 4 pedidos simultáneos)
+  photoSrc(r, f) {
+    if (!f.archivo || !P.api) return Promise.resolve(null);
+    const key = f.archivo; this.pend = this.pend || new Map();
+    if (this.pend.has(key)) return this.pend.get(key);
+    const run = () => call("foto", { token: ses.get(), archivo: f.archivo }).then(x => x.data).catch(() => null);
+    const pr = new Promise(res => { this.q = this.q || []; this.q.push(() => run().then(res)); this.pump(); }).finally(() => this.pend.delete(key));
+    this.pend.set(key, pr); return pr;
   },
+  pump() { this.act = this.act || 0; while (this.act < 4 && this.q.length) { const job = this.q.shift(); this.act++; job().finally(() => { this.act--; this.pump(); }); } },
   async detail(r) {
     const d = $("#drawer"), bg = $("#drawer-bg");
     const p = r.puntajes || {}; const l = rebaLevel(p.rebaFinal);
@@ -2045,22 +2086,14 @@ const Admin = {
   },
   async export(kind, rows) {
     if (!rows.length) { toast("Aún no hay registros para exportar"); return; }
-    if (!P.downloads) { toast("La descarga no está disponible en esta vista"); return; }
     let data, filename;
-    if (kind === "json") { data = JSON.stringify(rows.map(r => { const c = JSON.parse(JSON.stringify(r)); return c; }), null, 2); filename = "estudio_tme_registros.json"; }
+    if (kind === "json") { data = JSON.stringify(rows, null, 2); filename = "estudio_tme_registros.json"; }
     else {
-      const ficha = FICHA.filter(q => q.id).flatMap(q => q.follow ? [q.id, q.follow.id] : [q.id]);
-      const cols = ["codigo", "estrato", "estado", "motivos", "fecha", "establecimiento", "encuestador", "enviado", "cons_acepta", "cons_foto", ...ficha.map(k => "ficha_" + k), "imc", ...NASA.map(x => "nasa_" + x.id), "nasa_raw", ...Array.from({ length: 20 }, (_, i) => "suseso_" + (i + 1)), ...SUSESO.map(s => "suseso_" + s.key), ...WARR.map((_, i) => "warr_" + (i + 1)), "warr_total", ...REGIONS.flatMap(r => ["nord_" + r.id + "_12m", ...(r.side ? ["nord_" + r.id + "_12m_lado"] : []), "nord_" + r.id + "_7d", ...(r.side ? ["nord_" + r.id + "_7d_lado"] : []), "nord_" + r.id + "_imp"]), "sintomas_12m", "reba_tarea", "reba_lado", "reba_obs1", "reba_obs2", "reba_obs3", "reba_final", "reba_nivel", "n_fotos"];
-      const line = r => { const p = r.puntajes || {}; const o = { codigo: r.codigo, estrato: r.estrato, estado: r.estado, motivos: (r.motivos || []).join("; "), fecha: r.fecha, establecimiento: r.establecimiento, encuestador: this.names[r.encuestador] || r.encuestador, enviado: r.enviado, cons_acepta: r.consentimiento?.acepta, cons_foto: r.consentimiento?.foto, imc: p.imc, nasa_raw: p.nasa, warr_total: p.warr, sintomas_12m: p.sintomas12m == null ? "" : p.sintomas12m ? 1 : 0, reba_tarea: r.reba?.tarea, reba_lado: r.reba?.lado, reba_final: p.rebaFinal, reba_nivel: p.rebaNivel, n_fotos: (r.fotos || []).length };
-        ficha.forEach(k => o["ficha_" + k] = r.ficha?.[k]); NASA.forEach(x => o["nasa_" + x.id] = r.nasa?.[x.id]);
-        for (let i = 1; i <= 20; i++) o["suseso_" + i] = r.suseso?.["s" + i]; SUSESO.forEach(s => o["suseso_" + s.key] = p.suseso?.[s.key]);
-        WARR.forEach((_, i) => o["warr_" + (i + 1)] = r.warr?.["w" + (i + 1)]);
-        REGIONS.forEach(rg => { const d = r.nordico?.[rg.id] || {}; o["nord_" + rg.id + "_12m"] = d.m12; o["nord_" + rg.id + "_12m_lado"] = d.m12Lado; o["nord_" + rg.id + "_7d"] = d.d7; o["nord_" + rg.id + "_7d_lado"] = d.d7Lado; o["nord_" + rg.id + "_imp"] = d.imp; });
-        (p.reba || []).forEach((v, i) => o["reba_obs" + (i + 1)] = v);
-        return cols.map(c => { const v = o[c] ?? ""; const s = String(v); return /[",;\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(","); };
-      data = "﻿" + [cols.join(","), ...rows.map(line)].join("\n"); filename = "estudio_tme_registros.csv";
+      const cols = flatCols();
+      const line = r => { const o = flatObj(r); return cols.map(c => { const v = o[c] ?? ""; const s = String(v); return /[",;\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(","); };
+      data = "\ufeff" + [cols.join(","), ...rows.map(line)].join("\n"); filename = "estudio_tme_registros.csv";
     }
-    try { await P.downloads.save({ filename, data }); toast("Archivo listo"); } catch { toast("Descarga cancelada"); }
+    try { await saveFile(filename, data); toast("Archivo listo"); } catch { toast("Descarga cancelada"); }
   }
 };
 const IC = { dl: ms("download"), key: ms("key"), check: ms("task_alt"), cap: ms("school"), user: ms("person"), swap: ms("sync_alt"), search: ms("search"), img: ms("photo_library") };
@@ -2150,34 +2183,19 @@ const ses = {
   set(v) { try { sessionStorage.setItem(SESSION_KEY, v); } catch {} },
   del() { try { sessionStorage.removeItem(SESSION_KEY); } catch {} }
 };
-async function hashPass(pw, salt, iter = 150000) {
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt: enc.encode(salt), iterations: iter, hash: "SHA-256" }, key, 256);
-  return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, "0")).join("");
-}
 const CODE_ALPHA = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sin letras ni números que se confunden (O/0, I/1, L)
-function newAccessCode() { const a = new Uint32Array(8); crypto.getRandomValues(a); const c = [...a].map(n => CODE_ALPHA[n % CODE_ALPHA.length]).join(""); return `TME-${c.slice(0, 4)}-${c.slice(4)}`; }
 function codeBody(v) { const t = String(v || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); return t.length > 8 && t.startsWith("TME") ? t.slice(3) : t; }
 function normCode(v) { const c = codeBody(v); return c.length === 8 ? `TME-${c.slice(0, 4)}-${c.slice(4)}` : String(v || "").trim(); }
-function randomSalt() { const a = new Uint8Array(16); crypto.getRandomValues(a); return [...a].map(b => b.toString(16).padStart(2, "0")).join(""); }
 const Gate = {
-  cfg: null,
-  async load() { try { const d = await P.db.doc("config/admin").get(); this.cfg = d.exists ? d.data() : null; } catch { this.cfg = undefined; } return this.cfg; },
-  ok() { const t = ses.get(); return !!(t && this.cfg && this.cfg.hash && t === this.cfg.hash.slice(0, 16)); },
   async show() {
     const v = $("#view-adm");
+    if (ses.get()) { Admin.unlocked = true; Admin.start(); return; }
     v.innerHTML = `<div class="card login"><div class="saving"><span class="spin"></span>Verificando acceso…</div></div>`;
-    await this.load();
     const shell = (ic, title, text, inner) => `<div class="card login anim"><span class="tile t-primary lg">${ms(ic)}</span><h1>${title}</h1><p class="muted">${text}</p>${inner}</div>`;
-    if (this.cfg === undefined) { v.innerHTML = shell("wifi_off", "Sin conexión", "No se pudo verificar el código de acceso. Revise la conexión y vuelva a intentarlo.", `<button class="btn btn-primary" id="g-retry">${ms("refresh")} Reintentar</button>`); $("#g-retry").onclick = () => this.show(); return; }
-    if (this.ok()) { Admin.unlocked = true; Admin.start(); return; }
-    if (!this.cfg || !this.cfg.hash || !this.cfg.salt) {
-      if (!P.canAdmin) { v.innerHTML = shell("lock", "Panel sin código", "El investigador aún no ha asignado el código de acceso. Para aplicar encuestas use «Aplicar encuesta».", `<a class="btn btn-ghost" href="#inicio">${ICONS.prev} Volver al inicio</a>`); return; }
-      v.innerHTML = shell("key", "Asignar código de acceso", "Es la primera vez que se abre el panel. Genere el código que usará el equipo de investigación para ingresar.", `<button class="btn btn-primary" id="g-gen">${ms("auto_awesome")} Generar código</button><a class="btn btn-ghost" href="#inicio">Cancelar</a>`);
-      $("#g-gen").onclick = () => this.assign(true);
-      return;
-    }
+    let st;
+    try { st = await call("estado"); }
+    catch { v.innerHTML = shell("wifi_off", "Sin conexión", "No se pudo conectar con la base de datos en Google Sheets. Revise la conexión y vuelva a intentarlo.", `<button class="btn btn-primary" id="g-retry">${ms("refresh")} Reintentar</button>`); $("#g-retry").onclick = () => this.show(); return; }
+    if (!st.configurado || !st.codigo) { v.innerHTML = shell("lock", "Panel sin configurar", "Falta preparar la base de datos. En el proyecto de Apps Script ejecute la función «configurar»: crea la carpeta de Drive, la hoja de cálculo con sus dos tablas y el código de acceso (aparece en el registro de ejecución).", `<button class="btn btn-primary" id="g-retry">${ms("refresh")} Volver a comprobar</button><a class="btn btn-ghost" href="#inicio">${ICONS.prev} Volver al inicio</a>`); $("#g-retry").onclick = () => this.show(); return; }
     v.innerHTML = `<form class="card login anim" id="g-form" autocomplete="off"><span class="tile t-primary lg">${ms("lock")}</span><h1>Acceso del equipo</h1>
       <p class="muted">Las respuestas y las fotos son datos sensibles (Ley N.° 29733). Ingrese el código de acceso asignado al equipo de investigación.</p>
       <div class="field"><label for="g-p">Código de acceso</label><div class="code-wrap"><span class="code-pre mono" aria-hidden="true">TME-</span><input class="input code-in mono" id="g-p" placeholder="XXXX-XXXX" maxlength="40" autocapitalize="characters" spellcheck="false" autocomplete="off" aria-describedby="g-help"></div><small id="g-help">Escriba los 8 caracteres o pegue el código completo.</small></div>
@@ -2188,18 +2206,14 @@ const Gate = {
     $("#g-form").onsubmit = async e => { e.preventDefault(); const raw = inp.value, err = $("#g-err"), f = $("#g-form");
       if (!raw.trim()) { err.textContent = "Escriba el código de acceso."; return; }
       err.textContent = "Verificando…";
-      const iter = this.cfg.iter || 150000;
-      let h = await hashPass(normCode(raw), this.cfg.salt, iter);
-      if (h !== this.cfg.hash) h = await hashPass(raw, this.cfg.salt, iter); // contraseñas creadas antes del código
-      if (h === this.cfg.hash) { ses.set(h.slice(0, 16)); Admin.unlocked = true; toast("Acceso concedido"); Admin.start(); }
-      else { err.textContent = "Código incorrecto. Revíselo e inténtelo de nuevo."; f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); inp.select(); } };
+      try { const r = await call("login", { codigo: normCode(raw) }); ses.set(r.token); Admin.unlocked = true; toast("Acceso concedido"); Admin.start(); }
+      catch (e2) { err.textContent = e2.code === "bloqueado" ? "Demasiados intentos. Espere 10 minutos e inténtelo de nuevo." : e2.code === "codigo" ? "Código incorrecto. Revíselo e inténtelo de nuevo." : "No se pudo verificar: revise la conexión."; f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake"); inp.select(); } };
   },
-  // genera un código nuevo, guarda solo su huella y lo muestra una única vez
+  // Apps Script genera el código nuevo, guarda solo su huella y lo devuelve una única vez
   async assign(enter) {
-    const code = newAccessCode(), salt = randomSalt(), hash = await hashPass(code, salt);
-    try { await P.db.doc("config/admin").set({ salt, hash, iter: 150000, tipo: "codigo", actualizado: new Date().toISOString() }); }
-    catch { toast("No se pudo guardar. Solo el propietario o un editor puede asignar el código."); return; }
-    this.cfg = { salt, hash }; ses.set(hash.slice(0, 16));
+    let code;
+    try { const r = await call("nuevoCodigo", { token: ses.get() }); code = r.codigo; ses.set(r.token); }
+    catch (e) { if (e.code === "auth") { this.logout(true); return; } toast("No se pudo generar el código. Revise la conexión."); return; }
     const ov = document.createElement("div"); ov.className = "overlay";
     ov.innerHTML = `<div class="card ov-card" role="dialog" aria-modal="true" aria-labelledby="ov-t"><span class="tile t-green lg">${ms("verified")}</span><h2 id="ov-t">Código de acceso asignado</h2>
       <div class="codebox" id="ov-code">${code}</div>
@@ -2221,7 +2235,9 @@ const Gate = {
     ov.onclick = e => { if (e.target === ov) ov.remove(); };
     $("#ov-yes", ov).onclick = () => { ov.remove(); this.assign(false); };
   },
-  logout() { ses.del(); Admin.unlocked = false; Admin.subs.forEach(u => { try { u(); } catch {} }); Admin.subs = []; Admin.data = new Map(); Admin.started = false; Admin.shown = false; Admin.sel.clear(); Admin.srcs.clear(); location.hash = "#inicio"; toast("Sesión de administración cerrada"); }
+  // expirada = la sesión venció (6 h) o el código cambió en otro dispositivo
+  logout(expirada) { ses.del(); Admin.unlocked = false; Admin.rows = null; Admin.err = null; Admin.started = false; Admin.shown = false; Admin.sel.clear(); Admin.srcs.clear();
+    if (expirada) { toast("La sesión venció: ingrese de nuevo el código"); Gate.show(); } else { location.hash = "#inicio"; toast("Sesión de administración cerrada"); } }
 };
 
 /* =====================================================================
