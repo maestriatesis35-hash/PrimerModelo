@@ -673,6 +673,22 @@ td{padding:12px;font-size:.92rem}
 .crit.exc{background:#FFEDF1;color:#9F1239}.crit.exc .ms{color:#E11D48}
 .q.crit-inc{border-left:4px solid #2DD4BF}.q.crit-exc{border-left:4px solid #FB7185}
 .banner ul{margin:4px 0 0;padding-left:18px}
+.sw-list{display:grid;gap:8px}
+.switch{display:flex;align-items:center;gap:12px;min-height:56px;padding:12px 14px;border-radius:16px;background:var(--surface-2);border:2px solid transparent;cursor:pointer;transition:background .2s,border-color .2s}
+.switch[hidden]{display:none}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch .sw-t{flex:1;font-weight:600;font-size:.98rem;line-height:1.35}
+.switch .trk{width:48px;height:28px;border-radius:14px;background:#D6CDC7;position:relative;transition:background .25s;flex-shrink:0}
+.switch .trk::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.switch input:checked ~ .trk::after{left:23px}
+.switch.sw-inc input:checked ~ .trk{background:#0D9488}
+.switch.sw-exc input:checked ~ .trk{background:#E11D48}
+.switch.sw-inc:has(input:checked){background:#D9FBF4;border-color:rgba(13,148,136,.35)}
+.switch.sw-exc:has(input:checked){background:#FFE1E8;border-color:rgba(225,29,72,.3)}
+.switch input:focus-visible ~ .trk{outline:3px solid var(--accent);outline-offset:2px}
+.ie{display:inline-grid;place-items:center;min-width:38px;padding:3px 7px;border-radius:8px;font-size:.74rem;font-weight:800;letter-spacing:.02em;flex-shrink:0}
+.ie.inc{background:#CCFBF1;color:#0F766E}.ie.exc{background:#FFE1E8;color:#BE123C}
+@media (prefers-reduced-motion:reduce){ .switch .trk,.switch .trk::after{transition:none} }
 .crit-sub{display:flex;align-items:center;gap:6px;margin:12px 0 6px;font-weight:800;font-size:.95rem}
 .crit-sub .ms{font-size:20px}
 .crit-sub.inc{color:#0F766E}.crit-sub.exc{color:#BE123C}
@@ -1031,10 +1047,12 @@ const FICHA = [
   { sec: "B. Condición laboral o formativa" },
   { id: "condicion", t: "Condición", type: "pills", opts: ["Interno", "Egresado"] },
   { id: "meses", t: "Tiempo en actividad asistencial", type: "number", unit: "meses", min: 0, max: 600 },
+  { id: "elegMeses", t: "Tiene 3 meses o más de actividad asistencial", type: "switch" },
   { id: "pacientes", t: "Número promedio de pacientes atendidos por día", type: "number", unit: "pacientes", min: 0, max: 100 },
   { id: "moviliza", t: "¿Realiza movilización o transferencia de pacientes en su actividad habitual?", type: "pills", opts: ["Sí", "No"] },
   { id: "otroEmpleo", t: "¿Tiene otro empleo o actividad laboral adicional?", type: "pills", opts: ["Sí", "No"] },
   { id: "anosEgreso", t: "Años desde el egreso", type: "number", unit: "años", min: 0, max: 40, only: "Egresado" },
+  { id: "elegAnios", t: "Tiene 6 años o menos desde el egreso", type: "switch", only: "Egresado" },
   { id: "vinculo", t: "Tipo de vínculo laboral", type: "pills", opts: ["Nombrado", "Contratado", "Locador de servicios", "Independiente"], only: "Egresado" },
   { id: "centros", t: "Número de centros donde trabaja", type: "number", unit: "centros", min: 1, max: 10, only: "Egresado" },
   { id: "sede", t: "Sede de internado", type: "text", only: "Interno" },
@@ -1351,22 +1369,19 @@ function scores(st = S) {
 }
 // criterios de selección del estudio, ligados a las preguntas de la ficha
 const CRIT = {
-  moviliza: ["inc", "Se incluye si responde «Sí» (realiza movilización o transferencia de pacientes)."],
-  meses: ["inc", "Se incluye con 3 meses o más de actividad asistencial."],
-  anosEgreso: ["inc", "Egresados: se incluye con 6 años o menos desde el egreso."],
-  reuma: ["exc", "Se excluye si responde «Sí» (enfermedad reumatológica sistémica)."],
-  embarazo: ["exc", "Se excluye si responde «Sí» (embarazo en curso)."],
-  licencia: ["exc", "Se excluye si responde «Sí» (descanso médico o licencia)."]
+  moviliza: ["inc", "Realiza movilización o transferencia de pacientes"],
+  elegMeses: ["inc", "Tiene 3 meses o más de actividad asistencial"],
+  elegAnios: ["inc", "Tiene 6 años o menos desde el egreso"],
+  reuma: ["exc", "Tiene diagnóstico de enfermedad reumatológica sistémica (artritis reumatoide, lupus u otra)"],
+  embarazo: ["exc", "Está embarazada actualmente"],
+  licencia: ["exc", "Se encuentra con descanso médico o licencia"]
 };
-function critTag(id) {
-  const c = CRIT[id]; if (!c) return "";
-  return `<p class="crit ${c[0]}">${ms(c[0] === "inc" ? "check_circle" : "block")}<span><b>Criterio de ${c[0] === "inc" ? "inclusión" : "exclusión"}.</b> ${c[1]}</span></p>`;
-}
+const ELEG = Object.keys(CRIT);
 function eligibility(st = S) {
   const f = st.ficha, out = [];
   if (f.moviliza === "No") out.push("No cumple inclusión: no realiza movilización o transferencia de pacientes");
-  if (f.meses != null && f.meses !== "" && +f.meses < 3) out.push("No cumple inclusión: menos de 3 meses de actividad asistencial");
-  if (f.condicion === "Egresado" && f.anosEgreso != null && f.anosEgreso !== "" && +f.anosEgreso > 6) out.push("No cumple inclusión: más de 6 años de egreso");
+  if (f.elegMeses === "No" || (f.meses != null && f.meses !== "" && +f.meses < 3)) out.push("No cumple inclusión: menos de 3 meses de actividad asistencial");
+  if (f.condicion === "Egresado" && (f.elegAnios === "No" || (f.anosEgreso != null && f.anosEgreso !== "" && +f.anosEgreso > 6))) out.push("No cumple inclusión: más de 6 años de egreso");
   if (f.reuma === "Sí") out.push("Exclusión: diagnóstico de enfermedad reumatológica sistémica");
   if (f.embarazo === "Sí") out.push("Exclusión: embarazo en curso");
   if (f.licencia === "Sí") out.push("Exclusión: descanso médico o licencia");
@@ -1555,13 +1570,19 @@ function stepFicha(host) {
     else if (q.type === "text") ctrl = `<input class="input" id="f-${q.id}" value="${esc(f[q.id] ?? "")}">`;
     else ctrl = pills("f-" + q.id, q.opts, f[q.id]);
     if (q.follow) ctrl += `<div id="fw-${q.id}" ${f[q.id] === "Sí" ? "" : "hidden"}><input class="input" id="f-${q.follow.id}" placeholder="${q.follow.t}" value="${esc(f[q.follow.id] ?? "")}"></div>`;
-    return `<div class="q${CRIT[q.id] ? " has-crit crit-" + CRIT[q.id][0] : ""}" id="q-${q.id}" data-only="${q.only || ""}" ${hid}><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(q.t)}</span></div>${critTag(q.id)}${ctrl}</div>`;
+    return `<div class="q" id="q-${q.id}" data-only="${q.only || ""}" ${hid}><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(q.t)}</span></div>${ctrl}</div>`;
+  };
+  // los criterios se marcan con un interruptor: activado = «Sí», desactivado = «No»
+  ELEG.forEach(id => { if (f[id] == null || f[id] === "") f[id] = "No"; });
+  const swHTML = id => {
+    const q = FICHA.find(x => x.id === id), t = CRIT[id][0];
+    const hid = (q.only && f.condicion !== q.only) || (id === "embarazo" && f.sexo === "Masculino");
+    return `<label class="switch sw-${t}" id="q-${id}" data-only="${q.only || ""}" ${hid ? "hidden" : ""}><input type="checkbox" data-crit="${id}" ${f[id] === "Sí" ? "checked" : ""}><span class="ie ${t}" title="${t === "inc" ? "Criterio de inclusión" : "Criterio de exclusión"}">${t === "inc" ? "Inc" : "Exc"}</span><span class="sw-t">${esc(CRIT[id][1])}</span><span class="trk" aria-hidden="true"></span></label>`;
   };
   // primero las preguntas que definen si el participante es elegible y, debajo, el resultado
-  const crit = t => Object.keys(CRIT).filter(id => CRIT[id][0] === t).map(id => FICHA.find(q => q.id === id));
-  html += `<div class="section-title"><span class="tag">${ms("how_to_reg")}</span><h3>Elegibilidad del participante</h3></div>
-    <p class="crit-sub inc">${ms("check_circle")} Criterios de inclusión</p>${crit("inc").map(qHTML).join("")}
-    <p class="crit-sub exc">${ms("block")} Criterios de exclusión</p>${crit("exc").map(qHTML).join("")}
+  html += `<div class="section-title"><span class="tag">${ms("rule")}</span><h3>Criterios de participación</h3></div>
+    <p class="muted" style="font-size:.88rem;margin:-4px 0 10px">Active lo que corresponda al participante. <span class="ie inc">Inc</span> criterio de inclusión · <span class="ie exc">Exc</span> criterio de exclusión.</p>
+    <div class="sw-list" id="eleg">${ELEG.map(swHTML).join("")}</div>
     <div id="elig" aria-live="polite"></div>`;
   FICHA.forEach(q => {
     if (q.sec) { html += `<div class="section-title"><span class="tag">${q.sec[0]}</span><h3>${esc(q.sec.slice(3))}</h3></div>`; return; }
@@ -1569,19 +1590,20 @@ function stepFicha(host) {
   });
   host.innerHTML = html;
   const updElig = () => {
-    const e = eligibility(), inc = e.filter(x => x.startsWith("No cumple inclusión")), exc = e.filter(x => x.startsWith("Exclusión"));
+    const e = f._critVisto ? eligibility() : [], inc = e.filter(x => x.startsWith("No cumple inclusión")), exc = e.filter(x => x.startsWith("Exclusión"));
     const it = x => `<li>${esc(x.replace(/^(No cumple inclusión|Exclusión): /, ""))}</li>`;
-    const pend = Object.keys(CRIT).filter(id => { const q = FICHA.find(x => x.id === id); return (!q.only || f.condicion === q.only) && (f[id] == null || f[id] === ""); });
+    const pend = f._critVisto ? [] : ELEG;
     $("#elig", host).innerHTML = e.length ? `<div class="banner bad"><div><b>Participante no elegible.</b>${inc.length ? `<p style="margin-top:6px"><b>No cumple criterio de inclusión:</b></p><ul>${inc.map(it).join("")}</ul>` : ""}${exc.length ? `<p style="margin-top:6px"><b>Cumple criterio de exclusión:</b></p><ul>${exc.map(it).join("")}</ul>` : ""}<p style="margin-top:6px">Si se confirma, regístrelo como no elegible y seleccione al siguiente participante del mismo estrato.</p></div></div>`
-      : pend.length ? `<div class="banner"><div>Responda las ${pend.length === 1 ? "pregunta" : pend.length + " preguntas"} de elegibilidad pendiente${pend.length === 1 ? "" : "s"} para confirmar si el participante es elegible.</div></div>`
+      : pend.length ? `<div class="banner"><div>Active los criterios que cumple el participante para confirmar si es elegible.</div></div>`
       : `<div class="banner good"><div><b>Participante elegible.</b> Cumple los criterios de inclusión y ninguno de exclusión. Continúe con el resto de la ficha.</div></div>`;
   };
-  FICHA.filter(q => q.id).forEach(q => {
+  $$("[data-crit]", host).forEach(cb => cb.onchange = () => { f[cb.dataset.crit] = cb.checked ? "Sí" : "No"; f._critVisto = true; persist(); updElig(); });
+  FICHA.filter(q => q.id && !CRIT[q.id]).forEach(q => {
     if (q.type === "pills") bindPills(host, "f-" + q.id, v => {
       f[q.id] = v;
       if (q.id === "condicion") $$("[data-only]", host).forEach(el => { if (el.dataset.only) el.hidden = el.dataset.only !== v; });
       if (q.follow) $(`#fw-${q.id}`, host).hidden = v !== "Sí";
-      if (q.id === "sexo" && v === "Masculino" && f.embarazo !== "No aplica") { f.embarazo = "No aplica"; const r = $(`input[name="f-embarazo"][value="No aplica"]`, host); if (r) r.checked = true; }
+      if (q.id === "sexo") { if (v === "Masculino") f.embarazo = "No aplica"; else if (f.embarazo === "No aplica") f.embarazo = "No"; const row = $("#q-embarazo", host); row.hidden = v === "Masculino"; $("input", row).checked = f.embarazo === "Sí"; }
       persist(); updElig();
     });
     else { const el = $(`#f-${q.id}`, host); el.oninput = () => { el.closest(".q").classList.remove("invalid"); f[q.id] = q.type === "number" ? (el.value === "" ? "" : +el.value) : el.value; persist(); updElig(); };
