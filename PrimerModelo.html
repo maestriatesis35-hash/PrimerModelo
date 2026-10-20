@@ -692,6 +692,39 @@ td{padding:12px;font-size:.92rem}
 .nasa-lv button.on b{color:rgba(255,255,255,.85)}
 @media (max-width:640px){ .nasa-lv{gap:4px} .nasa-lv button{font-size:.72rem;min-height:50px} .nasa-read .nasa-val{font-size:1.7rem} }
 
+/* ---------- Cuestionario Nórdico: Sí/No grandes, lado con botones y subpreguntas rotuladas ---------- */
+.region.done{border-color:rgba(13,148,136,.3)}
+.region-head .chip{display:inline-flex;align-items:center;gap:4px}
+.region-head .chip .ms{font-size:16px}
+.subq{padding:10px 12px;border-radius:14px;background:var(--surface-2)}
+.subq .sq-h{display:flex;align-items:center;gap:8px;grid-template-columns:none}
+.sq-tag{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:var(--primary);color:#fff;font-weight:800;font-size:.85rem}
+.sq-per{font-weight:800;font-size:.85rem;color:var(--primary)}
+.subq .q-label{font-size:.95rem;color:var(--ink);font-weight:600}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.yn-o{position:relative;cursor:pointer}
+.yn-o input{position:absolute;opacity:0;width:1px;height:1px}
+.yn-o input + span{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;border-radius:14px;border:2px solid var(--line);background:#fff;font-size:1.02rem;transition:background .2s,border-color .2s,color .2s,transform .15s}
+.yn-o input + span .ms{font-size:22px;color:var(--muted)}
+.yn-o:hover input + span{border-color:#E7C9D0}
+.yn-o.no input:checked + span{background:#E6FBF6;border-color:#0D9488;color:#0F766E}
+.yn-o.no input:checked + span .ms{color:#0D9488}
+.yn-o.si input:checked + span{background:#FFE1E8;border-color:#E11D48;color:#BE123C}
+.yn-o.si input:checked + span .ms{color:#E11D48}
+.yn-o input:checked + span{font-weight:800;transform:translateY(-1px)}
+.yn-o input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+.side{margin-top:6px;padding-top:8px;border-top:1px dashed var(--line)}
+.side-q{display:flex;align-items:center;gap:6px;font-size:.88rem;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.side-q .ms{font-size:18px}
+.side-o{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.side-o label{position:relative;cursor:pointer}
+.side-o input{position:absolute;opacity:0;width:1px;height:1px}
+.side-o input + span{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:56px;justify-content:center;padding:6px 4px;border-radius:12px;border:2px solid var(--line);background:#fff;font-size:.8rem;font-weight:600;text-align:center;line-height:1.15;transition:background .2s,border-color .2s}
+.side-o i{font-style:normal;font-family:var(--f-mono);font-weight:800;font-size:1rem;color:var(--muted)}
+.side-o input:checked + span{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);font-weight:800}
+.side-o input:checked + span i{color:var(--primary)}
+.side-o input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+
 /* ---------- escala de satisfacción 1–7 (Warr, Cook y Wall) ---------- */
 .wscale{margin:2px 0 14px;padding:12px 14px;border-radius:14px;background:var(--surface-2)}
 .wbar{height:10px;border-radius:5px;background:linear-gradient(90deg,#E11D48,#FB7185 30%,#94A3B8 50%,#5EEAD4 70%,#0D9488)}
@@ -1857,16 +1890,21 @@ function stepNordic(host) {
     <div class="card body-map">${bodySVG()}<div class="legend-row"><span><i style="background:var(--accent)"></i>Con síntomas (12 meses)</span><span><i style="background:var(--surface-2);border:1px solid var(--muted)"></i>Sin registrar / no</span></div></div>
     <div id="regions">${REGIONS.map(r => regionHTML(r)).join("")}</div>
   </div>`;
+  // Sí / No como dos botones grandes con icono; el lado, como tres botones con su abreviatura
+  function yn(name, val) { return `<div class="yn" role="radiogroup">${[["No", "do_not_disturb_on", "no"], ["Sí", "error", "si"]].map(([o, ic, c]) => `<label class="yn-o ${c}"><input type="radio" name="${name}" value="${o}" ${val === o ? "checked" : ""} aria-label="${o}"><span>${ms(ic)}<b>${o}</b></span></label>`).join("")}</div>`; }
   function regionHTML(r) {
     const d = v[r.id] || {};
-    const sideQ = (k) => r.side && d[k] === "Sí" ? `<div class="pills" style="margin-top:4px">${SIDE_OPTS.map(o => `<label class="pill"><input type="radio" name="${r.id}-${k}-lado" value="${o}" ${d[k + "Lado"] === o ? "checked" : ""}><span>${o === "Ambos" ? (r.id === "hombros" ? "Ambos hombros" : r.id === "codos" ? "Ambos codos" : "Ambas") : o}</span></label>`).join("")}</div>` : "";
+    const ambos = r.id === "hombros" ? "Ambos hombros" : r.id === "codos" ? "Ambos codos" : "Ambas";
+    const sideQ = (k) => r.side && d[k] === "Sí" ? `<div class="side"><span class="side-q">${ms("swap_horiz")} ¿De qué lado?</span><div class="side-o" role="radiogroup">${SIDE_OPTS.map(o => `<label><input type="radio" name="${r.id}-${k}-lado" value="${o}" ${d[k + "Lado"] === o ? "checked" : ""} aria-label="${o === "Ambos" ? ambos : o}"><span><i>${o[0]}</i>${o === "Ambos" ? ambos : o}</span></label>`).join("")}</div></div>` : "";
     const label = r.both ? "uno o ambos(as) " : "";
-    return `<div class="region q" id="q-${r.id}" data-r="${r.id}">
-      <div class="region-head" data-toggle="${r.id}"><h3>${r.t}</h3><span class="chip ${d.m12 === "Sí" ? "a" : d.m12 === "No" ? "g" : ""}">${d.m12 === "Sí" ? "Con síntomas" : d.m12 === "No" ? "Sin síntomas" : "Pendiente"}</span></div>
+    const st = d.m12 === "Sí" ? ["a", "error", "Con síntomas"] : d.m12 === "No" ? ["g", "check_circle", "Sin síntomas"] : ["", "radio_button_unchecked", "Pendiente"];
+    const sq = (tag, per, txt, name, val, side) => `<div class="subq"><div class="sq-h q-head"><span class="sq-tag">${tag}</span><span class="sq-per">${per}</span></div><span class="q-label">${txt}</span>${yn(name, val)}${side || ""}</div>`;
+    return `<div class="region q${d.m12 ? " done" : ""}" id="q-${r.id}" data-r="${r.id}">
+      <div class="region-head" data-toggle="${r.id}"><h3>${r.t}</h3><span class="chip ${st[0]}">${ms(st[1])} ${st[2]}</span></div>
       <div class="region-body">
-        <div class="subq"><span class="q-label">A. En los últimos 12 meses, ¿ha tenido problemas en ${label}${r.t.toLowerCase()}?</span>${pills(r.id + "-m12", ["No", "Sí"], d.m12)}${sideQ("m12")}</div>
-        ${d.m12 === "Sí" ? `<div class="subq"><span class="q-label">B. ¿Ha tenido problemas en los últimos 7 días?</span>${pills(r.id + "-d7", ["No", "Sí"], d.d7)}${sideQ("d7")}</div>
-        <div class="subq"><span class="q-label">C. En los últimos 12 meses, ¿estos problemas le han impedido realizar sus actividades normales (trabajo, hogar o aficiones)?</span>${pills(r.id + "-imp", ["No", "Sí"], d.imp)}</div>` : ""}
+        ${sq("A", "Últimos 12 meses", `¿Ha tenido problemas en ${label}${r.t.toLowerCase()}?`, r.id + "-m12", d.m12, sideQ("m12"))}
+        ${d.m12 === "Sí" ? sq("B", "Últimos 7 días", "¿Ha tenido problemas en los últimos 7 días?", r.id + "-d7", d.d7, sideQ("d7"))
+          + sq("C", "Impedimento", "En los últimos 12 meses, ¿estos problemas le han impedido realizar sus actividades normales (trabajo, hogar o aficiones)?", r.id + "-imp", d.imp) : ""}
       </div></div>`;
   }
   const paint = () => {
