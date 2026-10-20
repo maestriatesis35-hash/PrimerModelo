@@ -2409,6 +2409,7 @@ const Voz = {
   },
   enhance() {
     const step = $("#step"); if (!step) return;
+    if (STEPS[S.step] && STEPS[S.step].id === "pres") { $$(".aud", step).forEach(a => a.remove()); $$(".q, .subq, .field", step).forEach(u => this.a11y(u)); return; }   // la presentación no lleva botones de audio
     this.units(step).forEach(u => {
       this.a11y(u);
       if (!this.on || u.querySelector(":scope > .aud, :scope > .q-head > .aud")) return;
