@@ -657,6 +657,7 @@ td{padding:12px;font-size:.92rem}
   .cc-txt small{font-size:.82rem}
 }
 
+.consent-doc .cd-title{font-family:var(--f-display);font-weight:800;font-size:1.05rem;line-height:1.35;color:var(--ink)}
 /* ---------- criterios de inclusión y exclusión ---------- */
 .crit{display:flex;gap:8px;align-items:flex-start;margin:6px 0 8px;padding:8px 12px;border-radius:12px;font-size:.88rem;line-height:1.4}
 .crit .ms{font-size:20px;margin-top:-1px}
@@ -1456,7 +1457,7 @@ function stepCons(host) {
   const c = S.cons;
   host.innerHTML = head(1, "Lea con calma. Puede hacer preguntas al encuestador antes de decidir.", `<span class="chip p">Anexo 2</span>`) + `
   <div class="consent-doc">
-    <p class="mono" style="font-size:.8rem">${esc(CFG.titulo)}</p>
+    <p class="cd-title">${esc(CFG.titulo)}</p>
     <p><b>Institución:</b> ${esc(CFG.institucion)}. <b>Investigador:</b> ${esc(CFG.investigador)}. <b>Asesora:</b> ${esc(CFG.asesora)}.</p>
     <div><h3>1. Propósito del estudio</h3><p>Conocer qué condiciones del trabajo asistencial (organizacionales, ergonómicas y psicosociales) se asocian con la presencia de dolor o molestias musculoesqueléticas en fisioterapeutas egresados e internos.</p></div>
     <div><h3>2. Procedimientos</h3><p>a) Completará una ficha sociodemográfica y ocupacional y cuatro cuestionarios (NASA-TLX, SUSESO/ISTAS21, Escala de Satisfacción Laboral de Warr, Cook y Wall y Cuestionario Nórdico). b) El investigador lo observará directamente durante tres movilizaciones o transferencias de pacientes de su jornada habitual para evaluar su postura con el método REBA. No se grabarán videos. Solo si usted lo autoriza, se podrán tomar fotografías enfocadas en usted, sin captar el rostro del paciente y con la autorización del establecimiento y el consentimiento verbal del paciente.</p></div>
