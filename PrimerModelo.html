@@ -2357,10 +2357,16 @@ const Voz = {
   say(text, btn) {
     if (!this.tts || !text) return;
     speechSynthesis.cancel(); $$(".aud .a-say.on").forEach(b => b.classList.remove("on"));
-    const u = new SpeechSynthesisUtterance(text); const v = this.voice();
-    u.lang = v ? v.lang : "es-PE"; if (v) u.voice = v; u.rate = 0.95;
-    if (btn) { btn.classList.add("on"); u.onend = u.onerror = () => btn.classList.remove("on"); }
-    speechSynthesis.speak(u);
+    // los textos largos se leen por frases: Chrome corta las lecturas de más de unos 15 segundos
+    const parts = text.match(/[^.!?;:]+[.!?;:]*\s*/g) || [text], chunks = [];
+    parts.forEach(t => { const last = chunks[chunks.length - 1]; if (last && last.length + t.length < 220) chunks[chunks.length - 1] = last + t; else chunks.push(t); });
+    const v = this.voice();
+    if (btn) btn.classList.add("on");
+    chunks.forEach((t, i) => {
+      const u = new SpeechSynthesisUtterance(t.trim()); u.lang = v ? v.lang : "es-PE"; if (v) u.voice = v; u.rate = 0.95;
+      if (btn && i === chunks.length - 1) u.onend = u.onerror = () => btn.classList.remove("on");
+      speechSynthesis.speak(u);
+    });
   },
   stop() { if (this.tts) speechSynthesis.cancel(); if (this.rec) { try { this.rec.abort(); } catch {} this.rec = null; } $$(".aud button.on").forEach(b => b.classList.remove("on")); },
   announce(t) { const l = $("#aud-live"); if (l) { l.textContent = ""; setTimeout(() => { l.textContent = t; }, 30); } },
@@ -2410,8 +2416,10 @@ const Voz = {
   enhance() {
     const step = $("#step"); if (!step) return;
     if (STEPS[S.step] && STEPS[S.step].id === "pres") { $$(".aud", step).forEach(a => a.remove()); $$(".q, .subq, .field", step).forEach(u => this.a11y(u)); return; }   // la presentación no lleva botones de audio
+    const cons = STEPS[S.step] && STEPS[S.step].id === "cons";
     this.units(step).forEach(u => {
       this.a11y(u);
+      if (cons) { $$(":scope > .aud, :scope > .q-head > .aud", u).forEach(a => a.remove()); return; }
       if (!this.on || u.querySelector(":scope > .aud, :scope > .q-head > .aud")) return;
       const bar = document.createElement("div"); bar.className = "aud";
       const lab = this.label(u);
@@ -2431,7 +2439,13 @@ const Voz = {
       sh.appendChild(bar);
     }
   },
-  readHead(btn) { const h = $("#step h2"), l = $("#step .step-head .lead"); if (h) this.say(h.textContent + (l ? ". " + l.textContent : ""), btn); },
+  readHead(btn) {
+    const h = $("#step h2"), l = $("#step .step-head .lead"); if (!h) return;
+    let t = h.textContent + (l ? ". " + l.textContent : "");
+    const doc = $("#step .consent-doc");
+    if (doc) t += " " + [...doc.children].map(el => el.innerText.replace(/\s*\n+\s*/g, ". ").replace(/\.\s*\./g, ".").trim()).map(x => /[.!?]$/.test(x) ? x : x + ".").join(" ");
+    this.say(t, btn);
+  },
   // ---------- responder con la voz ----------
   listen(u, btn) {
     if (!this.SR) return;
