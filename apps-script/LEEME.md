@@ -33,7 +33,7 @@ Las dos tablas se relacionan por la columna **id_encuesta**. Las pestañas «Enc
 1. Inicie sesión con **maestriatesis35@gmail.com** y abra la hoja de cálculo. Entre a **Extensiones → Apps Script** y póngale de nombre «Estudio TME» al proyecto.
 2. En **Código.gs**, borre todo y pegue el contenido de `apps-script/Code.gs`. En GitHub, abra el archivo y use el botón «Copy raw file». Guarde con Ctrl+S.
 3. En la lista de funciones, elija **configurar** y pulse **Ejecutar**. Acepte los permisos: **Revisar permisos** → su cuenta → **Configuración avanzada** → **Ir a Estudio TME** → **Permitir**.
-   - En la pestaña **Encuestas** se crean las 200 columnas de todas las respuestas, con el nombre completo de cada dato. La nota de cada encabezado indica la escala o los valores posibles.
+   - En la pestaña **Encuestas** se crean las 200 columnas de todas las respuestas, con el nombre completo de cada dato.
    - En la pestaña **Multimedia** se crean las 13 columnas de las fotos.
 4. En el **Registro de ejecución**, anote el **CÓDIGO DE ACCESO AL PANEL** (TME-XXXX-XXXX).
 5. Pulse **Implementar → Nueva implementación → ⚙️ Aplicación web** y configure:
