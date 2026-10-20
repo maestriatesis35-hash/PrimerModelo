@@ -664,17 +664,7 @@ td{padding:12px;font-size:.92rem}
 .crit.exc{background:#FFEDF1;color:#9F1239}.crit.exc .ms{color:#E11D48}
 .q.crit-inc{border-left:4px solid #2DD4BF}.q.crit-exc{border-left:4px solid #FB7185}
 .banner ul{margin:4px 0 0;padding-left:18px}
-@media (max-width:640px){ 
 /* ---------- modo audio: escuchar y responder con la voz ---------- */
-.audio-fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 104px);z-index:40;display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:10px 18px;border-radius:999px;border:0;font-weight:800;font-size:.95rem;color:#fff;background:linear-gradient(135deg,#2DD4BF,#0D9488);box-shadow:0 10px 24px rgba(13,148,136,.36);cursor:pointer;transition:transform .2s,box-shadow .2s}
-.audio-fab:hover{transform:translateY(-2px)}
-.audio-fab[aria-pressed="true"]{background:linear-gradient(135deg,#FF6B81,#E11D48);box-shadow:0 10px 24px rgba(225,29,72,.36)}
-.audio-fab .ms{font-size:24px}
-.audio-fab.in-nav{position:static;flex:none;align-self:stretch;justify-content:center;min-height:52px;box-shadow:0 6px 16px rgba(13,148,136,.28)}
-.audio-fab.in-nav[aria-pressed="true"]{box-shadow:0 6px 16px rgba(225,29,72,.28)}
-.navbar:has(.audio-fab.in-nav){flex-wrap:nowrap;align-items:stretch}
-.navbar:has(.audio-fab.in-nav) .btn{flex:1 1 0;min-width:0;padding-inline:12px}
-.navbar:has(.audio-fab.in-nav) > span:empty{display:none}
 .aud{display:inline-flex;gap:8px;margin:8px 0 4px;flex-wrap:wrap}
 .q-head .aud{margin:0 0 0 auto;flex:none;flex-wrap:nowrap}
 .aud button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:.88rem;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
@@ -688,7 +678,7 @@ td{padding:12px;font-size:.92rem}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(225,29,72,.45)}50%{box-shadow:0 0 0 10px rgba(225,29,72,0)}}
 .aud-heard{flex-basis:100%;font-size:.86rem;color:var(--muted)}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media (max-width:640px){ .aud button span.t{display:none} .aud button{padding:0;width:44px;justify-content:center} .audio-fab{bottom:calc(env(safe-area-inset-bottom,0px) + 92px);width:52px;padding:0;justify-content:center} .audio-fab span:not(.ms){display:none} .navbar .audio-fab.in-nav{flex:0 0 52px;min-width:52px} }
+@media (max-width:640px){ .aud button span.t{display:none} .aud button{padding:0;width:44px;justify-content:center} }
 @media (prefers-reduced-motion:reduce){ .aud button.on{animation:none} }
 
 /* ---------- identidad visual TME ----------
@@ -2350,44 +2340,16 @@ const Gate = {
    así sirve para todos los instrumentos sin cambiar cada paso.
    ===================================================================== */
 const Voz = {
-  KEY: "tme_audio",
-  on: false,
+  on: true,   // los botones Escuchar y Responder están siempre en todas las preguntas
   SR: window.SpeechRecognition || window.webkitSpeechRecognition || null,
   tts: "speechSynthesis" in window,
   init() {
-    this.on = store.get(this.KEY) === true;
-    const fab = document.createElement("button");
-    fab.className = "audio-fab"; fab.id = "audio-fab"; fab.type = "button"; fab.hidden = true;
-    fab.innerHTML = `${ms("headphones")}<span>Audio</span>`;
-    fab.onclick = () => this.toggle();
-    document.body.appendChild(fab); this.fab = fab;
     const live = document.createElement("div"); live.id = "aud-live"; live.className = "sr-only"; live.setAttribute("aria-live", "polite"); document.body.appendChild(live);
-    this.paintFab();
     // vuelve a preparar las preguntas cada vez que cambia el paso
     let t; new MutationObserver(() => { clearTimeout(t); t = setTimeout(() => this.enhance(), 60); }).observe(document.body, { childList: true, subtree: true });
     if (this.tts) speechSynthesis.getVoices();
   },
-  paintFab() {
-    const f = this.fab; if (!f) return;
-    f.setAttribute("aria-pressed", String(this.on));
-    f.setAttribute("aria-label", this.on ? "Desactivar el modo audio" : "Activar el modo audio: escuchar las preguntas y responder con la voz");
-    f.innerHTML = `${ms(this.on ? "headset_off" : "headphones")}<span>${this.on ? "Quitar audio" : "Audio"}</span>`;
-  },
-  toggle() {
-    this.on = !this.on; store.set(this.KEY, this.on); this.paintFab();
-    $$(".aud").forEach(a => a.remove());
-    this.enhance();
-    if (this.on) { const m = "Modo audio activado. Toque Escuchar para oír cada pregunta" + (this.SR ? " y Responder para contestar con su voz." : "."); toast(m); this.say(m); this.readHead(); }
-    else { this.stop(); toast("Modo audio desactivado"); }
-  },
-  show(r) { if (this.fab) this.fab.hidden = r !== "encuesta"; if (r !== "encuesta") this.stop(); },
-  // el botón va en la barra inferior (entre Anterior y Siguiente) para no tapar las preguntas
-  dock() {
-    const f = this.fab; if (!f) return;
-    const nb = $("#view-enc .navwrap .navbar, #view-enc #send-zone .navbar");
-    if (nb) { if (f.parentElement !== nb) { nb.insertBefore(f, nb.lastElementChild); f.classList.add("in-nav"); } }
-    else if (f.parentElement !== document.body) { document.body.appendChild(f); f.classList.remove("in-nav"); }
-  },
+  show(r) { if (r !== "encuesta") this.stop(); },
   voice() {
     const vs = this.tts ? speechSynthesis.getVoices() : [];
     return ["es-PE", "es-419", "es-US", "es-MX", "es-ES"].map(l => vs.find(v => v.lang === l || v.lang.replace("_", "-") === l)).find(Boolean) || vs.find(v => /^es/i.test(v.lang)) || null;
@@ -2418,6 +2380,8 @@ const Voz = {
     const b = l.querySelector(".cc-txt b"); if (b) return b.textContent.trim();          // consentimiento
     return l.textContent.replace(/\s+/g, " ").trim() || r.value;
   },
+  // código asignado al azar o fecha: se escuchan pero no se dictan
+  noMic(u) { const f = this.radios(u).length ? null : this.field(u); return !!f && (f.readOnly || f.type === "date"); },
   field(u) { return u.querySelector("input[type=number], input[type=range], input.input:not([type=radio]), textarea, select"); },
   text(u) {
     let t = this.label(u);
@@ -2444,7 +2408,6 @@ const Voz = {
     const f = this.field(u); if (f && !f.getAttribute("aria-label") && !(f.id && document.querySelector(`label[for="${f.id}"]`))) f.setAttribute("aria-label", lab);
   },
   enhance() {
-    this.dock();
     const step = $("#step"); if (!step) return;
     this.units(step).forEach(u => {
       this.a11y(u);
@@ -2452,16 +2415,22 @@ const Voz = {
       const bar = document.createElement("div"); bar.className = "aud";
       const lab = this.label(u);
       bar.innerHTML = (this.tts ? `<button type="button" class="a-say" aria-label="Escuchar: ${esc(lab)}">${ms("volume_up")}<span class="t">Escuchar</span></button>` : "")
-        + (this.SR ? `<button type="button" class="a-mic" aria-label="Responder con la voz: ${esc(lab)}">${ms("mic")}<span class="t">Responder</span></button>` : "");
+        + (this.SR && !this.noMic(u) ? `<button type="button" class="a-mic" aria-label="Responder con la voz: ${esc(lab)}">${ms("mic")}<span class="t">Responder</span></button>` : "");
       if (!bar.children.length) return;
       const sb = bar.querySelector(".a-say"); if (sb) sb.onclick = () => { if (sb.classList.contains("on")) { this.stop(); return; } this.say(this.text(u), sb); };
       const mb = bar.querySelector(".a-mic"); if (mb) mb.onclick = () => this.listen(u, mb);
       const qh = u.querySelector(":scope > .q-head"), ql = u.querySelector(":scope > .q-label, :scope > .nasa-top");
       if (qh) qh.appendChild(bar); else if (ql) ql.after(bar); else u.prepend(bar);
     });
-    if (this.on && step.dataset.audStep !== String(S.step)) { step.dataset.audStep = String(S.step); this.readHead(); }
+    const sh = step.querySelector(".step-head .sh-txt");
+    if (sh && this.tts && !sh.querySelector(".aud")) {
+      const bar = document.createElement("div"); bar.className = "aud";
+      bar.innerHTML = `<button type="button" class="a-say" aria-label="Escuchar las instrucciones de este paso">${ms("volume_up")}<span class="t">Escuchar instrucciones</span></button>`;
+      const b = bar.firstChild; b.onclick = () => { if (b.classList.contains("on")) { this.stop(); return; } this.readHead(b); };
+      sh.appendChild(bar);
+    }
   },
-  readHead() { const h = $("#step h2"), l = $("#step .lead, #step .step-head p"); if (h) this.say(h.textContent + (l ? ". " + l.textContent : "")); },
+  readHead(btn) { const h = $("#step h2"), l = $("#step .step-head .lead"); if (h) this.say(h.textContent + (l ? ". " + l.textContent : ""), btn); },
   // ---------- responder con la voz ----------
   listen(u, btn) {
     if (!this.SR) return;
