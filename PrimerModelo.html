@@ -663,8 +663,12 @@ td{padding:12px;font-size:.92rem}
 .navbar:has(.nav-cam) > .btn:not(.nav-cam){flex:1 1 0;min-width:0;padding-inline:12px}
 .nav-cam{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
 .nav-cam .ms{font-size:24px}
+.cam-n{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#E11D48;color:#fff;font-size:.75rem;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 2px #fff}
+.nav-cam{position:relative}
+.gen-fotos{margin:14px 0 4px;padding:12px;border:1.5px dashed var(--line);border-radius:14px}
+.gen-fotos > p{display:flex;align-items:center;gap:6px;font-size:.88rem;margin-bottom:8px}
 .nav-cam.off{opacity:.45;filter:grayscale(.6);box-shadow:none;cursor:not-allowed}
-@media (max-width:640px){ .nav-cam{width:56px;padding:0} .nav-cam .bl{display:none} }
+@media (max-width:640px){ .navbar .nav-cam{flex:0 0 60px;width:60px;min-width:60px;padding:0} .nav-cam .bl{display:none} }
 
 /* ---------- criterios de inclusión y exclusión ---------- */
 .crit{display:flex;gap:8px;align-items:flex-start;margin:6px 0 8px;padding:8px 12px;border-radius:12px;font-size:.88rem;line-height:1.4}
@@ -673,10 +677,18 @@ td{padding:12px;font-size:.92rem}
 .crit.exc{background:#FFEDF1;color:#9F1239}.crit.exc .ms{color:#E11D48}
 .q.crit-inc{border-left:4px solid #2DD4BF}.q.crit-exc{border-left:4px solid #FB7185}
 .banner ul{margin:4px 0 0;padding-left:18px}
+.cond-q{margin-bottom:6px}
+.cond-q .q-label{display:block;margin-bottom:8px;font-weight:700}
+.sw-num{cursor:default;flex-wrap:wrap}
+.sw-num .sw-t{display:flex;flex-direction:column}
+.sw-num .sw-t small{font-weight:600;font-size:.8rem;color:#0F766E}
+.sw-in{display:inline-flex;align-items:center;gap:6px}
+.sw-in .input{width:96px;height:48px;text-align:center;background:#fff}
+.sw-num:has(input:valid:not(:placeholder-shown)){border-color:rgba(13,148,136,.25)}
 .sw-list{display:grid;gap:8px}
 .switch{display:flex;align-items:center;gap:12px;min-height:56px;padding:12px 14px;border-radius:16px;background:var(--surface-2);border:2px solid transparent;cursor:pointer;transition:background .2s,border-color .2s}
 .switch[hidden]{display:none}
-.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch > input[type=checkbox]{position:absolute;opacity:0;width:1px;height:1px}
 .switch .sw-t{flex:1;font-weight:600;font-size:.98rem;line-height:1.35}
 .switch .trk{width:48px;height:28px;border-radius:14px;background:#D6CDC7;position:relative;transition:background .25s;flex-shrink:0}
 .switch .trk::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
@@ -1047,12 +1059,10 @@ const FICHA = [
   { sec: "B. Condición laboral o formativa" },
   { id: "condicion", t: "Condición", type: "pills", opts: ["Interno", "Egresado"] },
   { id: "meses", t: "Tiempo en actividad asistencial", type: "number", unit: "meses", min: 0, max: 600 },
-  { id: "elegMeses", t: "Tiene 3 meses o más de actividad asistencial", type: "switch" },
   { id: "pacientes", t: "Número promedio de pacientes atendidos por día", type: "number", unit: "pacientes", min: 0, max: 100 },
   { id: "moviliza", t: "¿Realiza movilización o transferencia de pacientes en su actividad habitual?", type: "pills", opts: ["Sí", "No"] },
   { id: "otroEmpleo", t: "¿Tiene otro empleo o actividad laboral adicional?", type: "pills", opts: ["Sí", "No"] },
   { id: "anosEgreso", t: "Años desde el egreso", type: "number", unit: "años", min: 0, max: 40, only: "Egresado" },
-  { id: "elegAnios", t: "Tiene 6 años o menos desde el egreso", type: "switch", only: "Egresado" },
   { id: "vinculo", t: "Tipo de vínculo laboral", type: "pills", opts: ["Nombrado", "Contratado", "Locador de servicios", "Independiente"], only: "Egresado" },
   { id: "centros", t: "Número de centros donde trabaja", type: "number", unit: "centros", min: 1, max: 10, only: "Egresado" },
   { id: "sede", t: "Sede de internado", type: "text", only: "Interno" },
@@ -1370,8 +1380,6 @@ function scores(st = S) {
 // criterios de selección del estudio, ligados a las preguntas de la ficha
 const CRIT = {
   moviliza: ["inc", "Realiza movilización o transferencia de pacientes"],
-  elegMeses: ["inc", "Tiene 3 meses o más de actividad asistencial"],
-  elegAnios: ["inc", "Tiene 6 años o menos desde el egreso"],
   reuma: ["exc", "Tiene diagnóstico de enfermedad reumatológica sistémica (artritis reumatoide, lupus u otra)"],
   embarazo: ["exc", "Está embarazada actualmente"],
   licencia: ["exc", "Se encuentra con descanso médico o licencia"]
@@ -1380,8 +1388,8 @@ const ELEG = Object.keys(CRIT);
 function eligibility(st = S) {
   const f = st.ficha, out = [];
   if (f.moviliza === "No") out.push("No cumple inclusión: no realiza movilización o transferencia de pacientes");
-  if (f.elegMeses === "No" || (f.meses != null && f.meses !== "" && +f.meses < 3)) out.push("No cumple inclusión: menos de 3 meses de actividad asistencial");
-  if (f.condicion === "Egresado" && (f.elegAnios === "No" || (f.anosEgreso != null && f.anosEgreso !== "" && +f.anosEgreso > 6))) out.push("No cumple inclusión: más de 6 años de egreso");
+  if (f.meses != null && f.meses !== "" && +f.meses < 3) out.push("No cumple inclusión: menos de 3 meses de actividad asistencial");
+  if (f.condicion === "Egresado" && f.anosEgreso != null && f.anosEgreso !== "" && +f.anosEgreso > 6) out.push("No cumple inclusión: más de 6 años de egreso");
   if (f.reuma === "Sí") out.push("Exclusión: diagnóstico de enfermedad reumatológica sistémica");
   if (f.embarazo === "Sí") out.push("Exclusión: embarazo en curso");
   if (f.licencia === "Sí") out.push("Exclusión: descanso médico o licencia");
@@ -1427,8 +1435,42 @@ function nav(host, { back = true, nextLabel = "Siguiente", onNext }) {
   const d = document.createElement("div"); d.className = "navwrap";
   d.innerHTML = `<p class="err" id="err" role="alert"></p><div class="navbar">${back ? `<button class="btn btn-ghost" id="prev">${ICONS.prev} Anterior</button>` : "<span></span>"}<button class="btn btn-primary" id="next">${nextLabel} ${ICONS.next}</button></div>`;
   host.appendChild(d);
+  navCam(host);
   if (back) $("#prev", host).onclick = () => go(S.step - 1);
   $("#next", host).onclick = () => { const err = onNext ? onNext() : null; if (err) { $("#err", host).textContent = err; const inv = $(".invalid", host); if (inv) inv.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); return; } go(S.step + 1); };
+}
+// botón de cámara entre «Anterior» y «Siguiente» fuera de REBA: guarda una foto general del paso
+function navCam(host) {
+  const id = STEPS[S.step] && STEPS[S.step].id;
+  if (id === "reba") return;
+  const nb = $(".navwrap .navbar", host), next = nb && $("#next", nb); if (!next) return;
+  const ok = S.cons.foto === "Sí", undecided = !S.cons.foto;
+  const cam = document.createElement("label");
+  cam.className = "btn btn-accent nav-cam" + (ok ? "" : " off");
+  const fotos = () => S.reba.fotos.filter(f => f.obs === -1 && f.paso === id);
+  const badge = () => { const n = fotos().length; return n ? `<span class="cam-n" aria-label="${n} foto(s)">${n}</span>` : ""; };
+  const paint = () => { cam.innerHTML = `${ICONS.cam}<span class="bl">Tomar foto</span>${badge()}${ok ? `<input type="file" accept="image/*" capture="environment" hidden>` : ""}`; if (ok) $("input", cam).onchange = add; strip(); };
+  const strip = () => {
+    let st = $(".gen-fotos", host); const list = fotos();
+    if (!list.length) { if (st) st.remove(); return; }
+    if (!st) { st = document.createElement("div"); st.className = "gen-fotos"; $(".navwrap", host).before(st); }
+    st.innerHTML = `<p class="muted">${ICONS.cam} Fotos de este paso</p><div class="thumbs">${list.map(f => `<figure><img src="${f.data}" alt="Foto del paso"><button aria-label="Eliminar foto" data-del="${f.k}">×</button></figure>`).join("")}</div>`;
+    $$("[data-del]", st).forEach(b => b.onclick = () => { S.reba.fotos = S.reba.fotos.filter(f => f.k !== b.dataset.del); persist(); paint(); });
+  };
+  const add = async e => {
+    const file = e.target.files[0]; e.target.value = ""; if (!file) return;
+    if (fotos().length >= MAX_FOTOS_OBS) { toast(`Máximo ${MAX_FOTOS_OBS} fotos por paso.`); return; }
+    try { const data = await compressImage(file); S.reba.fotos.push({ k: "f" + Date.now(), obs: -1, paso: id, data, ts: new Date().toISOString() }); persist(); paint(); toast("Foto agregada"); }
+    catch { toast("No se pudo procesar la imagen. Intente con otra foto."); }
+  };
+  if (ok) { cam.setAttribute("aria-label", "Tomar foto"); cam.dataset.tip = "Tomar foto"; }
+  else {
+    cam.setAttribute("aria-disabled", "true");
+    const why = undecided ? "Primero registre en el consentimiento si autoriza fotografías" : "El participante no autorizó fotografías";
+    cam.dataset.tip = why; cam.onclick = () => toast(why + ".");
+  }
+  paint();
+  nb.insertBefore(cam, next);
 }
 function go(i) {
   if (i < 0 || i >= STEPS.length) return;
@@ -1511,7 +1553,7 @@ function stepCons(host) {
     const box = $(`input[name="acepta"][value="${v}"]`, host).closest(".cchoice");
     box.classList.remove("fx"); void box.offsetWidth; box.classList.add("fx");
   });
-  bindPills(host, "foto", v => { c.foto = v; persist(); });
+  bindPills(host, "foto", v => { c.foto = v; persist(); const old = $(".nav-cam", host); if (old) { old.remove(); navCam(host); } });
   nav(host, { onNext: () => {
     $$(".invalid", host).forEach(x => x.classList.remove("invalid"));
     if (!c.leido) { $("#q-leido", host).classList.add("invalid"); return "Confirme que leyó la información."; }
@@ -1579,22 +1621,32 @@ function stepFicha(host) {
     const hid = (q.only && f.condicion !== q.only) || (id === "embarazo" && f.sexo === "Masculino");
     return `<label class="switch sw-${t}" id="q-${id}" data-only="${q.only || ""}" ${hid ? "hidden" : ""}><input type="checkbox" data-crit="${id}" ${f[id] === "Sí" ? "checked" : ""}><span class="ie ${t}" title="${t === "inc" ? "Criterio de inclusión" : "Criterio de exclusión"}">${t === "inc" ? "Inc" : "Exc"}</span><span class="sw-t">${esc(CRIT[id][1])}</span><span class="trk" aria-hidden="true"></span></label>`;
   };
-  // primero las preguntas que definen si el participante es elegible y, debajo, el resultado
-  html += `<div class="section-title"><span class="tag">${ms("rule")}</span><h3>Criterios de participación</h3></div>
-    <p class="muted" style="font-size:.88rem;margin:-4px 0 10px">Active lo que corresponda al participante. <span class="ie inc">Inc</span> criterio de inclusión · <span class="ie exc">Exc</span> criterio de exclusión.</p>
-    <div class="sw-list" id="eleg">${ELEG.map(swHTML).join("")}</div>
-    <div id="elig" aria-live="polite"></div>`;
+  // criterio con número (meses de actividad, años desde el egreso): se escribe en la misma fila
+  const numHTML = (id, regla) => {
+    const q = FICHA.find(x => x.id === id), hid = q.only && f.condicion !== q.only;
+    return `<div class="switch sw-num sw-inc" id="q-${id}" data-only="${q.only || ""}" ${hid ? "hidden" : ""}><span class="ie inc" title="Criterio de inclusión">Inc</span><label class="sw-t" for="f-${id}">${esc(q.t)}<small>${regla}</small></label><span class="sw-in"><input class="input mono" type="number" inputmode="numeric" id="f-${id}" min="${q.min}" max="${q.max}" step="${q.step || 1}" value="${esc(f[id] ?? "")}"><span class="muted">${q.unit}</span></span></div>`;
+  };
+  const cq = FICHA.find(x => x.id === "condicion");
+  // primero la condición y las preguntas que definen si el participante es elegible; debajo, el resultado
+  html += `<div class="no-aud">
+    <div class="q cond-q" id="q-condicion"><span class="q-label">${esc(cq.t)} del participante</span>${pills("f-condicion", cq.opts, f.condicion)}</div>
+    <div class="section-title"><span class="tag">${ms("rule")}</span><h3>Criterios de participación</h3></div>
+    <p class="muted" style="font-size:.88rem;margin:-4px 0 10px">Active o complete lo que corresponda. <span class="ie inc">Inc</span> criterio de inclusión · <span class="ie exc">Exc</span> criterio de exclusión.</p>
+    <div class="sw-list" id="eleg">${numHTML("meses", "3 meses o más")}${numHTML("anosEgreso", "6 años o menos")}${ELEG.map(swHTML).join("")}</div>
+    <div id="elig" aria-live="polite"></div></div>`;
+  const PRE = ["condicion", "meses", "anosEgreso"];
   FICHA.forEach(q => {
     if (q.sec) { html += `<div class="section-title"><span class="tag">${q.sec[0]}</span><h3>${esc(q.sec.slice(3))}</h3></div>`; return; }
-    if (!CRIT[q.id]) html += qHTML(q);
+    if (!CRIT[q.id] && !PRE.includes(q.id)) html += qHTML(q);
   });
   host.innerHTML = html;
   const updElig = () => {
-    const e = f._critVisto ? eligibility() : [], inc = e.filter(x => x.startsWith("No cumple inclusión")), exc = e.filter(x => x.startsWith("Exclusión"));
+    const e = eligibility().filter(x => f._critVisto || !/movilización|reumatológica|embarazo|licencia/.test(x)), inc = e.filter(x => x.startsWith("No cumple inclusión")), exc = e.filter(x => x.startsWith("Exclusión"));
     const it = x => `<li>${esc(x.replace(/^(No cumple inclusión|Exclusión): /, ""))}</li>`;
-    const pend = f._critVisto ? [] : ELEG;
+    const falta = id => f[id] == null || f[id] === "";
+    const pend = !f._critVisto || falta("meses") || (f.condicion === "Egresado" && falta("anosEgreso")) ? ["x"] : [];
     $("#elig", host).innerHTML = e.length ? `<div class="banner bad"><div><b>Participante no elegible.</b>${inc.length ? `<p style="margin-top:6px"><b>No cumple criterio de inclusión:</b></p><ul>${inc.map(it).join("")}</ul>` : ""}${exc.length ? `<p style="margin-top:6px"><b>Cumple criterio de exclusión:</b></p><ul>${exc.map(it).join("")}</ul>` : ""}<p style="margin-top:6px">Si se confirma, regístrelo como no elegible y seleccione al siguiente participante del mismo estrato.</p></div></div>`
-      : pend.length ? `<div class="banner"><div>Active los criterios que cumple el participante para confirmar si es elegible.</div></div>`
+      : pend.length ? `<div class="banner"><div>Complete los criterios de participación para confirmar si el participante es elegible.</div></div>`
       : `<div class="banner good"><div><b>Participante elegible.</b> Cumple los criterios de inclusión y ninguno de exclusión. Continúe con el resto de la ficha.</div></div>`;
   };
   $$("[data-crit]", host).forEach(cb => cb.onchange = () => { f[cb.dataset.crit] = cb.checked ? "Sí" : "No"; f._critVisto = true; persist(); updElig(); });
@@ -1606,7 +1658,7 @@ function stepFicha(host) {
       if (q.id === "sexo") { if (v === "Masculino") f.embarazo = "No aplica"; else if (f.embarazo === "No aplica") f.embarazo = "No"; const row = $("#q-embarazo", host); row.hidden = v === "Masculino"; $("input", row).checked = f.embarazo === "Sí"; }
       persist(); updElig();
     });
-    else { const el = $(`#f-${q.id}`, host); el.oninput = () => { el.closest(".q").classList.remove("invalid"); f[q.id] = q.type === "number" ? (el.value === "" ? "" : +el.value) : el.value; persist(); updElig(); };
+    else { const el = $(`#f-${q.id}`, host); el.oninput = () => { el.closest(".q, .switch").classList.remove("invalid"); f[q.id] = q.type === "number" ? (el.value === "" ? "" : +el.value) : el.value; persist(); updElig(); };
       if (q.dec) el.onblur = () => { if (el.value !== "" && Math.round(+el.value * 10 ** q.dec) / 10 ** q.dec === +el.value) el.value = (+el.value).toFixed(q.dec); }; }
     if (q.follow) { const el = $(`#f-${q.follow.id}`, host); el.oninput = () => { f[q.follow.id] = el.value; persist(); }; }
   });
@@ -1946,10 +1998,10 @@ async function submit(host, estado = "completa") {
       let ref = S.envio.fotos[f.k];
       if (!ref) {
         msgZ(`Subiendo foto ${k + 1} de ${fotos.length} a Drive…`);
-        const r = await call("subirFoto", { foto: { id: `${id}_${f.k}`, encuesta: id, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, obs: f.obs + 1, ts: f.ts, data: f.data } });
+        const r = await call("subirFoto", { foto: { id: `${id}_${f.k}`, encuesta: id, codigo: S.meta.codigo, estrato: S.meta.estrato, fecha: S.meta.fecha, obs: f.obs >= 0 ? f.obs + 1 : "General", ts: f.ts, data: f.data } });
         ref = { id: r.id, archivo: r.archivo, url: r.url }; S.envio.fotos[f.k] = ref; store.set(DRAFT_KEY, S);
       }
-      fotosRefs.push(Object.assign({ obs: f.obs + 1, ts: f.ts }, ref));
+      fotosRefs.push(Object.assign({ obs: f.obs >= 0 ? f.obs + 1 : "General", paso: f.paso, ts: f.ts }, ref));
     }
     msgZ("Guardando respuestas en la tabla «Encuestas»…");
     const rec = {
@@ -2436,6 +2488,7 @@ const Voz = {
     return $$(".q, .subq, .field", root).filter(u => {
       if (u.querySelector(".subq")) return false;                 // la región del Nórdico se lee por sus subpreguntas
       if (u.closest(".subq") && !u.classList.contains("subq")) return false;
+      if (u.closest(".no-aud")) return false;
       return !!this.label(u) && !!u.querySelector("input:not([type=hidden]), select, textarea");
     });
   },
@@ -2478,6 +2531,7 @@ const Voz = {
     const step = $("#step"); if (!step) return;
     if (STEPS[S.step] && STEPS[S.step].id === "pres") { $$(".aud", step).forEach(a => a.remove()); $$(".q, .subq, .field", step).forEach(u => this.a11y(u)); return; }   // la presentación no lleva botones de audio
     const cons = STEPS[S.step] && STEPS[S.step].id === "cons";
+    $$(".no-aud .aud", step).forEach(a => a.remove());
     this.units(step).forEach(u => {
       this.a11y(u);
       if (cons) { $$(":scope > .aud, :scope > .q-head > .aud", u).forEach(a => a.remove()); return; }
