@@ -657,6 +657,48 @@ td{padding:12px;font-size:.92rem}
   .cc-txt small{font-size:.82rem}
 }
 
+/* ---------- criterios de inclusión y exclusión ---------- */
+.crit-box{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}
+.crit-box .cb{border-radius:14px;padding:12px 14px;border:1.5px solid}
+.crit-box .cb.inc{background:linear-gradient(145deg,#ECFDF9,#D9FBF4);border-color:rgba(13,148,136,.3)}
+.crit-box .cb.exc{background:linear-gradient(145deg,#FFF0F3,#FFE1E8);border-color:rgba(225,29,72,.25)}
+.crit-box h3{display:flex;align-items:center;gap:6px;font-size:.98rem}
+.crit-box .inc h3{color:#0F766E}.crit-box .exc h3{color:#BE123C}
+.crit-box ul{margin:6px 0 0;padding-left:18px;font-size:.88rem;line-height:1.45;color:var(--ink-2)}
+.crit{display:flex;gap:8px;align-items:flex-start;margin:6px 0 8px;padding:8px 12px;border-radius:12px;font-size:.88rem;line-height:1.4}
+.crit .ms{font-size:20px;margin-top:-1px}
+.crit.inc{background:#E6FBF6;color:#0F5F58}.crit.inc .ms{color:#0D9488}
+.crit.exc{background:#FFEDF1;color:#9F1239}.crit.exc .ms{color:#E11D48}
+.q.crit-inc{border-left:4px solid #2DD4BF}.q.crit-exc{border-left:4px solid #FB7185}
+.banner ul{margin:4px 0 0;padding-left:18px}
+@media (max-width:640px){ .crit-box{grid-template-columns:1fr} }
+
+/* ---------- modo audio: escuchar y responder con la voz ---------- */
+.audio-fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 104px);z-index:40;display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:10px 18px;border-radius:999px;border:0;font-weight:800;font-size:.95rem;color:#fff;background:linear-gradient(135deg,#2DD4BF,#0D9488);box-shadow:0 10px 24px rgba(13,148,136,.36);cursor:pointer;transition:transform .2s,box-shadow .2s}
+.audio-fab:hover{transform:translateY(-2px)}
+.audio-fab[aria-pressed="true"]{background:linear-gradient(135deg,#FF6B81,#E11D48);box-shadow:0 10px 24px rgba(225,29,72,.36)}
+.audio-fab .ms{font-size:24px}
+.audio-fab.in-nav{position:static;flex:none;align-self:stretch;justify-content:center;min-height:52px;box-shadow:0 6px 16px rgba(13,148,136,.28)}
+.audio-fab.in-nav[aria-pressed="true"]{box-shadow:0 6px 16px rgba(225,29,72,.28)}
+.navbar:has(.audio-fab.in-nav){flex-wrap:nowrap;align-items:stretch}
+.navbar:has(.audio-fab.in-nav) .btn{flex:1 1 0;min-width:0;padding-inline:12px}
+.navbar:has(.audio-fab.in-nav) > span:empty{display:none}
+.aud{display:inline-flex;gap:8px;margin:8px 0 4px;flex-wrap:wrap}
+.q-head .aud{margin:0 0 0 auto;flex:none;flex-wrap:nowrap}
+.aud button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font-weight:700;font-size:.88rem;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.aud button .ms{font-size:20px}
+.aud .a-say{color:var(--accent);border-color:rgba(13,148,136,.35)}
+.aud .a-say:hover{background:var(--accent-soft)}
+.aud .a-mic{color:var(--primary);border-color:rgba(225,29,72,.3)}
+.aud .a-mic:hover{background:var(--primary-soft)}
+.aud button.on{color:#fff;background:var(--primary);border-color:var(--primary);animation:micPulse 1.2s ease-in-out infinite}
+.aud .a-say.on{background:var(--accent);border-color:var(--accent);animation:none}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(225,29,72,.45)}50%{box-shadow:0 0 0 10px rgba(225,29,72,0)}}
+.aud-heard{flex-basis:100%;font-size:.86rem;color:var(--muted)}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media (max-width:640px){ .aud button span.t{display:none} .aud button{padding:0;width:44px;justify-content:center} .audio-fab{bottom:calc(env(safe-area-inset-bottom,0px) + 92px);width:52px;padding:0;justify-content:center} .audio-fab span:not(.ms){display:none} .navbar .audio-fab.in-nav{flex:0 0 52px;min-width:52px} }
+@media (prefers-reduced-motion:reduce){ .aud button.on{animation:none} }
+
 /* ---------- identidad visual TME ----------
    Paleta tomada de Ejemplo.html: coral como color principal, verde azulado como acento,
    ámbar para avisos, fondo crema y tinta color piedra. Se mantienen Manrope, los iconos
@@ -1312,14 +1354,32 @@ function scores(st = S) {
   const imc = st.ficha.peso && tm ? Math.round(st.ficha.peso / (tm ** 2) * 10) / 10 : null;
   return { nasa, sus: susOk ? sus : null, warr, regs, sintomas12: regs.length > 0, reba, rebaFinal, rebaLevel: rebaLevel(rebaFinal), imc };
 }
+// criterios de selección del estudio, ligados a las preguntas de la ficha
+const CRIT = {
+  moviliza: ["inc", "Se incluye si responde «Sí» (realiza movilización o transferencia de pacientes).", "Realiza movilización o transferencia de pacientes."],
+  meses: ["inc", "Se incluye con 3 meses o más de actividad asistencial.", "Tiene 3 meses o más de actividad asistencial."],
+  anosEgreso: ["inc", "Egresados: se incluye con 6 años o menos desde el egreso.", "Egresados: 6 años o menos desde el egreso."],
+  reuma: ["exc", "Se excluye si responde «Sí» (enfermedad reumatológica sistémica).", "Diagnóstico de enfermedad reumatológica sistémica (artritis reumatoide, lupus u otra)."],
+  embarazo: ["exc", "Se excluye si responde «Sí» (embarazo en curso).", "Embarazo en curso."],
+  licencia: ["exc", "Se excluye si responde «Sí» (descanso médico o licencia).", "Descanso médico o licencia al momento de la encuesta."]
+};
+function critTag(id) {
+  const c = CRIT[id]; if (!c) return "";
+  return `<p class="crit ${c[0]}">${ms(c[0] === "inc" ? "check_circle" : "block")}<span><b>Criterio de ${c[0] === "inc" ? "inclusión" : "exclusión"}.</b> ${c[1]}</span></p>`;
+}
+function critBox() {
+  const li = t => FICHA.filter(q => CRIT[q.id] && CRIT[q.id][0] === t).map(q => `<li>${esc(CRIT[q.id][2])}</li>`).join("");
+  return `<div class="crit-box"><div class="cb inc"><h3>${ms("check_circle")} Criterios de inclusión</h3><ul><li>Fisioterapeuta egresado o interno de la UCSS en actividad asistencial.</li>${li("inc")}</ul></div>
+    <div class="cb exc"><h3>${ms("block")} Criterios de exclusión</h3><ul>${li("exc")}</ul></div></div>`;
+}
 function eligibility(st = S) {
   const f = st.ficha, out = [];
-  if (f.reuma === "Sí") out.push("Diagnóstico de enfermedad reumatológica sistémica");
-  if (f.embarazo === "Sí") out.push("Embarazo en curso");
-  if (f.licencia === "Sí") out.push("Descanso médico o licencia");
-  if (f.moviliza === "No") out.push("No realiza movilización o transferencia de pacientes");
-  if (f.meses != null && f.meses !== "" && +f.meses < 3) out.push("Menos de 3 meses de actividad asistencial");
-  if (f.condicion === "Egresado" && f.anosEgreso != null && f.anosEgreso !== "" && +f.anosEgreso > 6) out.push("Más de 6 años de egreso");
+  if (f.moviliza === "No") out.push("No cumple inclusión: no realiza movilización o transferencia de pacientes");
+  if (f.meses != null && f.meses !== "" && +f.meses < 3) out.push("No cumple inclusión: menos de 3 meses de actividad asistencial");
+  if (f.condicion === "Egresado" && f.anosEgreso != null && f.anosEgreso !== "" && +f.anosEgreso > 6) out.push("No cumple inclusión: más de 6 años de egreso");
+  if (f.reuma === "Sí") out.push("Exclusión: diagnóstico de enfermedad reumatológica sistémica");
+  if (f.embarazo === "Sí") out.push("Exclusión: embarazo en curso");
+  if (f.licencia === "Sí") out.push("Exclusión: descanso médico o licencia");
   return out;
 }
 
@@ -1495,7 +1555,7 @@ function fichaError(f = S.ficha) {
 }
 function stepFicha(host) {
   const f = S.ficha;
-  let html = head(2, "Datos generales, condición laboral, jornada, pausas activas y antecedentes. Son confidenciales.", `<span class="chip p">Anexo 3</span><span class="chip a">23 ítems</span>`);
+  let html = head(2, "Datos generales, condición laboral, jornada, pausas activas y antecedentes. Son confidenciales.", `<span class="chip p">Anexo 3</span><span class="chip a">23 ítems</span>`) + critBox();
   let n = 0;
   FICHA.forEach(q => {
     if (q.sec) { html += `<div class="section-title"><span class="tag">${q.sec[0]}</span><h3>${esc(q.sec.slice(3))}</h3></div>`; return; }
@@ -1506,11 +1566,15 @@ function stepFicha(host) {
     else if (q.type === "text") ctrl = `<input class="input" id="f-${q.id}" value="${esc(f[q.id] ?? "")}">`;
     else ctrl = pills("f-" + q.id, q.opts, f[q.id]);
     if (q.follow) ctrl += `<div id="fw-${q.id}" ${f[q.id] === "Sí" ? "" : "hidden"}><input class="input" id="f-${q.follow.id}" placeholder="${q.follow.t}" value="${esc(f[q.follow.id] ?? "")}"></div>`;
-    html += `<div class="q" id="q-${q.id}" data-only="${q.only || ""}" ${hid}><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(q.t)}</span></div>${ctrl}</div>`;
+    html += `<div class="q${CRIT[q.id] ? " has-crit crit-" + CRIT[q.id][0] : ""}" id="q-${q.id}" data-only="${q.only || ""}" ${hid}><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(q.t)}</span></div>${critTag(q.id)}${ctrl}</div>`;
   });
   html += `<div id="elig" style="margin-top:14px"></div>`;
   host.innerHTML = html;
-  const updElig = () => { const e = eligibility(); $("#elig", host).innerHTML = e.length ? `<div class="banner bad"><div><b>Posible criterio de exclusión.</b> ${e.map(esc).join("; ")}. Si se confirma, registre al participante como no elegible para reemplazarlo dentro del mismo estrato.<div style="margin-top:8px"><button class="btn btn-accent" id="noelig" style="min-height:38px;padding:6px 14px">Registrar como no elegible</button></div></div></div>` : ""; const b = $("#noelig", host); if (b) b.onclick = () => finishRefusal("no elegible"); };
+  const updElig = () => {
+    const e = eligibility(), inc = e.filter(x => x.startsWith("No cumple inclusión")), exc = e.filter(x => x.startsWith("Exclusión"));
+    const it = x => `<li>${esc(x.replace(/^(No cumple inclusión|Exclusión): /, ""))}</li>`;
+    $("#elig", host).innerHTML = e.length ? `<div class="banner bad"><div><b>Participante no elegible.</b>${inc.length ? `<p style="margin-top:6px"><b>No cumple criterio de inclusión:</b></p><ul>${inc.map(it).join("")}</ul>` : ""}${exc.length ? `<p style="margin-top:6px"><b>Cumple criterio de exclusión:</b></p><ul>${exc.map(it).join("")}</ul>` : ""}<p style="margin-top:6px">Si se confirma, regístrelo como no elegible y seleccione al siguiente participante del mismo estrato.</p></div></div>` : "";
+  };
   FICHA.filter(q => q.id).forEach(q => {
     if (q.type === "pills") bindPills(host, "f-" + q.id, v => {
       f[q.id] = v;
@@ -1528,7 +1592,7 @@ function stepFicha(host) {
     $$(".invalid", host).forEach(x => x.classList.remove("invalid"));
     const e = fichaError();
     if (e) { if (e.id) $(`#q-${e.id}`, host).classList.add("invalid"); return e.msg; }
-    if (eligibility().length) return "El participante cumple un criterio de exclusión. Regístrelo como no elegible o corrija la respuesta.";
+    if (eligibility().length) return "El participante no es elegible (no cumple un criterio de inclusión o cumple uno de exclusión). Regístrelo como no elegible o corrija la respuesta.";
     return null; } });
 }
 
@@ -1819,7 +1883,7 @@ function stepSend(host) {
   if (!S.meta.fecha) problems.push("Falta la fecha (paso 1)");
   if (S.cons.acepta !== "Sí, acepto" || !S.cons.leido) problems.push("Consentimiento no aceptado");
   if (fichaError()) problems.push("Ficha sociodemográfica incompleta o con valores fuera de rango");
-  if (eligibility().length) problems.push("El participante cumple un criterio de exclusión: " + eligibility().join(", "));
+  if (eligibility().length) problems.push("El participante no es elegible: " + eligibility().join("; "));
   if (!s.nasa) problems.push("NASA-TLX incompleto"); if (!s.sus) problems.push("SUSESO/ISTAS21 incompleto"); if (!s.warr) problems.push("Satisfacción laboral incompleta");
   if (REGIONS.some(r => !S.nordic[r.id]?.m12)) problems.push("Cuestionario Nórdico incompleto"); if (!s.rebaFinal || s.reba.some(x => !x)) problems.push("Observaciones REBA incompletas");
   $("#checks", host).innerHTML = problems.length ? `<div class="banner bad"><div><b>Antes de enviar:</b> ${problems.map(esc).join("; ")}.</div></div>` : `<div class="banner good"><div><b>Todo completo.</b> ${fotosEnvio().length} foto(s) adjunta(s).</div></div>`;
@@ -2294,6 +2358,190 @@ const Gate = {
 };
 
 /* =====================================================================
+   MODO AUDIO: lee cada pregunta en voz alta y permite responder con la voz.
+   Funciona sobre las preguntas ya dibujadas (.q, .subq, .field con .q-label),
+   así sirve para todos los instrumentos sin cambiar cada paso.
+   ===================================================================== */
+const Voz = {
+  KEY: "tme_audio",
+  on: false,
+  SR: window.SpeechRecognition || window.webkitSpeechRecognition || null,
+  tts: "speechSynthesis" in window,
+  init() {
+    this.on = store.get(this.KEY) === true;
+    const fab = document.createElement("button");
+    fab.className = "audio-fab"; fab.id = "audio-fab"; fab.type = "button"; fab.hidden = true;
+    fab.innerHTML = `${ms("headphones")}<span>Audio</span>`;
+    fab.onclick = () => this.toggle();
+    document.body.appendChild(fab); this.fab = fab;
+    const live = document.createElement("div"); live.id = "aud-live"; live.className = "sr-only"; live.setAttribute("aria-live", "polite"); document.body.appendChild(live);
+    this.paintFab();
+    // vuelve a preparar las preguntas cada vez que cambia el paso
+    let t; new MutationObserver(() => { clearTimeout(t); t = setTimeout(() => this.enhance(), 60); }).observe(document.body, { childList: true, subtree: true });
+    if (this.tts) speechSynthesis.getVoices();
+  },
+  paintFab() {
+    const f = this.fab; if (!f) return;
+    f.setAttribute("aria-pressed", String(this.on));
+    f.setAttribute("aria-label", this.on ? "Desactivar el modo audio" : "Activar el modo audio: escuchar las preguntas y responder con la voz");
+    f.innerHTML = `${ms(this.on ? "headset_off" : "headphones")}<span>${this.on ? "Quitar audio" : "Audio"}</span>`;
+  },
+  toggle() {
+    this.on = !this.on; store.set(this.KEY, this.on); this.paintFab();
+    $$(".aud").forEach(a => a.remove());
+    this.enhance();
+    if (this.on) { const m = "Modo audio activado. Toque Escuchar para oír cada pregunta" + (this.SR ? " y Responder para contestar con su voz." : "."); toast(m); this.say(m); this.readHead(); }
+    else { this.stop(); toast("Modo audio desactivado"); }
+  },
+  show(r) { if (this.fab) this.fab.hidden = r !== "encuesta"; if (r !== "encuesta") this.stop(); },
+  // el botón va en la barra inferior (entre Anterior y Siguiente) para no tapar las preguntas
+  dock() {
+    const f = this.fab; if (!f) return;
+    const nb = $("#view-enc .navwrap .navbar, #view-enc #send-zone .navbar");
+    if (nb) { if (f.parentElement !== nb) { nb.insertBefore(f, nb.lastElementChild); f.classList.add("in-nav"); } }
+    else if (f.parentElement !== document.body) { document.body.appendChild(f); f.classList.remove("in-nav"); }
+  },
+  voice() {
+    const vs = this.tts ? speechSynthesis.getVoices() : [];
+    return ["es-PE", "es-419", "es-US", "es-MX", "es-ES"].map(l => vs.find(v => v.lang === l || v.lang.replace("_", "-") === l)).find(Boolean) || vs.find(v => /^es/i.test(v.lang)) || null;
+  },
+  say(text, btn) {
+    if (!this.tts || !text) return;
+    speechSynthesis.cancel(); $$(".aud .a-say.on").forEach(b => b.classList.remove("on"));
+    const u = new SpeechSynthesisUtterance(text); const v = this.voice();
+    u.lang = v ? v.lang : "es-PE"; if (v) u.voice = v; u.rate = 0.95;
+    if (btn) { btn.classList.add("on"); u.onend = u.onerror = () => btn.classList.remove("on"); }
+    speechSynthesis.speak(u);
+  },
+  stop() { if (this.tts) speechSynthesis.cancel(); if (this.rec) { try { this.rec.abort(); } catch {} this.rec = null; } $$(".aud button.on").forEach(b => b.classList.remove("on")); },
+  announce(t) { const l = $("#aud-live"); if (l) { l.textContent = ""; setTimeout(() => { l.textContent = t; }, 30); } },
+  // ---------- qué es una pregunta y qué opciones tiene ----------
+  units(root) {
+    return $$(".q, .subq, .field", root).filter(u => {
+      if (u.querySelector(".subq")) return false;                 // la región del Nórdico se lee por sus subpreguntas
+      if (u.closest(".subq") && !u.classList.contains("subq")) return false;
+      return !!this.label(u) && !!u.querySelector("input:not([type=hidden]), select, textarea");
+    });
+  },
+  label(u) { const l = u.querySelector(".q-label, h3, label[for]"); return l ? l.textContent.replace(/\s+/g, " ").trim() : ""; },
+  radios(u) { return $$("input[type=radio]", u).filter(r => !r.closest("[hidden]")); },
+  optText(r) {
+    const a = r.getAttribute("aria-label"); if (a) return a.replace(/^\d+\s+/, "");   // escala de Warr: «1 Muy insatisfecho»
+    const l = r.closest("label"); if (!l) return r.value;
+    const b = l.querySelector(".cc-txt b"); if (b) return b.textContent.trim();          // consentimiento
+    return l.textContent.replace(/\s+/g, " ").trim() || r.value;
+  },
+  field(u) { return u.querySelector("input[type=number], input[type=range], input.input:not([type=radio]), textarea, select"); },
+  text(u) {
+    let t = this.label(u);
+    const d = u.querySelector(".nasa-top + p"); if (d) t += ". " + d.textContent.trim();
+    const rs = this.radios(u);
+    if (rs.length) {
+      const opts = [...new Set(rs.map(r => this.optText(r)))];
+      t += ". Opciones: " + opts.join("; ") + ".";
+      const c = rs.find(r => r.checked); if (c) t += " Respuesta actual: " + this.optText(c) + ".";
+    } else {
+      const f = this.field(u);
+      if (f && f.type === "range") { const e = u.querySelectorAll(".ends span"); t += `. Diga un número de 0 a 100${e.length ? `, donde 0 es ${e[0].textContent} y 100 es ${e[1].textContent}` : ""}.`; }
+      else if (f && f.type === "number") { const unit = f.parentElement.querySelector(".muted"); t += `. Diga un número${unit ? " en " + unit.textContent.trim() : ""}.`; }
+      else if (f && f.tagName === "SELECT") t += ". Opciones: " + [...f.options].filter(o => o.value).map(o => o.text).join("; ") + ".";
+      else t += ". Diga su respuesta.";
+      if (f && f.value && f.type !== "range") t += " Respuesta actual: " + f.value + ".";
+    }
+    return t;
+  },
+  // ---------- etiquetas para lectores de pantalla (siempre activas) ----------
+  a11y(u) {
+    const lab = this.label(u);
+    $$("[role=radiogroup]", u).forEach(g => { if (!g.getAttribute("aria-label")) g.setAttribute("aria-label", lab); });
+    const f = this.field(u); if (f && !f.getAttribute("aria-label") && !(f.id && document.querySelector(`label[for="${f.id}"]`))) f.setAttribute("aria-label", lab);
+  },
+  enhance() {
+    this.dock();
+    const step = $("#step"); if (!step) return;
+    this.units(step).forEach(u => {
+      this.a11y(u);
+      if (!this.on || u.querySelector(":scope > .aud, :scope > .q-head > .aud")) return;
+      const bar = document.createElement("div"); bar.className = "aud";
+      const lab = this.label(u);
+      bar.innerHTML = (this.tts ? `<button type="button" class="a-say" aria-label="Escuchar: ${esc(lab)}">${ms("volume_up")}<span class="t">Escuchar</span></button>` : "")
+        + (this.SR ? `<button type="button" class="a-mic" aria-label="Responder con la voz: ${esc(lab)}">${ms("mic")}<span class="t">Responder</span></button>` : "");
+      if (!bar.children.length) return;
+      const sb = bar.querySelector(".a-say"); if (sb) sb.onclick = () => { if (sb.classList.contains("on")) { this.stop(); return; } this.say(this.text(u), sb); };
+      const mb = bar.querySelector(".a-mic"); if (mb) mb.onclick = () => this.listen(u, mb);
+      const qh = u.querySelector(":scope > .q-head"), ql = u.querySelector(":scope > .q-label, :scope > .nasa-top");
+      if (qh) qh.appendChild(bar); else if (ql) ql.after(bar); else u.prepend(bar);
+    });
+    if (this.on && step.dataset.audStep !== String(S.step)) { step.dataset.audStep = String(S.step); this.readHead(); }
+  },
+  readHead() { const h = $("#step h2"), l = $("#step .lead, #step .step-head p"); if (h) this.say(h.textContent + (l ? ". " + l.textContent : "")); },
+  // ---------- responder con la voz ----------
+  listen(u, btn) {
+    if (!this.SR) return;
+    if (this.rec) { this.stop(); return; }
+    if (this.tts) speechSynthesis.cancel();
+    const rec = new this.SR(); this.rec = rec;
+    rec.lang = "es-PE"; rec.interimResults = false; rec.maxAlternatives = 4; rec.continuous = false;
+    btn.classList.add("on"); btn.setAttribute("aria-label", "Escuchando… toque para detener");
+    const done = () => { btn.classList.remove("on"); btn.setAttribute("aria-label", "Responder con la voz: " + this.label(u)); if (this.rec === rec) this.rec = null; };
+    rec.onresult = e => { const alts = [...e.results[0]].map(a => a.transcript); this.apply(u, alts); };
+    rec.onerror = e => { done(); const m = e.error === "not-allowed" || e.error === "service-not-allowed" ? "Permita el uso del micrófono en el navegador para responder con la voz." : e.error === "no-speech" ? "No se escuchó nada. Toque Responder e intente de nuevo." : "No se pudo usar el micrófono."; toast(m); this.say(m); };
+    rec.onend = done;
+    try { rec.start(); } catch { done(); }
+  },
+  norm(t) { return String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9ñ.,\s]/g, " ").replace(/\s+/g, " ").trim(); },
+  NUM: { cero: 0, uno: 1, una: 1, un: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11, doce: 12, trece: 13, catorce: 14, quince: 15, dieciseis: 16, diecisiete: 17, dieciocho: 18, diecinueve: 19, veinte: 20, treinta: 30, cuarenta: 40, cincuenta: 50, sesenta: 60, setenta: 70, ochenta: 80, noventa: 90, cien: 100 },
+  number(t) {
+    const n = this.norm(t);
+    const m = n.match(/\d+(?:[.,]\d+)?/); if (m) return parseFloat(m[0].replace(",", "."));
+    // números dichos en palabras: «treinta y cinco», «uno sesenta y cinco» (1,65)
+    const w = n.split(" ").filter(x => x !== "y"); let tot = 0, any = false, parts = [];
+    w.forEach(x => { if (x in this.NUM) { any = true; tot += this.NUM[x]; } else if (any && /^(coma|punto|con|metro|metros)$/.test(x)) { parts.push(tot); tot = 0; } });
+    if (!any) return null; parts.push(tot);
+    if (parts.length === 1 && w.length > 1 && w[0] in this.NUM && this.NUM[w[0]] < 10 && w.slice(1).some(x => this.NUM[x] >= 20)) { const r = w.slice(1).reduce((a, x) => a + (this.NUM[x] || 0), 0); return +(this.NUM[w[0]] + "." + String(r).padStart(2, "0")); }
+    return parts.length > 1 ? +(parts[0] + "." + parts[1]) : parts[0];
+  },
+  apply(u, alts) {
+    const heard = alts[0] || "";
+    const rs = this.radios(u);
+    let ok = null;
+    if (rs.length) {
+      for (const a of alts) {
+        const t = " " + this.norm(a) + " ";
+        const cands = rs.map(r => ({ r, o: this.norm(this.optText(r)) })).filter(c => c.o);
+        let hit = cands.find(c => t.trim() === c.o) || cands.filter(c => t.includes(" " + c.o + " ")).sort((x, y) => y.o.length - x.o.length)[0];
+        if (!hit) { const n = this.number(a); const pos = /opcion|numero/.test(t) && n != null ? cands[n - 1] : null; hit = pos || (n != null ? cands.find(c => c.r.value === String(n)) : null); }
+        if (!hit && /^\s*si\s*$/.test(t)) hit = cands.find(c => /^si\b/.test(c.o));
+        if (hit) { ok = hit; break; }
+      }
+      if (ok) { ok.r.checked = true; ok.r.dispatchEvent(new Event("change", { bubbles: true })); ok.r.dispatchEvent(new Event("input", { bubbles: true })); }
+    } else {
+      const f = this.field(u);
+      if (f && (f.type === "number" || f.type === "range")) {
+        let n = null; for (const a of alts) { n = this.number(a); if (n != null) break; }
+        if (n != null) {
+          if (f.type === "range") n = Math.max(0, Math.min(100, Math.round(n / 5) * 5));
+          f.value = String(n); f.dispatchEvent(new Event("input", { bubbles: true })); f.dispatchEvent(new Event("change", { bubbles: true })); f.dispatchEvent(new Event("blur"));
+          ok = { text: f.value };
+        }
+      } else if (f && f.tagName === "SELECT") {
+        const t = this.norm(heard); const o = [...f.options].find(o => o.value && t.includes(this.norm(o.text)));
+        if (o) { f.value = o.value; f.dispatchEvent(new Event("change", { bubbles: true })); ok = { text: o.text }; }
+      } else if (f) {
+        f.value = heard.charAt(0).toUpperCase() + heard.slice(1); f.dispatchEvent(new Event("input", { bubbles: true })); ok = { text: f.value };
+      }
+    }
+    const said = ok ? (ok.r ? this.optText(ok.r) : ok.text) : null;
+    const msg = said ? `Registrado: ${said}.` : `No entendí «${heard}». ${this.radios(u).length ? "Diga una de las opciones." : "Intente de nuevo."}`;
+    // la pregunta puede volver a dibujarse al responder (Nórdico); se busca de nuevo por id
+    const cur = (u.id && document.getElementById(u.id)) || u;
+    let note = cur.querySelector(".aud-heard"); const bar = cur.querySelector(".aud");
+    if (bar) { if (!note) { note = document.createElement("span"); note.className = "aud-heard"; bar.appendChild(note); } note.textContent = `Oído: «${heard}» · ${said ? "registrado: " + said : "sin coincidencia"}`; }
+    this.announce(msg); this.say(msg);
+  }
+};
+
+/* =====================================================================
    RUTAS
    ===================================================================== */
 function route() { return location.hash === "#admin" ? "admin" : location.hash === "#encuesta" ? "encuesta" : "inicio"; }
@@ -2303,6 +2551,7 @@ function applyRoute() {
   $("#tab-home").setAttribute("aria-current", r === "inicio" ? "page" : "false");
   $("#tab-enc").setAttribute("aria-current", r === "encuesta" ? "page" : "false");
   $("#tab-adm").setAttribute("aria-current", r === "admin" ? "page" : "false");
+  Voz.show(r);
   if (r === "admin") Admin.start(); else if (r === "encuesta") { S = store.get(DRAFT_KEY) || S; renderSurvey(); } else renderHome();
   window.scrollTo({ top: 0 });
 }
@@ -2310,6 +2559,7 @@ function syncTopbar() { const t = $(".topbar"); if (t) document.documentElement.
 if (window.ResizeObserver) new ResizeObserver(syncTopbar).observe($(".topbar")); else window.addEventListener("resize", syncTopbar);
 syncTopbar();
 window.addEventListener("hashchange", applyRoute);
+Voz.init();
 applyRoute();
 initPlatform();
 </script>
