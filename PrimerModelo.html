@@ -720,7 +720,7 @@ td{padding:12px;font-size:.92rem}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(225,29,72,.45)}50%{box-shadow:0 0 0 10px rgba(225,29,72,0)}}
 .aud-heard{flex-basis:100%;font-size:.86rem;color:var(--muted)}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media (max-width:640px){ .aud button span.t{display:none} .aud button{padding:0;width:44px;justify-content:center} }
+.aud button{padding:0;width:44px;justify-content:center}
 @media (prefers-reduced-motion:reduce){ .aud button.on{animation:none} }
 
 /* ---------- identidad visual TME ----------
@@ -2539,8 +2539,8 @@ const Voz = {
       if (!this.on || u.querySelector(":scope > .aud, :scope > .q-head > .aud")) return;
       const bar = document.createElement("div"); bar.className = "aud";
       const lab = this.label(u);
-      bar.innerHTML = (this.tts ? `<button type="button" class="a-say" aria-label="Escuchar: ${esc(lab)}">${ms("volume_up")}<span class="t">Escuchar</span></button>` : "")
-        + (this.SR && !this.noMic(u) ? `<button type="button" class="a-mic" aria-label="Responder con la voz: ${esc(lab)}">${ms("mic")}<span class="t">Responder</span></button>` : "");
+      bar.innerHTML = (this.tts ? `<button type="button" class="a-say" data-tip="Escuchar" aria-label="Escuchar: ${esc(lab)}">${ms("volume_up")}</button>` : "")
+        + (this.SR && !this.noMic(u) ? `<button type="button" class="a-mic" data-tip="Responder con la voz" aria-label="Responder con la voz: ${esc(lab)}">${ms("mic")}</button>` : "");
       if (!bar.children.length) return;
       const sb = bar.querySelector(".a-say"); if (sb) sb.onclick = () => { if (sb.classList.contains("on")) { this.stop(); return; } this.say(this.text(u), sb); };
       const mb = bar.querySelector(".a-mic"); if (mb) mb.onclick = () => this.listen(u, mb);
@@ -2552,7 +2552,7 @@ const Voz = {
     if (sh && !cons) $$(".aud", sh).forEach(a => a.remove());
     if (sh && cons && this.tts && !sh.querySelector(".aud")) {
       const bar = document.createElement("div"); bar.className = "aud";
-      bar.innerHTML = `<button type="button" class="a-say" aria-label="Escuchar las instrucciones de este paso">${ms("volume_up")}<span class="t">Escuchar instrucciones</span></button>`;
+      bar.innerHTML = `<button type="button" class="a-say" data-tip="Escuchar el consentimiento" aria-label="Escuchar todo el consentimiento informado">${ms("volume_up")}</button>`;
       const b = bar.firstChild; b.onclick = () => { if (b.classList.contains("on")) { this.stop(); return; } this.readHead(b); };
       sh.appendChild(bar);
     }
