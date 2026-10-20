@@ -673,6 +673,10 @@ td{padding:12px;font-size:.92rem}
 .crit.exc{background:#FFEDF1;color:#9F1239}.crit.exc .ms{color:#E11D48}
 .q.crit-inc{border-left:4px solid #2DD4BF}.q.crit-exc{border-left:4px solid #FB7185}
 .banner ul{margin:4px 0 0;padding-left:18px}
+.crit-sub{display:flex;align-items:center;gap:6px;margin:12px 0 6px;font-weight:800;font-size:.95rem}
+.crit-sub .ms{font-size:20px}
+.crit-sub.inc{color:#0F766E}.crit-sub.exc{color:#BE123C}
+#elig{margin:12px 0 4px}
 /* ---------- modo audio: escuchar y responder con la voz ---------- */
 .aud{display:inline-flex;gap:8px;margin:8px 0 4px;flex-wrap:wrap}
 .q-head .aud{margin:0 0 0 auto;flex:none;flex-wrap:nowrap}
@@ -1543,8 +1547,7 @@ function stepFicha(host) {
   const f = S.ficha;
   let html = head(2, "Datos generales, condición laboral, jornada, pausas activas y antecedentes. Son confidenciales.", `<span class="chip p">Anexo 3</span><span class="chip a">23 ítems</span>`);
   let n = 0;
-  FICHA.forEach(q => {
-    if (q.sec) { html += `<div class="section-title"><span class="tag">${q.sec[0]}</span><h3>${esc(q.sec.slice(3))}</h3></div>`; return; }
+  const qHTML = q => {
     n++;
     const hid = q.only && f.condicion !== q.only ? "hidden" : "";
     let ctrl = "";
@@ -1552,14 +1555,26 @@ function stepFicha(host) {
     else if (q.type === "text") ctrl = `<input class="input" id="f-${q.id}" value="${esc(f[q.id] ?? "")}">`;
     else ctrl = pills("f-" + q.id, q.opts, f[q.id]);
     if (q.follow) ctrl += `<div id="fw-${q.id}" ${f[q.id] === "Sí" ? "" : "hidden"}><input class="input" id="f-${q.follow.id}" placeholder="${q.follow.t}" value="${esc(f[q.follow.id] ?? "")}"></div>`;
-    html += `<div class="q${CRIT[q.id] ? " has-crit crit-" + CRIT[q.id][0] : ""}" id="q-${q.id}" data-only="${q.only || ""}" ${hid}><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(q.t)}</span></div>${critTag(q.id)}${ctrl}</div>`;
+    return `<div class="q${CRIT[q.id] ? " has-crit crit-" + CRIT[q.id][0] : ""}" id="q-${q.id}" data-only="${q.only || ""}" ${hid}><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(q.t)}</span></div>${critTag(q.id)}${ctrl}</div>`;
+  };
+  // primero las preguntas que definen si el participante es elegible y, debajo, el resultado
+  const crit = t => Object.keys(CRIT).filter(id => CRIT[id][0] === t).map(id => FICHA.find(q => q.id === id));
+  html += `<div class="section-title"><span class="tag">${ms("how_to_reg")}</span><h3>Elegibilidad del participante</h3></div>
+    <p class="crit-sub inc">${ms("check_circle")} Criterios de inclusión</p>${crit("inc").map(qHTML).join("")}
+    <p class="crit-sub exc">${ms("block")} Criterios de exclusión</p>${crit("exc").map(qHTML).join("")}
+    <div id="elig" aria-live="polite"></div>`;
+  FICHA.forEach(q => {
+    if (q.sec) { html += `<div class="section-title"><span class="tag">${q.sec[0]}</span><h3>${esc(q.sec.slice(3))}</h3></div>`; return; }
+    if (!CRIT[q.id]) html += qHTML(q);
   });
-  html += `<div id="elig" style="margin-top:14px"></div>`;
   host.innerHTML = html;
   const updElig = () => {
     const e = eligibility(), inc = e.filter(x => x.startsWith("No cumple inclusión")), exc = e.filter(x => x.startsWith("Exclusión"));
     const it = x => `<li>${esc(x.replace(/^(No cumple inclusión|Exclusión): /, ""))}</li>`;
-    $("#elig", host).innerHTML = e.length ? `<div class="banner bad"><div><b>Participante no elegible.</b>${inc.length ? `<p style="margin-top:6px"><b>No cumple criterio de inclusión:</b></p><ul>${inc.map(it).join("")}</ul>` : ""}${exc.length ? `<p style="margin-top:6px"><b>Cumple criterio de exclusión:</b></p><ul>${exc.map(it).join("")}</ul>` : ""}<p style="margin-top:6px">Si se confirma, regístrelo como no elegible y seleccione al siguiente participante del mismo estrato.</p></div></div>` : "";
+    const pend = Object.keys(CRIT).filter(id => { const q = FICHA.find(x => x.id === id); return (!q.only || f.condicion === q.only) && (f[id] == null || f[id] === ""); });
+    $("#elig", host).innerHTML = e.length ? `<div class="banner bad"><div><b>Participante no elegible.</b>${inc.length ? `<p style="margin-top:6px"><b>No cumple criterio de inclusión:</b></p><ul>${inc.map(it).join("")}</ul>` : ""}${exc.length ? `<p style="margin-top:6px"><b>Cumple criterio de exclusión:</b></p><ul>${exc.map(it).join("")}</ul>` : ""}<p style="margin-top:6px">Si se confirma, regístrelo como no elegible y seleccione al siguiente participante del mismo estrato.</p></div></div>`
+      : pend.length ? `<div class="banner"><div>Responda las ${pend.length === 1 ? "pregunta" : pend.length + " preguntas"} de elegibilidad pendiente${pend.length === 1 ? "" : "s"} para confirmar si el participante es elegible.</div></div>`
+      : `<div class="banner good"><div><b>Participante elegible.</b> Cumple los criterios de inclusión y ninguno de exclusión. Continúe con el resto de la ficha.</div></div>`;
   };
   FICHA.filter(q => q.id).forEach(q => {
     if (q.type === "pills") bindPills(host, "f-" + q.id, v => {
