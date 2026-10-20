@@ -692,6 +692,49 @@ td{padding:12px;font-size:.92rem}
 .nasa-lv button.on b{color:rgba(255,255,255,.85)}
 @media (max-width:640px){ .nasa-lv{gap:4px} .nasa-lv button{font-size:.72rem;min-height:50px} .nasa-read .nasa-val{font-size:1.7rem} }
 
+/* ---------- REBA: tarea con iconos, segmentos numerados y ajustes como fichas ---------- */
+.tareas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:6px}
+.tarea{position:relative;cursor:pointer}
+.tarea input{position:absolute;opacity:0;width:1px;height:1px}
+.tarea input + span{display:flex;align-items:center;gap:8px;min-height:52px;height:100%;padding:8px 12px;border-radius:14px;border:2px solid var(--line);background:#fff;font-size:.88rem;font-weight:600;line-height:1.25;transition:background .2s,border-color .2s}
+.tarea input + span .ms{font-size:22px;color:var(--accent)}
+.tarea input:checked + span{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);font-weight:800}
+.tarea input:checked + span .ms{color:var(--primary)}
+.tarea input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+#q-tarea,#q-lado{padding:12px 14px;align-self:start}
+.obs-tabs button{display:inline-flex;align-items:center;gap:8px}
+.obs-tabs button small{font-family:var(--f-mono);font-size:.78rem;padding:2px 7px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.obs-tabs button b{font-size:1rem}
+.obs-tabs button .ms{font-size:18px;color:#0D9488}
+.obs-tabs button[aria-selected="true"] small{background:rgba(255,255,255,.18);color:#fff}
+.obs-tabs button[aria-selected="true"] .ms{color:#5EEAD4}
+.copy-prev{margin-bottom:12px}
+.seg{display:block;padding:12px;border-radius:16px;border:1.5px solid var(--line);background:#fff;transition:border-color .2s}
+.seg + .seg{margin-top:10px}
+.seg.done{border-color:rgba(13,148,136,.35)}
+.seg-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.seg-n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--surface-2);color:var(--ink-2);font-weight:800;font-size:.88rem;flex-shrink:0}
+.seg.done .seg-n{background:#0D9488;color:#fff}
+.seg-h .q-label{font-weight:800;font-size:1rem}
+.seg-st{display:inline-flex;color:var(--muted)}
+.seg-st .ms{font-size:22px}
+.seg.done .seg-st{color:#0D9488}
+.seg-h .aud{margin-left:auto}
+.opt .box{position:relative}
+.opt .ok{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;opacity:0;transform:scale(.4);transition:opacity .2s,transform .2s}
+.opt .ok .ms{font-size:16px}
+.opt input:checked + .box .ok{opacity:1;transform:none}
+.adj-t{position:relative;cursor:pointer;border:0!important;padding:0!important}
+.adj-t input{position:absolute;opacity:0;width:1px;height:1px}
+.adj-t input + span{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px 8px 8px;border-radius:999px;border:1.5px dashed var(--line);background:#fff;font-size:.88rem;line-height:1.25;transition:background .2s,border-color .2s}
+.adj-t b{display:grid;place-items:center;min-width:30px;height:26px;border-radius:999px;background:var(--surface-2);font-family:var(--f-mono);font-size:.8rem;color:var(--ink-2)}
+.adj-t input:checked + span{background:#FFF4E5;border:1.5px solid #F59E0B;color:#92400E;font-weight:700}
+.adj-t input:checked + span b{background:#F59E0B;color:#fff}
+.adj-t.neg input:checked + span{background:#E6FBF6;border-color:#0D9488;color:#0F766E}
+.adj-t.neg input:checked + span b{background:#0D9488}
+.adj-t input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+@media (max-width:640px){ .tareas{grid-template-columns:1fr 1fr} .tarea input + span{font-size:.82rem} }
+
 /* ---------- Cuestionario Nórdico: Sí/No grandes, lado con botones y subpreguntas rotuladas ---------- */
 .region.done{border-color:rgba(13,148,136,.3)}
 .region-head .chip{display:inline-flex;align-items:center;gap:4px}
@@ -1935,12 +1978,18 @@ function stepNordic(host) {
 /* ---------- 8. REBA ---------- */
 function stepReba(host) {
   const R = S.reba; const fotosOK = S.cons.foto === "Sí";
+  const SEG = ["neck", "trunk", "legs", "knee", "load", "upper", "lower", "wrist", "coupling"];
+  const cnt = o => SEG.filter(k => o[k] != null).length;
+  // ajuste como ficha: el signo (+1 / −1) a la izquierda y el texto sin el paréntesis
+  const adjChip = (k, l, on) => { const m = l.match(/\(([+−-]\d)\)/); return `<label class="adj-t${m && m[1][0] !== "+" ? " neg" : ""}"><input type="checkbox" data-adj="${k}" ${on ? "checked" : ""}><span><b>${m ? m[1] : ""}</b>${l.replace(/\s*\([+−-]\d\)\s*$/, "")}</span></label>`; };
   const optGroup = (key, title, i) => {
-    const o = R.obs[i];
-    return `<div class="field"><span class="q-label">${title}</span><div class="opts">${REBA_OPTS[key].map(([val, lbl, svg]) => `<label class="opt"><input type="radio" name="${key}-${i}" value="${val}" ${o[key] === val ? "checked" : ""}><div class="box">${svg}<span class="lbl">${lbl}</span><span class="pts">${key === "knee" ? "+" + val : key === "load" || key === "coupling" ? "+" + val : val + " pt"}</span></div></label>`).join("")}</div>
-      ${REBA_ADJ[key] ? `<div class="adj">${REBA_ADJ[key].map(([k, l]) => `<label><input type="checkbox" data-adj="${k}" ${o[k] ? "checked" : ""}>${l}</label>`).join("")}</div>` : ""}</div>`;
+    const o = R.obs[i], done = o[key] != null;
+    return `<div class="field seg${done ? " done" : ""}" id="seg-${key}"><div class="q-head seg-h"><span class="seg-n">${SEG.indexOf(key) + 1}</span><span class="q-label">${title}</span><span class="seg-st" aria-hidden="true">${ms(done ? "check_circle" : "radio_button_unchecked")}</span></div><div class="opts">${REBA_OPTS[key].map(([val, lbl, svg]) => `<label class="opt"><input type="radio" name="${key}-${i}" value="${val}" ${o[key] === val ? "checked" : ""} aria-label="${esc(lbl)}"><div class="box"><span class="ok" aria-hidden="true">${ms("check")}</span>${svg}<span class="lbl">${lbl}</span><span class="pts">${key === "knee" || key === "load" || key === "coupling" ? "+" + val : val + " pt"}</span></div></label>`).join("")}</div>
+      ${REBA_ADJ[key] ? `<div class="adj">${REBA_ADJ[key].map(([k, l]) => adjChip(k, l, o[k])).join("")}</div>` : ""}</div>`;
   };
+  const tabTxt = i => { const c = rebaCalc(R.obs[i]); return `<span>Obs. ${i + 1}</span>${c ? `<b class="mono">${c.total}</b>${ms("check_circle")}` : `<small>${cnt(R.obs[i])}/9</small>`}`; };
   const obsHTML = i => `
+    ${i > 0 && cnt(R.obs[i]) < 9 && cnt(R.obs[i - 1]) > 0 ? `<button type="button" class="btn btn-ghost copy-prev" id="copy-prev">${ms("content_copy")} Copiar respuestas de la observación ${i} y ajustar</button>` : ""}
     <div class="reba">
       <div>
         <div class="group"><h3><span class="chip p">Grupo A</span> Cuello, tronco y piernas</h3>
@@ -1949,7 +1998,7 @@ function stepReba(host) {
         <div class="group"><h3><span class="chip a">Grupo B</span> Brazo, antebrazo y muñeca <span class="muted" style="font-weight:400;font-size:.85rem">(lado evaluado)</span></h3>
           ${optGroup("upper", "Brazo", i)}<div style="height:12px"></div>${optGroup("lower", "Antebrazo", i)}<div style="height:12px"></div>${optGroup("wrist", "Muñeca", i)}<div style="height:12px"></div>${optGroup("coupling", "Agarre", i)}
         </div>
-        <div class="group"><h3><span class="chip">Actividad</span></h3><div class="adj">${REBA_ADJ.act.map(([k, l]) => `<label><input type="checkbox" data-adj="${k}" ${R.obs[i][k] ? "checked" : ""}>${l}</label>`).join("")}</div></div>
+        <div class="group"><h3><span class="chip">Actividad</span> Marque lo que ocurra durante la movilización</h3><div class="adj">${REBA_ADJ.act.map(([k, l]) => adjChip(k, l, R.obs[i][k])).join("")}</div></div>
         <div class="group"><h3>${ICONS.cam.replace("<svg", '<svg width="20" height="20"')} Fotografía de la observación ${i + 1}</h3>
           ${fotosOK ? `<div class="photo-zone"><p class="muted" style="font-size:.86rem">Opcional. Encuadre al fisioterapeuta; no capte el rostro del paciente. Requiere autorización del establecimiento y consentimiento verbal del paciente.</p><label class="btn btn-ghost" style="width:max-content">${ICONS.cam} Tomar o subir foto<input type="file" accept="image/*" capture="environment" id="foto-in" hidden></label><div class="thumbs" id="thumbs"></div></div>` : `<p class="muted" style="font-size:.88rem">El participante no autorizó fotografías. La puntuación se registra solo por observación directa.</p>`}
         </div>
@@ -1958,10 +2007,10 @@ function stepReba(host) {
     </div>`;
   host.innerHTML = head(7, "Observe tres ejecuciones de la misma movilización. Se registra el puntaje más alto como criterio conservador. No se graban videos.", `<span class="chip p">Anexo 5</span><span class="chip a">Hoja de campo</span>`) + `
     <div class="grid2">
-      <div class="field"><label for="r-tarea">Tarea observada</label><select class="input" id="r-tarea"><option value="">Seleccione…</option>${["Transferencia cama a silla", "Transferencia silla a cama", "Cambio de posición en cama", "Asistencia a la marcha", "Sedestación / bipedestación asistida", "Otra movilización"].map(t => `<option ${R.tarea === t ? "selected" : ""}>${t}</option>`).join("")}</select></div>
-      <div class="field q" id="q-lado" style="padding:8px 10px"><span class="q-label">Lado corporal evaluado (mayor carga)</span>${pills("r-lado", ["Derecho", "Izquierdo"], R.lado)}</div>
+      <div class="field q" id="q-tarea"><div class="q-head"><span class="q-label">Tarea observada</span></div><div class="tareas" role="radiogroup">${[["Transferencia cama a silla", "airline_seat_recline_normal"], ["Transferencia silla a cama", "bed"], ["Cambio de posición en cama", "sync"], ["Asistencia a la marcha", "directions_walk"], ["Sedestación / bipedestación asistida", "accessibility_new"], ["Otra movilización", "more_horiz"]].map(([t, ic]) => `<label class="tarea"><input type="radio" name="r-tarea" value="${t}" ${R.tarea === t ? "checked" : ""} aria-label="${t}"><span>${ms(ic)}${t}</span></label>`).join("")}</div></div>
+      <div class="field q" id="q-lado"><div class="q-head"><span class="q-label">Lado corporal evaluado (mayor carga)</span></div>${pills("r-lado", ["Derecho", "Izquierdo"], R.lado)}</div>
     </div>
-    <div class="obs-tabs" role="tablist" style="margin-top:16px">${[0, 1, 2].map(i => { const c = rebaCalc(R.obs[i]); return `<button role="tab" aria-selected="${S.active === i}" data-obs="${i}">Observación ${i + 1}${c ? ` · <span class="mono">${c.total}</span>` : ""}</button>`; }).join("")}<span class="chip g" id="final-chip"></span></div>
+    <div class="obs-tabs" role="tablist" style="margin-top:16px">${[0, 1, 2].map(i => `<button role="tab" aria-selected="${S.active === i}" data-obs="${i}">${tabTxt(i)}</button>`).join("")}<span class="chip g" id="final-chip"></span></div>
     <div id="obs-host"></div>`;
   const fin = () => { const s = scores(); $("#final-chip", host).textContent = s.rebaFinal ? `Puntaje final: ${s.rebaFinal} · ${s.rebaLevel.t}` : "Puntaje final: —"; };
   const renderObs = () => {
@@ -1970,6 +2019,7 @@ function stepReba(host) {
     Object.keys(REBA_OPTS).forEach(key => $$(`input[name="${key}-${i}"]`, host).forEach(inp => inp.onchange = () => { o[key] = +inp.value; persist(); upd(); }));
     $$("[data-adj]", host).forEach(cb => cb.onchange = () => { o[cb.dataset.adj] = cb.checked; persist(); upd(); });
     if (fotosOK) { $("#foto-in", host).onchange = e => addPhoto(e.target.files[0], i); drawThumbs(); }
+    const cp = $("#copy-prev", host); if (cp) cp.onclick = () => { R.obs[i] = Object.assign({}, R.obs[i - 1]); persist(); renderObs(); toast(`Respuestas copiadas de la observación ${i}. Revise y ajuste lo que cambió.`); };
     upd();
   };
   const drawThumbs = () => { const t = $("#thumbs", host); if (!t) return; const list = R.fotos.filter(f => f.obs === S.active); t.innerHTML = list.map(f => `<figure><img src="${f.data}" alt="Foto observación ${f.obs + 1}"><button aria-label="Eliminar foto" data-del="${f.k}">×</button></figure>`).join(""); $$("[data-del]", t).forEach(b => b.onclick = () => { R.fotos = R.fotos.filter(f => f.k !== b.dataset.del); persist(); drawThumbs(); }); };
@@ -1982,15 +2032,16 @@ function stepReba(host) {
     sc.innerHTML = c ? `<p class="eyebrow">Observación ${S.active + 1}</p><div><span class="score-num mono" style="color:var(--${["", "good", "primary", "warn", "bad", "bad"][c.level.n]})">${c.total}</span></div><span class="lvl lvl-${c.level.n}">${c.level.t}</span><p class="muted hide-sm" style="font-size:.84rem">${c.level.a}</p>
       <div class="calc"><div><span>Tabla A (${c.neck}·${c.trunk}·${c.legs})</span><b>${c.a}</b></div><div><span>+ Carga/fuerza</span><b>${c.load}</b></div><div><span>Puntuación A</span><b>${c.scoreA}</b></div><div><span>Tabla B (${c.upper}·${c.lower}·${c.wrist})</span><b>${c.b}</b></div><div><span>+ Agarre</span><b>${c.coupling}</b></div><div><span>Puntuación B</span><b>${c.scoreB}</b></div><div><span>Tabla C</span><b>${c.c}</b></div><div><span>+ Actividad</span><b>${c.act}</b></div></div>`
       : `<p class="eyebrow">Observación ${S.active + 1}</p><p class="score-num mono muted">—</p><p class="muted" style="font-size:.86rem">Seleccione una opción en cada segmento para calcular el puntaje REBA.</p>`;
-    $$("[data-obs]", host).forEach(b => { const cc = rebaCalc(R.obs[+b.dataset.obs]); b.innerHTML = `Observación ${+b.dataset.obs + 1}${cc ? ` · <span class="mono">${cc.total}</span>` : ""}`; });
+    $$("[data-obs]", host).forEach(b => { b.innerHTML = tabTxt(+b.dataset.obs); });
+    SEG.forEach(k => { const el = $("#seg-" + k, host); if (!el) return; const d = R.obs[S.active][k] != null; el.classList.toggle("done", d); $(".seg-st", el).innerHTML = ms(d ? "check_circle" : "radio_button_unchecked"); });
     fin();
   };
   $$("[data-obs]", host).forEach(b => b.onclick = () => { S.active = +b.dataset.obs; $$("[data-obs]", host).forEach(x => x.setAttribute("aria-selected", x === b)); persist(); renderObs(); });
-  $("#r-tarea", host).onchange = e => { R.tarea = e.target.value; e.target.classList.remove("invalid"); persist(); };
+  bindPills(host, "r-tarea", v => { R.tarea = v; $("#q-tarea", host).classList.remove("invalid"); persist(); });
   bindPills(host, "r-lado", v => { R.lado = v; $("#q-lado", host).classList.remove("invalid"); persist(); });
   renderObs();
   nav(host, { onNext: () => {
-    if (!R.tarea) { $("#r-tarea", host).classList.add("invalid"); return "Seleccione la tarea observada."; }
+    if (!R.tarea) { $("#q-tarea", host).classList.add("invalid"); return "Seleccione la tarea observada."; }
     if (!R.lado) { $("#q-lado", host).classList.add("invalid"); return "Indique el lado corporal evaluado."; }
     const miss = [0, 1, 2].find(i => !rebaCalc(R.obs[i]));
     if (miss != null) { S.active = miss; renderObs(); $$("[data-obs]", host).forEach(x => x.setAttribute("aria-selected", +x.dataset.obs === miss)); return `Complete la observación ${miss + 1}.`; }
