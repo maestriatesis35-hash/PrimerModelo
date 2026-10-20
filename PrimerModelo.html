@@ -692,6 +692,25 @@ td{padding:12px;font-size:.92rem}
 .nasa-lv button.on b{color:rgba(255,255,255,.85)}
 @media (max-width:640px){ .nasa-lv{gap:4px} .nasa-lv button{font-size:.72rem;min-height:50px} .nasa-read .nasa-val{font-size:1.7rem} }
 
+/* ---------- escala de satisfacción 1–7 (Warr, Cook y Wall) ---------- */
+.wscale{margin:2px 0 14px;padding:12px 14px;border-radius:14px;background:var(--surface-2)}
+.wbar{height:10px;border-radius:5px;background:linear-gradient(90deg,#E11D48,#FB7185 30%,#94A3B8 50%,#5EEAD4 70%,#0D9488)}
+.wlab{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:.8rem;font-weight:700;color:var(--ink-2)}
+.wlab span{display:inline-flex;align-items:center;gap:4px}
+.wlab .ms{font-size:18px}
+.lk7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:10px;max-width:520px}
+.lk{position:relative;display:grid;place-items:center;cursor:pointer}
+.lk input{position:absolute;opacity:0;width:1px;height:1px}
+.lk span{display:grid;place-items:center;width:100%;max-width:56px;aspect-ratio:1;border-radius:50%;border:2px solid color-mix(in srgb,var(--c) 45%,#fff);background:color-mix(in srgb,var(--c) 10%,#fff);color:var(--ink);font-family:var(--f-mono);font-weight:800;font-size:1.05rem;transition:transform .15s,background .2s,color .2s,box-shadow .2s}
+.lk:hover span{transform:translateY(-1px);background:color-mix(in srgb,var(--c) 22%,#fff)}
+.lk input:checked + span{background:var(--c);border-color:var(--c);color:#fff;transform:scale(1.08);box-shadow:0 6px 14px color-mix(in srgb,var(--c) 40%,transparent)}
+.lk input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+.lk7-ends{display:flex;justify-content:space-between;max-width:520px;margin-top:4px;font-size:.74rem;color:var(--muted);font-weight:600}
+.lk7-sel{margin-top:6px;font-size:.9rem;font-weight:600;color:var(--c,var(--ink-2))}
+.lk7-sel b{font-family:var(--f-mono)}
+.lk7-sel.none{color:var(--muted);font-weight:500}
+@media (max-width:640px){ .lk7{gap:4px} .lk span{font-size:.95rem} .wlab{font-size:.72rem} }
+
 /* ---------- botones de opción (radio) ---------- */
 .rlist{display:grid;gap:8px;margin-top:10px}
 .rb{position:relative;display:flex;align-items:center;gap:12px;min-height:52px;padding:10px 14px;border-radius:14px;border:2px solid transparent;background:var(--surface-2);cursor:pointer;transition:background .2s,border-color .2s}
@@ -1795,14 +1814,22 @@ function stepSuseso(host) {
 }
 
 /* ---------- 6. Warr-Cook-Wall ---------- */
+// colores de la escala 1–7: de insatisfecho (rojo) a satisfecho (turquesa), con el punto neutro en gris
+const WARR_COL = ["#BE123C", "#E11D48", "#E8516B", "#64748B", "#0E9F8F", "#0D8A7E", "#0F766E"];
 function stepWarr(host) {
   const v = S.warr;
-  host.innerHTML = head(5, "Indique su grado de satisfacción con cada aspecto de su trabajo, de 1 (muy insatisfecho) a 7 (muy satisfecho).", `<span class="chip p">Anexo 7</span><span class="chip a" id="w-count">${Object.keys(v).length}/15</span>`) +
-    `<div class="legend" style="margin-bottom:10px">${WARR_OPTS.map((o, i) => `<span><b class="mono">${i + 1}</b> ${o}</span>`).join("")}</div>` +
-    WARR.map((t, i) => `<div class="q" id="q-w${i + 1}"><div class="q-head"><span class="q-num">${String(i + 1).padStart(2, "0")}</span><span class="q-label">${esc(t)}</span></div>
-      <div class="likert7" role="radiogroup" aria-label="${esc(t)}">${WARR_OPTS.map((o, oi) => `<label class="pill"><input type="radio" name="w${i + 1}" value="${oi + 1}" ${v["w" + (i + 1)] === oi + 1 ? "checked" : ""} aria-label="${oi + 1} ${o}"><span><b>${oi + 1}</b>${o}</span></label>`).join("")}</div></div>`).join("");
-  for (let i = 1; i <= 15; i++) bindPills(host, "w" + i, val => { v["w" + i] = +val; $("#w-count", host).textContent = Object.keys(v).length + "/15"; persist(); });
-  nav(host, { onNext: () => { for (let i = 1; i <= 15; i++) if (v["w" + i] == null) { $(`#q-w${i}`, host).classList.add("invalid"); return `Falta responder el ítem ${i}.`; } return null; } });
+  const lbl = n => n ? `<b>${n}</b> · ${WARR_OPTS[n - 1]}` : "Sin responder";
+  host.innerHTML = head(5, "¿Qué tan satisfecho está con cada aspecto de su trabajo? Toque un número del 1 al 7.", `<span class="chip p">Anexo 7</span><span class="chip a" id="w-count">${Object.keys(v).length}/15</span>`) +
+    `<div class="wscale" aria-hidden="true"><div class="wbar"></div><div class="wlab"><span>${ms("sentiment_dissatisfied")} 1 Muy insatisfecho</span><span>4 Neutral</span><span>7 Muy satisfecho ${ms("sentiment_satisfied")}</span></div></div>` +
+    WARR.map((t, i) => { const cur = v["w" + (i + 1)]; return `<div class="q" id="q-w${i + 1}"><div class="q-head"><span class="q-num">${String(i + 1).padStart(2, "0")}</span><span class="q-label">${esc(t)}</span></div>
+      <div class="lk7" role="radiogroup" aria-label="${esc(t)}">${WARR_OPTS.map((o, oi) => `<label class="lk" style="--c:${WARR_COL[oi]}" title="${oi + 1} · ${o}"><input type="radio" name="w${i + 1}" value="${oi + 1}" ${cur === oi + 1 ? "checked" : ""} aria-label="${oi + 1} ${o}"><span>${oi + 1}</span></label>`).join("")}</div>
+      <div class="lk7-ends" aria-hidden="true"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      <p class="lk7-sel${cur ? "" : " none"}" id="ws-${i + 1}" style="${cur ? `--c:${WARR_COL[cur - 1]}` : ""}">${lbl(cur)}</p></div>`; }).join("");
+  for (let i = 1; i <= 15; i++) bindPills(host, "w" + i, val => {
+    v["w" + i] = +val; const el = $(`#ws-${i}`, host); el.innerHTML = lbl(+val); el.classList.remove("none"); el.style.setProperty("--c", WARR_COL[+val - 1]);
+    $("#w-count", host).textContent = Object.keys(v).length + "/15"; persist();
+  });
+  nav(host, { onNext: () => { for (let i = 1; i <= 15; i++) if (v["w" + i] == null) { const q = $(`#q-w${i}`, host); q.classList.add("invalid"); q.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" }); return `Falta responder el ítem ${i}.`; } return null; } });
 }
 
 /* ---------- 7. Nórdico ---------- */
