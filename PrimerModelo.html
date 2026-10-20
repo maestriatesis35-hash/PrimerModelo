@@ -1730,8 +1730,10 @@ function compressImage(file, maxSide = 960, maxChars = 230000) {
 // solo se envían fotos si el participante las autorizó (pudo cambiar su respuesta después de tomarlas)
 function flatCols() {
   const ficha = FICHA.filter(q => q.id).flatMap(q => q.follow ? [q.id, q.follow.id] : [q.id]);
-  return ["id_encuesta", "codigo", "estrato", "estado", "motivos", "fecha", "establecimiento", "dispositivo", "enviado", "cons_acepta", "cons_foto", ...ficha.map(k => "ficha_" + k), "imc", ...NASA.map(x => "nasa_" + x.id), "nasa_raw", ...Array.from({ length: 20 }, (_, i) => "suseso_" + (i + 1)), ...SUSESO.map(s => "suseso_" + s.key), ...WARR.map((_, i) => "warr_" + (i + 1)), "warr_total", ...REGIONS.flatMap(r => ["nord_" + r.id + "_12m", ...(r.side ? ["nord_" + r.id + "_12m_lado"] : []), "nord_" + r.id + "_7d", ...(r.side ? ["nord_" + r.id + "_7d_lado"] : []), "nord_" + r.id + "_imp"]), "sintomas_12m", "reba_tarea", "reba_lado", "reba_obs1", "reba_obs2", "reba_obs3", "reba_final", "reba_nivel", "n_fotos"];
+  return ["id_encuesta", "codigo", "estrato", "estado", "motivos", "fecha", "establecimiento", "dispositivo", "enviado", "cons_acepta", "cons_foto", ...ficha.map(k => "ficha_" + k), "imc", ...NASA.map(x => "nasa_" + x.id), "nasa_raw", ...Array.from({ length: 20 }, (_, i) => "suseso_" + (i + 1)), ...SUSESO.map(s => "suseso_" + s.key), ...WARR.map((_, i) => "warr_" + (i + 1)), "warr_total", ...REGIONS.flatMap(r => ["nord_" + r.id + "_12m", ...(r.side ? ["nord_" + r.id + "_12m_lado"] : []), "nord_" + r.id + "_7d", ...(r.side ? ["nord_" + r.id + "_7d_lado"] : []), "nord_" + r.id + "_imp"]), "sintomas_12m", "reba_tarea", "reba_lado", ...[1, 2, 3].flatMap(k => REBA_COLS.map(c => `reba_o${k}_${c}`)), "reba_obs1", "reba_obs2", "reba_obs3", "reba_final", "reba_nivel", "n_fotos", "fotos_ids_drive", "fotos_urls"];
 }
+// respuestas de cada observación REBA y puntajes intermedios (tablas A, B y C)
+const REBA_COLS = ["neck", "neckAdj", "trunk", "trunkAdj", "legs", "knee", "load", "shock", "upper", "abd", "raised", "supported", "lower", "wrist", "wristAdj", "coupling", "act1", "act2", "act3", "puntaje_a", "puntaje_b", "puntaje_c", "actividad"];
 function flatObj(r) {
   const p = r.puntajes || {};
   const o = { id_encuesta: r.id, codigo: r.codigo, estrato: r.estrato, estado: r.estado, motivos: (r.motivos || []).join("; "), fecha: r.fecha, establecimiento: r.establecimiento, dispositivo: r.dispositivo || r.encuestador, enviado: r.enviado, cons_acepta: r.consentimiento?.acepta, cons_foto: r.consentimiento?.foto, imc: p.imc, nasa_raw: p.nasa, warr_total: p.warr, sintomas_12m: p.sintomas12m == null ? "" : p.sintomas12m ? 1 : 0, reba_tarea: r.reba?.tarea, reba_lado: r.reba?.lado, reba_final: p.rebaFinal, reba_nivel: p.rebaNivel, n_fotos: (r.fotos || []).length };
@@ -1742,6 +1744,13 @@ function flatObj(r) {
   WARR.forEach((_, i) => o["warr_" + (i + 1)] = r.warr?.["w" + (i + 1)]);
   REGIONS.forEach(rg => { const d = r.nordico?.[rg.id] || {}; o["nord_" + rg.id + "_12m"] = d.m12; o["nord_" + rg.id + "_12m_lado"] = d.m12Lado; o["nord_" + rg.id + "_7d"] = d.d7; o["nord_" + rg.id + "_7d_lado"] = d.d7Lado; o["nord_" + rg.id + "_imp"] = d.imp; });
   (p.reba || []).forEach((v, i) => o["reba_obs" + (i + 1)] = v);
+  (r.reba?.obs || []).forEach((ob, i) => {
+    const c = rebaCalc(ob), pre = `reba_o${i + 1}_`;
+    REBA_COLS.slice(0, 19).forEach(k => { const v = ob?.[k]; o[pre + k] = typeof v === "boolean" ? (v ? 1 : 0) : v; });
+    if (c) { o[pre + "puntaje_a"] = c.scoreA; o[pre + "puntaje_b"] = c.scoreB; o[pre + "puntaje_c"] = c.c; o[pre + "actividad"] = c.act; }
+  });
+  o.fotos_ids_drive = (r.fotos || []).map(f => f.archivo).filter(Boolean).join("; ");
+  o.fotos_urls = (r.fotos || []).map(f => f.url).filter(Boolean).join("; ");
   return o;
 }
 function flatRow(r) { const cols = flatCols(), o = flatObj(r); return { cols, vals: cols.map(c => o[c] ?? "") }; }

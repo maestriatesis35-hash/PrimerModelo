@@ -22,38 +22,52 @@ Carpeta de Drive / Multimedia/
 
 Las dos tablas se relacionan por la columna **id_encuesta**. Las pestañas «Encuestas» y «Multimedia» se crean solas al ejecutar `configurar`. Si la hoja tiene una pestaña vacía (por ejemplo «Hoja 1»), se elimina; si tiene datos, no se toca.
 
-## Pasos (una sola vez, unos 10 minutos)
+## Cómo funciona
 
-1. Inicie sesión con **maestriatesis35@gmail.com** y abra la hoja de cálculo. En el menú, entre a **Extensiones → Apps Script**. Póngale de nombre «Estudio TME» al proyecto.
-2. En **Código.gs**, borre lo que haya y pegue todo el contenido de `apps-script/Code.gs`.
-3. Junto a **Archivos**, pulse **+** y elija **HTML**. Llame al archivo exactamente `Index`. Borre su contenido y pegue todo el contenido de `PrimerModelo.html`. Guarde (Ctrl+S).
-4. En la lista de funciones de arriba, elija **configurar** y pulse **Ejecutar**. Acepte los permisos:
-   - Pulse **Revisar permisos**, elija la cuenta maestriatesis35@gmail.com y luego **Configuración avanzada → Ir a Estudio TME**.
-   - Por último, pulse **Permitir**.
-5. Abra el **Registro de ejecución**. Ahí aparecen el enlace de la carpeta, el de la hoja y el **CÓDIGO DE ACCESO AL PANEL** (TME-XXXX-XXXX). Anote el código: no se volverá a mostrar.
-6. Pulse **Implementar → Nueva implementación**. En el engranaje, elija **Aplicación web** y configure:
-   - **Ejecutar como:** Yo (maestriatesis35@gmail.com)
+- En Apps Script **solo va `Code.gs`**. La encuesta (`PrimerModelo.html`) **no** se pega en Apps Script.
+- Apps Script entrega un enlace que termina en `/exec`. Ese enlace se escribe en la constante `GS_URL` de `PrimerModelo.html`.
+- La encuesta envía cada respuesta a ese enlace, y `Code.gs` la escribe en la hoja y guarda las fotos en Drive.
+
+## Pasos (una sola vez)
+
+1. Inicie sesión con **maestriatesis35@gmail.com** y abra la hoja de cálculo. Entre a **Extensiones → Apps Script** y póngale de nombre «Estudio TME» al proyecto.
+2. En **Código.gs**, borre todo y pegue el contenido de `apps-script/Code.gs`. En GitHub, abra el archivo y use el botón «Copy raw file». Guarde con Ctrl+S.
+3. En la lista de funciones, elija **configurar** y pulse **Ejecutar**. Acepte los permisos: **Revisar permisos** → su cuenta → **Configuración avanzada** → **Ir a Estudio TME** → **Permitir**.
+   - En la pestaña **Encuestas** se crean las 200 columnas de todas las respuestas. Cada encabezado tiene una nota con la pregunta: pase el ratón por encima para leerla.
+   - En la pestaña **Multimedia** se crean las 13 columnas de las fotos.
+4. En el **Registro de ejecución**, anote el **CÓDIGO DE ACCESO AL PANEL** (TME-XXXX-XXXX).
+5. Pulse **Implementar → Nueva implementación → ⚙️ Aplicación web** y configure:
+   - **Ejecutar como:** Yo
    - **Quién tiene acceso:** Cualquier usuario
-   Pulse **Implementar** y copie la **URL de la aplicación web**, que termina en `/exec`.
-7. Esa URL es el enlace de la encuesta. Compártala con los encuestadores; funciona en el celular. El panel se abre desde la misma página, en «Admin», con el código del paso 5.
+   Pulse **Implementar** y copie la URL que termina en `/exec`.
+6. Escriba esa URL en `PrimerModelo.html`, en la línea `const GS_URL = "";`. Si lo prefiere, envíela al asistente para que lo haga y suba el cambio a GitHub.
 
-## Cuando cambie el HTML
+## Columnas de «Encuestas»
 
-Pegue la nueva versión en `Index` y luego vaya a **Implementar → Gestionar implementaciones**. Pulse el lápiz, elija **Versión: Nueva versión** y luego **Implementar**. La URL no cambia.
+Hay una fila por participante y una columna por respuesta:
 
-## Usar la página fuera de Apps Script (opcional)
+- **Registro:** código, estrato, fecha, establecimiento y consentimiento.
+- **Ficha:** las 25 preguntas, más el IMC.
+- **NASA-TLX:** las 6 dimensiones y el puntaje Raw.
+- **SUSESO/ISTAS21:** los 20 ítems y los 5 puntajes por dimensión.
+- **Warr-Cook-Wall:** los 15 ítems y el total.
+- **Nórdico:** 9 regiones, con 12 meses, 7 días, lado e impedimento.
+- **REBA:** tarea, lado, y por cada observación todas las posturas y ajustes, los puntajes A, B y C, la actividad y el total; además, el REBA final y su nivel.
+- **Fotos:** número de fotos, ids y enlaces de Drive.
+- **datos_json:** el registro completo. No lo edite: lo usa el panel.
 
-Si abre `PrimerModelo.html` como archivo local o desde otro sitio, escriba la URL `/exec` en la constante `GS_URL` del HTML. Así esa copia también enviará los datos a la misma hoja. Sin esa URL, la página funciona en modo de práctica y no envía nada.
+## Cuando cambie Code.gs
+
+Pegue la versión nueva y vaya a **Implementar → Gestionar implementaciones**. Pulse el lápiz, elija **Nueva versión** y luego **Implementar**. La URL `/exec` no cambia.
+
+Si el cambio agrega columnas, ejecute otra vez **configurar**: agrega las que falten y no borra datos.
 
 ## Código de acceso
 
 - Para cambiarlo, use **Nuevo código** en el panel.
-- Si lo pierde, ejecute la función `nuevoCodigoAcceso` en el editor y léalo en el registro de ejecución.
-
-Al cambiar el código, se cierran todas las sesiones abiertas del panel.
+- Si lo pierde, ejecute `nuevoCodigoAcceso` y léalo en el registro.
 
 ## Notas
 
-- Cada encuesta tiene un identificador fijo. Si se corta la conexión, **Reintentar** no duplica filas ni fotos.
-- No edite ni borre la columna `datos_json` de «Encuestas»: el panel la usa para los gráficos. Las demás columnas sirven para el análisis (SPSS, R, Excel).
-- Las fotos quedan privadas en el Drive de la cuenta. El panel las muestra mediante Apps Script, solo después de ingresar el código.
+- Si se corta la conexión, **Reintentar** no duplica filas ni fotos.
+- Las fotos quedan privadas en el Drive de la cuenta. El panel las muestra solo después de ingresar el código.
