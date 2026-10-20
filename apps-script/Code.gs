@@ -440,6 +440,19 @@ function columnas(sh, cols) {
     head = head.concat(faltan);
   }
   sh.getRange(1, 1, 1, head.length).clearNote().setFontWeight("bold").setBackground("#FFE1E8");
+  formato(sh, head);
+}
+
+// encabezado con el texto ajustado al ancho de la columna y todo el contenido centrado
+function formato(sh, head) {
+  const n = head.length;
+  sh.setColumnWidths(1, n, 170);
+  const j = head.indexOf(C_JSON); if (j >= 0) sh.setColumnWidth(j + 1, 120);
+  sh.getRange(1, 1, sh.getMaxRows(), n).setHorizontalAlignment("center").setVerticalAlignment("middle")
+    .setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+  sh.getRange(1, 1, 1, n).setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
+  SpreadsheetApp.flush();
+  sh.autoResizeRows(1, 1); // la altura del encabezado se ajusta al texto
   sh.setFrozenRows(1);
 }
 
