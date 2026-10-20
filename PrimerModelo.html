@@ -692,6 +692,22 @@ td{padding:12px;font-size:.92rem}
 .nasa-lv button.on b{color:rgba(255,255,255,.85)}
 @media (max-width:640px){ .nasa-lv{gap:4px} .nasa-lv button{font-size:.72rem;min-height:50px} .nasa-read .nasa-val{font-size:1.7rem} }
 
+/* ---------- botones de opción (radio) ---------- */
+.rlist{display:grid;gap:8px;margin-top:10px}
+.rb{position:relative;display:flex;align-items:center;gap:12px;min-height:52px;padding:10px 14px;border-radius:14px;border:2px solid transparent;background:var(--surface-2);cursor:pointer;transition:background .2s,border-color .2s}
+.rb input{position:absolute;opacity:0;width:1px;height:1px}
+.rb-dot{width:24px;height:24px;border-radius:50%;border:2px solid #CFC4C7;background:#fff;flex-shrink:0;display:grid;place-items:center;transition:border-color .2s}
+.rb-dot::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--primary);transform:scale(0);transition:transform .2s cubic-bezier(.2,.8,.2,1.4)}
+.rb-t{font-weight:600;font-size:.98rem;color:var(--ink)}
+.rb:hover{background:#FFE9EE}
+.rb:has(input:checked){background:var(--primary-soft);border-color:rgba(225,29,72,.45)}
+.rb input:checked + .rb-dot{border-color:var(--primary)}
+.rb input:checked + .rb-dot::after{transform:scale(1)}
+.rb input:checked ~ .rb-t{color:var(--primary);font-weight:800}
+.rb input:focus-visible + .rb-dot{outline:3px solid var(--accent);outline-offset:2px}
+@media (min-width:900px){ .rlist{grid-template-columns:repeat(5,minmax(0,1fr))} .rb{flex-direction:column;justify-content:flex-start;text-align:center;gap:8px;padding:14px 8px 12px} .rb-t{font-size:.9rem;line-height:1.2} }
+@media (prefers-reduced-motion:reduce){ .rb-dot::after{transition:none} }
+
 /* ---------- botón de cámara en la barra inferior (REBA) ---------- */
 .navbar:has(.nav-cam){flex-wrap:nowrap;align-items:stretch}
 .navbar:has(.nav-cam) > .btn:not(.nav-cam){flex:1 1 0;min-width:0;padding-inline:12px}
@@ -1773,7 +1789,7 @@ function stepSuseso(host) {
   host.innerHTML = head(4, "Marque la alternativa que mejor describa su situación en su actividad asistencial. No hay respuestas buenas ni malas.", `<span class="chip p">Anexo 6</span><span class="chip a" id="sus-count">${answered()}/20</span>`) +
     SUSESO.map((d, di) => `<div class="section-title"><span class="tag">D${di + 1}</span><h3>${d.dim}</h3></div>` + d.items.map(([n, t]) => `
       <div class="q" id="q-s${n}"><div class="q-head"><span class="q-num">${String(n).padStart(2, "0")}</span><span class="q-label">${esc(t)}</span></div>
-      <div class="pills" role="radiogroup">${SUS_OPTS.map((o, oi) => `<label class="pill"><input type="radio" name="s${n}" value="${oi}" ${v["s" + n] === oi ? "checked" : ""}><span>${o}</span></label>`).join("")}</div></div>`).join("")).join("");
+      <div class="rlist" role="radiogroup" aria-label="${esc(t)}">${SUS_OPTS.map((o, oi) => `<label class="rb"><input type="radio" name="s${n}" value="${oi}" ${v["s" + n] === oi ? "checked" : ""}><span class="rb-dot" aria-hidden="true"></span><span class="rb-t">${o}</span></label>`).join("")}</div></div>`).join("")).join("");
   for (let n = 1; n <= 20; n++) bindPills(host, "s" + n, val => { v["s" + n] = +val; $("#sus-count", host).textContent = answered() + "/20"; persist(); });
   nav(host, { onNext: () => { for (let n = 1; n <= 20; n++) if (v["s" + n] == null) { $(`#q-s${n}`, host).classList.add("invalid"); return `Falta responder la pregunta ${n}.`; } return null; } });
 }
